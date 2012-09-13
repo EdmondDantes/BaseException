@@ -2,21 +2,18 @@
 namespace Exceptions;
 
 /**
- * Исключение бросается, если методу
- * передан не поддерживаемый режи работы.
- * Исключение должно использоваться только для тех методов,
- * которые имеют несколько режимов работы, режим должен
- * задаваться с помощью параметра метода.
+ * The method does not support this mode of work.
  */
 class UnexpectedMethodMode  extends LoggableException
 {
     /**
-     * Конструктор исключения
+     * The method does not support this mode of work.
      *
-     * @param       string|array    $method         Имя метода, сгенерировавшего исключение
-     *                                              или массив с параметрами конструктора
-     * @param       string          $mode           Название режима (переменная, в которой он был передан)
-     * @param       string|int      $value          Значение режима
+     * @param       string|array    $method         The method name
+     *                                              or list of parameters for exception
+     *                                              or another exception for container
+     * @param       string          $mode           Name of mode
+     * @param       string|int      $value          Mode value
      */
     public function __construct($method,
                                 $mode   = null,

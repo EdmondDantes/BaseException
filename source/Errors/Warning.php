@@ -2,10 +2,7 @@
 namespace Exceptions\Errors;
 
 /**
- * Класс для преобразования предупреждений.
- *
- * Предупреждения получают аспект \Exceptions\SystemExceptionI
- * и попадают в журнал.
+ * Class for warnings
  *
  */
 class Warning extends Error

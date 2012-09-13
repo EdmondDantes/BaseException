@@ -4,14 +4,13 @@ namespace Exceptions\Errors;
 use \Exceptions\BaseExceptionI;
 
 /**
- * Класс для инкапсулирования ошибок PHP,
- * как BaseExceptionI объект.
- *
+ * The class for incapsulate of PHP Errors
+ * as object BaseExceptionI
  */
 class Error implements BaseExceptionI
 {
 	/**
-	 * Определения типов ошибок PHP и типов ошибок BaseExceptionI
+	 * Conformity between PHP-errors and BaseExceptionI
 	 * @var array
 	 */
 	protected static $ERRORS = array
@@ -40,28 +39,26 @@ class Error implements BaseExceptionI
     protected $trace;
 
     /**
-     * Флаг логирования.
-     * Если флаг равен true - то исключение
-     * собирается быть записанным в журнал.
+     * Loggable flag
      *
      * @var         boolean
      */
     protected $is_loggable  = true;
 
     /**
-     * Флаг фатальной ошибки
+     * Fatal error flag
      * @var         boolean
      */
     protected $is_fatal     = false;
 
     /**
-     * Конструктор ошибки
+     * Errors factory
      *
-     * @param        int            $errno      Класс ошибки
-     * @param        string         $errstr     Описание
-     * @param        string         $errfile    Файл
-     * @param        string         $errline    Номер строки в файле
-     * @param        array          $errcontext Контекст ошибки
+     * @param        int            $errno      Class of error
+     * @param        string         $errstr     Message
+     * @param        string         $errfile    File
+     * @param        string         $errline    Line
+     * @param        array          $errcontext Context
      *
      * @return       Error
     */
@@ -82,7 +79,7 @@ class Error implements BaseExceptionI
             case self::EMERG    :
             {
                 //
-                // EMERG преобразуются в фатальные ошибки
+                // EMERG created as fatal error
                 //
                 $err = new Error($errno, $errstr, $errfile, $errline, $errcontext);
                 $err->set_fatal();
@@ -110,13 +107,13 @@ class Error implements BaseExceptionI
     }
 
     /**
-     * Конструктор ошибки
+     * Errors constructor
      *
-     * @param        int            $errno      Класс ошибки
-     * @param        string         $errstr     Описание
-     * @param        string         $errfile    Файл
-     * @param        string         $errline    Номер строки в файле
-     * @param        array          $errcontext Контекст ошибки
+     * @param        int            $errno      Class of error
+     * @param        string         $errstr     Message
+     * @param        string         $errfile    File
+     * @param        string         $errline    Line
+     * @param        array          $errcontext Context
      *
     */
     public function __construct($errno, $errstr, $errfile, $errline, $errcontext = null)
@@ -168,29 +165,11 @@ class Error implements BaseExceptionI
         return print_r($this->trace, true);
     }
 
-    /**
-     * Метод возвращает флаг журнализирования
-     * для ошибки.
-     *
-     * Если метод вернёт true - это значит,
-     * что исключение собирается быть поданым в журнал.
-     *
-     * @return boolean
-     */
     public function is_loggable()
     {
         return $this->is_loggable;
     }
 
-    /**
-     * Метод устанавливает флаг журналирования исключения.
-     * Если $flag равно true, тогда исключение попадает в журнал.
-     * Иначе - исключение игнорируется.
-     *
-     * @param   boolean     $flag   Состояние флага журналирования
-     *
-     * @return  Error               Метод возвращает указатель на себя
-     */
     public function set_loggable($flag)
     {
         $this->is_loggable = (boolean) $flag;
@@ -198,21 +177,11 @@ class Error implements BaseExceptionI
         return $this;
     }
 
-    /**
-     * Метод возвращает true - если ошибка является фатальной.
-     *
-     * @return boolean
-     */
     public function is_fatal()
     {
         return $this->is_fatal;
     }
 
-    /**
-     * Метод отмечает ошибку фатальной.
-     *
-     * @return  Error       Метод возвращает указатель на себя
-     */
     public function set_fatal()
     {
         $this->is_fatal = true;
@@ -220,17 +189,13 @@ class Error implements BaseExceptionI
         return $this;
     }
 
-    /**
-     * Метод вернёт true, если ошибка - это контейнер
-     * @return boolean
-     */
     public function is_container()
     {
         return false;
     }
 
     /**
-     * Метод вернёт уровень ошибки.
+     * Returns level of error
      * @return      int
      */
     public function get_level()
@@ -243,10 +208,6 @@ class Error implements BaseExceptionI
         return self::$ERRORS[$this->code];
     }
 
-    /**
-     * Метод определяет источник ошибки
-     * @return array
-     */
     public function get_source()
     {
         return ['source' => $this->getFile(), 'type' => '', 'function' => ''];
@@ -257,33 +218,22 @@ class Error implements BaseExceptionI
         return null;
     }
 
-    /**
-     * Метод возвращает дополнительные данные исключения
-     * @return array
-     */
     public function get_data()
     {
         return array();
     }
 
-    /**
-     * Метод вернёт отладочные данные
-     * @return string
-     */
     public function get_debug_data()
     {
         return '';
     }
 
-    /**
-     * Метод возвращает ошибку в виде массива.
-     *
-     * @return array
-     */
     public function to_array()
     {
         return array
         (
+            'type'      => get_class($this),
+            'source'    => $this->get_source(),
             'message'   => $this->getMessage(),
             'code'      => $this->getCode(),
             'data'      => array()

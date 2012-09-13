@@ -2,11 +2,10 @@
 namespace Exceptions\Errors;
 
 /**
- * Класс для преобразования ошибок,
- * которые являются нотисами.
- * 
- * Ошибки с кодом E_USER_ERROR - попадают в журнал.
- * Однако ни WARNING ни NOTICE - это не касается.
+ * Class for USER_ error:
+ *
+ * -  E_USER_ERROR is logged,
+ * -  WARNING ни NOTICE - not is logged.
  *
  */
 class UserError extends Error implements \Exceptions\RuntimeExceptionI

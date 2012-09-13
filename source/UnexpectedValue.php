@@ -2,19 +2,18 @@
 namespace Exceptions;
 
 /**
- * Исключение бросается, если переменная
- * имеет недопустимое значение.
+ * The variable has unexpected value!
  */
 class UnexpectedValue   extends LoggableException
 {
     /**
-     * Конструктор исключения
+     * The variable has unexpected value!
      *
-     * @param       string|array        $name           Имя переменной
-     *                                                  или массив с параметрами конструктора
-     * @param       mixed               $value          Значение, которое было получено
-     * @param       string              $rules          Указание на свод правил,
-     *                                                  который был нарушен.
+     * @param       string|array        $name           Variable name
+     *                                                  or list of parameters for exception
+     * @param       mixed               $value          Value
+     * @param       string              $rules          Rules description
+     *
      */
     public function __construct($name, $value = null, $rules = null)
     {

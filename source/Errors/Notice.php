@@ -2,8 +2,7 @@
 namespace Exceptions\Errors;
 
 /**
- * Класс для преобразования ошибок,
- * которые являются нотисами.
+ * Class for notice
  *
  */
 class Notice extends Error

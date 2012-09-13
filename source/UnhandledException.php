@@ -2,8 +2,8 @@
 namespace Exceptions;
 
 /**
- * Специальное исключение, для случая необработанного исключения.
- * Используется только для логировния.
+ * Special exception, which is used to mark an unhandled exception.
+ * Is used in the `Registry`.
  */
 class UnhandledException extends LoggableException
 {

@@ -2,18 +2,17 @@
 namespace Exceptions;
 
 /**
- * Исключение бросается, если переменная
- * имеет не тот тип, который ожидался
+ * Value of variable has unexpected type.
  */
 class UnexpectedValueType   extends LoggableException
 {
     /**
-     * Конструктор исключения
+     * Value of variable has unexpected type.
      *
-     * @param       string|array        $name           Имя переменной
-     *                                                  или массив с параметрами конструктора
-     * @param       mixed               $value          Значение, которое было получено
-     * @param       string              $expected       Тип, который ожидался
+     * @param       string|array        $name           Variable name
+     *                                                  or list of parameters for exception
+     * @param       mixed               $value          Value
+     * @param       string              $expected       Excepted type
      */
     public function __construct($name,
                                 $value      = null,
