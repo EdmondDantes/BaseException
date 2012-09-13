@@ -10,7 +10,7 @@ Missions:
 3. Aggregation exceptions within exceptions.
 4. Registration exceptions in the global registry for logging.
 
-**And most importantly, make it all easy and simple ;)**
+**And most importantly: make it all easy and simple ;)**
 
 # Overview
 
