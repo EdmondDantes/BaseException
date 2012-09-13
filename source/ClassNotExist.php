@@ -2,15 +2,14 @@
 namespace Exceptions;
 
 /**
- * Исключение срабатывает когда класс отсутствует
- * в проекте.
+ * If class not exists or not loaded with autoload.
  */
 class ClassNotExist  extends LoggableException
 {
     /**
-     * Конструктор исключения
+     * ClassNotExist
      *
-     * @param       string|array    $class         Имя класса
+     * @param       string|array    $class         Class name
      */
     public function __construct($class)
     {

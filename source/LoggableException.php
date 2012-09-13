@@ -2,14 +2,12 @@
 namespace Exceptions;
 
 /**
- * Базовый класс для логируемых исключений
+ * Base class for loggable exception.
  */
 class LoggableException extends BaseException
 {
     /**
-     * Флаг логирования.
-     * Если флаг равен true - то исключение
-     * собирается быть записанным в журнал.
+     * Loggable flag is true.
      *
      * @var         boolean
      */

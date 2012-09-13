@@ -1,9 +1,8 @@
-<?PHP 
+<?PHP
 namespace Exceptions;
 
 /**
- * Исключение бросается при нарушении логики работы кода,
- * чаще всего в результате семантической ошибки в коде
+ * Violation of logic
  */
 class LogicalException      extends LoggableException
 {

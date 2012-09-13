@@ -2,10 +2,11 @@
 namespace Exceptions;
 
 /**
- * Аспект: Исключения режима Runtime.
- * Эти исключения являются частью процесса выполнения
- * программы, и не являются следствием ошибок программиста,
- * или неработоспособности системы.
+ * Aspect: Exception runtime mode.
+ *
+ * These exceptions are part of the implementation process
+ * program, and are not the result of errors programmer
+ * or unusable system.
  *
  */
 interface RuntimeExceptionI

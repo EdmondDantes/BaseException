@@ -2,13 +2,13 @@
 namespace Exceptions;
 
 /**
- * Аспект: Исключения Системы.
- * Эти исключения являются следствием сбоев системы:
- * 1. внешних програмных компонентов.
- * 2. сбои оборудования.
+ * Aspect: System exception.
  *
- * Этот вид исключений не является следствием ошибок программиста.
+ * These exceptions are the result of system failures:
  *
+ * 1. Outside of software components.
+ * 2. Equipment failures.
+ * 3. This type of exception is not the result of errors programmer.
  */
 interface SystemExceptionI
 {

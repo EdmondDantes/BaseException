@@ -2,16 +2,15 @@
 namespace Exceptions;
 
 /**
- * Исключение бросается, если класс не реализовывает
- * нужный интерфейс.
+ * If class not implimented required interface
  */
 class InterfaceNotImplemented  extends LoggableException
 {
     /**
      * Конструктор исключения
      *
-     * @param       string|array|object     $class         Имя класса
-     * @param       string                  $interface     Интерфейс
+     * @param       string|array|object     $class         Class name
+     * @param       string                  $interface     Required interface
      */
     public function __construct($class, $interface)
     {

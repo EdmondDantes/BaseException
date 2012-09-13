@@ -2,16 +2,14 @@
 namespace Exceptions;
 
 /**
- * Исключение бросается при достижении максимальной
- * глубины рекурсионного вызова метода или фукнции
+ * Reached a maximum depth of recursion
  */
 class RecursionLimitExceeded extends LoggableException
 {
     /**
-     * Конструктор исключения
+     * Reached a maximum depth of recursion
      *
-     * @param       int|array           $limit          Максимальная глубина рекурсии
-     *                                                  или массив с параметрами конструктора
+     * @param       int|array           $limit          maximum depth
      */
     public function __construct($limit)
     {

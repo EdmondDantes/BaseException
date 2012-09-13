@@ -2,23 +2,19 @@
 namespace Exceptions;
 
 /**
- * Исключение бросается, если при выполнении
- * метода объект находится в неинициализированном состоянии
+ * If object not initialized
+ * but using!
  */
 class ObjectNotInitialized  extends LoggableException
 {
+    /**
+     * If object not initialized
+     *
+     * @param object $object
+     */
     public function __construct($object = null)
     {
-        if (is_object($object))
-        {
-            $object = get_class($object);
-        }
-        else
-        {
-            $object = gettype($object);
-        }
-
-        parent::__construct("Object not initialized (object = '$object')");
+        parent::__construct("Object not initialized (object = '{$this->get_value_type($object)}')");
     }
 }
 ?>

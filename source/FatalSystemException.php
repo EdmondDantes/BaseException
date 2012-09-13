@@ -2,8 +2,7 @@
 namespace Exceptions;
 
 /**
- * Фатальное исключение системы
- * для Системных ошибок.
+ * Fatal exception with aspect: "System"
  */
 class FatalSystemException extends FatalException implements SystemExceptionI
 {

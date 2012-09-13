@@ -2,21 +2,17 @@
 namespace Exceptions;
 
 /**
- * Фатальное исключение - контейнер.
+ * Fatal exception - container.
  *
- * Исключение используется как контейнер для других исключений.
+ * The class used as container for another exceptions.
  *
- * Если в конструктор передано исключение типа BaseExceptionI,
- * то FatalException не будет журнализирован.
- *
- * Иначе - исключение будет журнализировано,
- * и примет на себя все параметры от исходного.
+ * It is marked $exception as "fatal" and logged its
  *
  */
 class FatalException extends LoggableException
 {
     /**
-     * Конструктор фатального исключения.
+     * FatalException
      *
      * @param       \Exception|mixed    $exception
      * @param       int                 $code

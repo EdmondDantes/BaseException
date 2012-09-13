@@ -2,8 +2,7 @@
 namespace Exceptions;
 
 /**
- * Класс для исключений
- * аспекта Runtime.
+ * Base class for exception with aspect: System
  */
 class SystemException extends LoggableException implements SystemExceptionI
 {

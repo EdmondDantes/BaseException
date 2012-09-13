@@ -2,17 +2,16 @@
 namespace Exceptions;
 
 /**
- * Исключение бросается, если необходимая
- * переменная не задана или пуста
+ * If required value is empty
  */
 class RequiredValueEmpty extends LoggableException
 {
     /**
-     * Конструктор исключения
+     * If required value is empty
      *
-     * @param       string|array        $name           Имя переменной
-     *                                                  или массив с параметрами конструктора
-     * @param       string              $expected       Тип, который ожидался
+     * @param       string|array        $name           Variable name
+     *                                                  or array with parameters.
+     * @param       string              $expected       Excepted type
      */
     public function __construct($name, $expected = null)
     {

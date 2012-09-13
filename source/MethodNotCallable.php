@@ -2,18 +2,15 @@
 namespace Exceptions;
 
 /**
- * Исключение бросается,
- * если метод нельзя вызывать в данной ситуации
- * (обычно из-за ошибки программиста)
+ * Rais if the method can not be called
  */
 class MethodNotCallable extends LogicalException
 {
     /**
-     * Конструктор исключения
+     * MethodNotCallable
      *
-     * @param       string|array        $method         Метод, в котором было брошено исключение
-     *                                                  или массив с параметрами конструктора
-     * @param       string              $message        Сообщение об ошибке
+     * @param       string|array        $method         Method
+     * @param       string              $message        Message
      */
     public function __construct($method, $message = null)
     {

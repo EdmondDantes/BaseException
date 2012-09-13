@@ -2,29 +2,29 @@
 namespace Exceptions;
 
 /**
- * StorageI - хранилище для исключений.
+ * StorageI - Interface for exception storage.
  *
  */
 interface StorageI
 {
     /**
-     * Метод добавляет исключение
+     * Add exception into storage
      *
-     * @param       BaseExceptionI|\Exception      $exception      Исключение
+     * @param       BaseExceptionI|\Exception      $exception      Exception
      *
      * @return      StorageI
      */
     public function add_exception($exception);
 
     /**
-     * Метод вернёт список исключений как массив.
+     * Returns list of exceptions
      *
      * @return      array
      */
     public function get_storage();
 
     /**
-     * Метод сбрасывает журнал исключений, если он есть.
+     * Reset storage
      *
      * @return      StorageI
      */

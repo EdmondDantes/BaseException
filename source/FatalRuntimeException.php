@@ -2,8 +2,7 @@
 namespace Exceptions;
 
 /**
- * Фатальное исключение системы
- * для Runtime ошибок.
+ * Fatal exception with aspect: "Runtime"
  */
 class FatalRuntimeException extends FatalException implements RuntimeExceptionI
 {

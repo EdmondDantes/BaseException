@@ -2,85 +2,83 @@
 namespace Exceptions;
 
 /**
- * Реестр исключений.
+ * Register of exceptions.
  *
- * Этот статический класс играет роль "глобального реестра",
- * в который попадают все исключения с флагом is_loggable,
- * и унаследованные от базового класса BaseException.
+ * This is a static class which used as global registry for exceptions.
+ * It defines the internal storage for exceptions which can be redefined by a programmer.
  *
- * Класс обладает возможность перегрузки хранилища исключений
- * на своё: объект с интерфейсом StorageI
+ * Realy this class not log an exception.
+ * It's stores them until called $save_handler.
  *
- * Прототип журнализатора *$save_handler* (функция обратного вызова).
+ * Prototype for *$save_handler*
  *
- * @param array             $exceptions         Хранилище исключений
- * @param callable          $reset_log          Функция сброса журнала
- * @param ArrayAccess       $logger_options     опции журналирования
- * @param ArrayAccess       $debug_options      опции для отладки (профайлинга)
+ * @param array             $exceptions         List of exceptions
+ * @param callable          $reset_log          callback function for reset registry
+ * @param ArrayAccess       $logger_options     options
+ * @param ArrayAccess       $debug_options      and debug or profiler options
  * function save_handler($exceptions, callable $reset_log, $logger_options = [], $debug_options = []);
  *
  */
 class Registry
 {
     /**
-     * Опции для журнала запроса.
+     * Options for logger
      * @var array|ArrayAccess
      */
     static public $Logger_options = [];
 
     /**
-     * Опции для отладки
+     * Options for debug mode
      * @var array|ArrayAccess
      */
     static public $Debug_options  = [];
 
     /**
-     * Журнал исключений, которые нужно сохранить
+     * List of exception
      *
      * @var array
      */
     static protected $exceptions = [];
 
     /**
-     * Обработчик, который вызывается
-     * в методе save_exception_log
+     * Handler which called from save_exception_log
      *
      * @var callback
      */
     static protected $save_handler;
 
     /**
-     * Код, вызываемый в случае необработанного исключения.
+     * Handler for unhandled exception
      * @var callable
      */
     static protected $unhandled_handler;
 
     /**
-     * Код, вызываемый в случае фатального исключения
+     * Handler called for fatal exception
      * @var callable
      */
     static protected $fatal_handler;
 
     /**
-     * Предыдущий обработчик ошибок
+     * Old error handler
      * @var callback
      */
     static protected $old_error_handler;
 
     /**
-     * Предыдущий обработчик исключений
+     * Old exception handler
      * @var callback
      */
     static protected $old_exception_handler;
 
     /**
-     * Флаг установки глобальных обработчиков
+     * Setup global handler flag
      * @var boolen
      */
     static protected $install_global_handlers;
 
     /**
-     * Список фатальних ошибок
+     * List of fatal php error
      * @var array
      */
     protected static $FATAL = array
@@ -91,9 +89,9 @@ class Registry
     final private function __construct(){}
 
     /**
-     * Метод регистрирует исключение в системе журналирвания
+     * Registred exception.
      *
-     * Этот метод может быть использован в set_exception_handler()
+     * This method may be used with set_exception_handler()
      *
      */
     static public function register_exception($exception)
@@ -115,8 +113,7 @@ class Registry
     }
 
     /**
-     * Метод вернёт журнал исключений, которые доступны на данное время
-     * Метод возвращает массив объектов.
+     * Returns the list of exception
      *
      * @return      array
      */
@@ -145,7 +142,7 @@ class Registry
     }
 
     /**
-     * Метод сбрасывает журнал исключений, если он есть.
+     * Resets exception storage
      */
     static public function reset_exception_log()
     {
@@ -160,7 +157,7 @@ class Registry
     }
 
     /**
-     * Метод заставляет явно журнализировать текущие исключения.
+     * Saves registry exceptions to log.
      */
     static public function save_exception_log()
     {
@@ -178,12 +175,11 @@ class Registry
     }
 
     /**
-     * Метод устанавливает хранилище для сбора исключений.
+     * Setup custom storage for exceptions
      *
-     * @param       StorageI     $storage      Хранилище
+     * @param       StorageI     $storage      Custom storage
      *
-     * @return      StorageI                   Метод возвращает старое хранилище, или false,
-     *                                          в случае ошибки.
+     * @return      StorageI                   returns older storage if exists
      */
     static public function set_registry_storage(StorageI $storage)
     {
@@ -195,11 +191,11 @@ class Registry
     }
 
     /**
-     * Установить обработчик сохранения исключений
+     * Setup save handler
      *
      * @param       callable        $callback       Callback
      *
-     * @return      callable                        Метод возвращает старый обработчик
+     * @return      callable                        Returns old handler if exists
      */
     static public function set_save_handler($callback)
     {
@@ -229,7 +225,7 @@ class Registry
     }
 
     /**
-     * Метод вызывает обработчика фатальных исключений
+     * Invokes the handler if there is
      *
      * @param       BaseExceptionI      $exception
      */
@@ -242,9 +238,7 @@ class Registry
     }
 
     /**
-     * Метод возвращает массив из опций (настроек) журнала.
-     * Опции могут контролировать детализацию журнала,
-     * прочее.
+     * Return list of logger options
      *
      * @return      array
      */
@@ -262,13 +256,12 @@ class Registry
     }
 
     /**
-     * Метод регистрирует все три обработчика по умолчанию
+     * Registers three default handlers:
+     *
      * 1.  shutdown_function
      * 2.  error_handler
      * 3.  exception_handler
      *
-     * С этого момента все ошибки и непойманные исключения
-     * попадают в этот реестр
      */
     static public function install_global_handlers()
     {
@@ -284,10 +277,8 @@ class Registry
     }
 
     /**
-     * Метод восстанавливает обработчики ошибок и исключений по умолчанию
+     * Restores default handlers.
      *
-     * Внимание!
-     * Этот метод не может отменить обработчик shutdown_function
      */
     static public function restore_global_handlers()
     {
@@ -320,10 +311,10 @@ class Registry
     {
         if($exception instanceof BaseExceptionI)
         {
-            // Если исключение достигает обработчика
-            // оно не логируется в случае, если:
-            // - уже было журналированным
-            // - или если является контейнером для другого исключения
+            // When exception reaches this handler
+            // its not logged if:
+            // - already was logged
+            // - or is container
             if($exception->is_loggable() || $exception->is_container())
             {
                 new UnhandledException($exception);
@@ -344,13 +335,13 @@ class Registry
     }
 
     /**
-     * Метод для использования в set_error_handler
+     * The method for set_error_handler
      *
-     * @param        int            $errno      Класс ошибки
-     * @param        string         $errstr     Описание
-     * @param        string         $errfile    Файл
-     * @param        string         $errline    Номер строки в файле
-     * @param        array          $errcontext Контекст ошибки
+     * @param        int            $errno      Class of error
+     * @param        string         $errstr     Description
+     * @param        string         $errfile    File
+     * @param        string         $errline    Line
+     * @param        array          $errcontext Context
      *
      * @return       boolean
     */
@@ -382,29 +373,27 @@ class Registry
     }
 
     /**
-     * Метод вернёт true, если режим отладки включен
-     * для этого пространства имён.
+     * Returns true if debug mode was enabled
      *
-     * @param       string      $class          Имя класса или имя пространства имён
+     * @param       string      $class          name of class or namespace
      *
      * @return      boolean
      */
     static public function is_debug($class = null)
     {
-        // Если включен глобальный режим отладки - true
+        // If global debug mode on - return true.
         if(isset(self::$Debug_options['debug']) && self::$Debug_options['debug'])
         {
             return true;
         }
 
-        // Продолжать нет смысла,
-        // Если не определён $namespace или список namespaces для отладки
+        // if namespaces not defined - return
         if(is_null($class) || empty(self::$Debug_options['namespaces']))
         {
             return false;
         }
 
-        // Поиск совпадения
+        // Searching for matches
         foreach(self::$Debug_options['namespaces'] as $namespace)
         {
             if(strpos($class, $namespace) === 0)
