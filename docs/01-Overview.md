@@ -2,13 +2,13 @@
 
 # BaseException::__construct()
 
-Обычное использование:
+The basic use:
 
 ```php
     throw new BaseException('message', 0, $previous);
 ```
 
-Дополнительные данные:
+List of parameters:
 
 ```php
     // use array()
@@ -27,7 +27,7 @@
 
 ```
 
-Исключение-контейнер:
+Container-Exception:
 
 ```php
 
@@ -51,7 +51,7 @@
 
 ```
 
-Исключение контейнер с журнализированием:
+The container is used to change the flag `is_loggable`:
 
 ```php
 
@@ -81,9 +81,53 @@
 
 ## Inheriting from the BaseException
 
+```php
+class ClassNotExist  extends BaseException
+{
+    // This exception will be logged
+    protected $is_loggable = true;
+
+    /**
+     * ClassNotExist
+     *
+     * @param       string      $class         Class name
+     */
+    public function __construct($class)
+    {
+        parent::__construct
+        (
+            array
+            (
+                'message' => "Сlass '$class' does not exist",
+                'class'   => $class
+            )
+        );
+    }
+}
+```
+
 ## FatalException
 
+```php
+class MyFatalException  extends BaseException
+{
+    // This exception has aspect: "fatal"
+    protected $is_fatal    = true;
+}
+```
+
 ## Debug data
+
+```php
+class MyException  extends BaseException
+{
+    public function __construct($object)
+    {
+        $this->set_debug_data($object);
+        parent::__construct('its too bad!');
+    }
+}
+```
 
 ## BaseException static methods
 
