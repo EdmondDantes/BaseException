@@ -3,7 +3,9 @@ namespace Exceptions;
 
 /**
  * Contract is not correctly
- * (used for trait when the object is abusing the Trait)
+ * (When an object does not support the required conditions of Trait, 
+ * Traits
+ * throws that exception)
  */
 class ContractNotCorrectly   extends LoggableException
 {
