@@ -2,6 +2,15 @@
 <phpunit
     bootstrap="./autoload.php"
 >
-    <php>
-    </php>
+ <testsuites>
+        <testsuite name="BaseException test suite">
+            <directory>./source</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./source</directory>
+        </whitelist>
+    </filter>
 </phpunit>
