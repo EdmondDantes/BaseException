@@ -1,4 +1,4 @@
-BaseException
+BaseException [![Build Status](https://secure.travis-ci.org/EdmondDantes/BaseException.png)](http://travis-ci.org/EdmondDantes/BaseException)
 =============
 
 Base Exception Library for PHP 5.4+
