@@ -9,12 +9,18 @@ class SerializeException  extends LoggableException
     /**
      * Object can't be serialized!
      *
-     * @param       object      $object         The object which must have been serialized
-     * @param       string      $type           Type of serialize
-     * @param       object      $src_object     The object where started the process
+     * @param       object|array        $object         The object which must have been serialized
+     * @param       string              $type           Type of serialize
+     * @param       object              $src_object     The object where started the process
      */
     public function __construct($object = null, $type = 'phpserialize', $src_object = null)
     {
+        if(is_array($object))
+        {
+            parent::__construct($object);
+            return;
+        }
+
         parent::__construct
         ([
             'message'       => 'Serialize Failed',
@@ -24,4 +30,3 @@ class SerializeException  extends LoggableException
         ]);
     }
 }
-?>
