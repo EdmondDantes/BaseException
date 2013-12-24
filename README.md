@@ -1,7 +1,7 @@
 BaseException [![Build Status](https://secure.travis-ci.org/EdmondDantes/BaseException.png)](http://travis-ci.org/EdmondDantes/BaseException)
 =============
 
-Base Exception Library for PHP 5.4+
+Base Exception Library for PHP 5.5+
 (The latest version: 2.0.0)
 
 Missions:
@@ -10,6 +10,7 @@ Missions:
 2. Aspects for exceptions.
 3. Aggregation exceptions within exceptions.
 4. Registration exceptions in the global registry for logging.
+5. Support for the concept of message templates.
 
 **And most importantly: make it all easy and simple ;)**
 
