@@ -6,6 +6,8 @@ namespace Exceptions;
  */
 class RecursionLimitExceeded extends LoggableException
 {
+    protected $template         = 'Recursion limit exceeded: {limit}';
+
     /**
      * Reached a maximum depth of recursion
      *
@@ -19,8 +21,7 @@ class RecursionLimitExceeded extends LoggableException
         }
         else
         {
-            parent::__construct(array('message' => 'Recursion limit exceeded', 'limit' => $limit));
+            parent::__construct(['limit' => $limit]);
         }
     }
 }
-?>

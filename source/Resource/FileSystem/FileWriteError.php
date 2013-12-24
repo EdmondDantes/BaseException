@@ -1,7 +1,9 @@
 <?PHP
 namespace Exceptions\Resource\FileSystem;
 
-class FileWriteError    extends    \Exceptions\Resource\ResourceWriteError
+use \Exceptions\Resource\ResourceWriteError;
+
+class FileWriteError    extends    ResourceWriteError
                         implements FileSystemExceptionI
 {
     protected $system   = self::SYSTEM;
@@ -11,5 +13,3 @@ class FileWriteError    extends    \Exceptions\Resource\ResourceWriteError
         parent::__construct($resource, $type);
     }
 }
-
-?>

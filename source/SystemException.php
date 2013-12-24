@@ -7,4 +7,3 @@ namespace Exceptions;
 class SystemException extends LoggableException implements SystemExceptionI
 {
 }
-?>

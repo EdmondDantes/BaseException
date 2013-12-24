@@ -98,7 +98,7 @@ class ClassNotExist  extends BaseException
         (
             array
             (
-                'message' => "Сlass '$class' does not exist",
+                'message' => "Class '$class' does not exist",
                 'class'   => $class
             )
         );

@@ -8,5 +8,3 @@ class ResourceLockFailed extends ResourceException
         parent::__construct($resource, $type, 'lock');
     }
 }
-
-?>

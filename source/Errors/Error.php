@@ -4,7 +4,7 @@ namespace Exceptions\Errors;
 use \Exceptions\BaseExceptionI;
 
 /**
- * The class for incapsulate of PHP Errors
+ * The class for encapsulate of PHP Errors
  * as object BaseExceptionI
  */
 class Error implements BaseExceptionI
@@ -15,19 +15,19 @@ class Error implements BaseExceptionI
 	 */
 	protected static $ERRORS = array
     (
-        E_ERROR              => self::ERR,
+        E_ERROR              => self::ERROR,
         E_WARNING            => self::WARNING,
-        E_PARSE              => self::CRIT,
+        E_PARSE              => self::CRITICAL,
         E_NOTICE             => self::NOTICE,
-        E_CORE_ERROR         => self::EMERG,
+        E_CORE_ERROR         => self::EMERGENCY,
         E_CORE_WARNING       => self::WARNING,
-        E_COMPILE_ERROR      => self::EMERG,
+        E_COMPILE_ERROR      => self::EMERGENCY,
         E_COMPILE_WARNING    => self::WARNING,
-        E_USER_ERROR         => self::ERR,
+        E_USER_ERROR         => self::ERROR,
         E_USER_WARNING       => self::INFO,
         E_USER_NOTICE        => self::DEBUG,
-        E_STRICT             => self::ERR,
-        E_RECOVERABLE_ERROR  => self::ERR,
+        E_STRICT             => self::ERROR,
+        E_RECOVERABLE_ERROR  => self::ERROR,
         E_DEPRECATED         => self::INFO,
         E_USER_DEPRECATED    => self::INFO
 	);
@@ -66,7 +66,7 @@ class Error implements BaseExceptionI
     {
         if(!array_key_exists($errno, self::$ERRORS))
         {
-            $errno = self::ERR;
+            $errno = self::ERROR;
         }
 
         if(in_array($errno, array(E_USER_ERROR, E_USER_WARNING, E_USER_NOTICE)))
@@ -76,10 +76,10 @@ class Error implements BaseExceptionI
 
         switch(self::$ERRORS[$errno])
         {
-            case self::EMERG    :
+            case self::EMERGENCY    :
             {
                 //
-                // EMERG created as fatal error
+                // EMERGENCY created as fatal error
                 //
                 $err = new Error($errno, $errstr, $errfile, $errline, $errcontext);
                 $err->set_fatal();
@@ -87,8 +87,8 @@ class Error implements BaseExceptionI
                 return $err;
             }
             case self::ALERT    :
-            case self::CRIT     :
-            case self::ERR      :
+            case self::CRITICAL     :
+            case self::ERROR      :
             {
                 return new Error($errno, $errstr, $errfile, $errline, $errcontext);
             }
@@ -102,8 +102,11 @@ class Error implements BaseExceptionI
             {
                 return new Notice($errno, $errstr, $errfile, $errline, $errcontext);
             }
+            default:
+            {
+                return new Error($errno, $errstr, $errfile, $errline, $errcontext);
+            }
         }
-
     }
 
     /**
@@ -202,7 +205,7 @@ class Error implements BaseExceptionI
     {
         if(!array_key_exists($this->code, self::$ERRORS))
         {
-            return self::ERR;
+            return self::ERROR;
         }
 
         return self::$ERRORS[$this->code];
@@ -239,6 +242,15 @@ class Error implements BaseExceptionI
             'data'      => array()
         );
     }
-}
 
-?>
+    public function append_data(array $data)
+    {
+        /** nothing to do */
+        return $this;
+    }
+
+    public function template()
+    {
+        return '';
+    }
+}

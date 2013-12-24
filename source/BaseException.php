@@ -29,14 +29,28 @@ namespace Exceptions;
  *
  * Exception-container can hide another type of exception.
  *
+ * <h1>Support the template</h1>
+ *
+ * Class supports the template of the error message instead of the plain message.
+ *
  */
 class BaseException extends \Exception implements BaseExceptionI
 {
+    use HelperT;
+    use ArraySerializerT;
+    use TemplateHandlerT;
+
     /**
      * Layout of the default properties
      * @var array
      */
-    static protected $base_props = array('message' => '', 'code' => 0, 'previous' => null);
+    static protected $base_props = ['message' => '', 'code' => 0, 'previous' => null, 'template' => ''];
+
+    /**
+     * template message
+     * @var string
+     */
+    protected $template     = '';
 
     /**
      * Extra data to exception
@@ -52,9 +66,9 @@ class BaseException extends \Exception implements BaseExceptionI
 
     /**
      * Debug data
-     * @var         mixed
+     * @var         array
      */
-    protected $debug_data;
+    protected $debug_data   = [];
 
     /**
      * Container flag
@@ -93,7 +107,7 @@ class BaseException extends \Exception implements BaseExceptionI
      *    and $exception is the $message.
      * 2. $exception - array.
      *    Key of array: message, code, previous
-     *    ovverided the parameters $code and $previous,
+     *    overridden the parameters $code and $previous,
      *    and other data is saved to the property `$data`.
      * 3. $exception - BaseExceptionI
      *    In this case, exception acts as container,
@@ -108,13 +122,14 @@ class BaseException extends \Exception implements BaseExceptionI
      */
     public function __construct($exception, $code = 0, $previous = null)
     {
+        $template               = '';
         $message                = '';
 
         if($exception instanceof BaseExceptionI)
         {
             $this->is_container = true;
 
-            // If aggregate $exception was't journaled,
+            // If aggregate $exception wasn't journaled,
             // and this is going to be to journal,
             // then an $exception should be registered.
             if(!$exception->is_loggable() && $this->is_loggable)
@@ -153,6 +168,26 @@ class BaseException extends \Exception implements BaseExceptionI
             $message            = (string)$exception;
         }
 
+        // handle template message
+        if(empty($template) && !empty($this->template))
+        {
+            $template           = $this->template;
+        }
+
+        if(!empty($template))
+        {
+            $this->template     = $template;
+
+            // override message key if not exists
+            if(!empty($message))
+            {
+                $this->data['message'] = $message;
+            }
+
+            $message            = $this->handle_template($this->template, $this->data, $message, $code, $previous);
+        }
+
+        // parent construct
         if( $previous instanceof BaseExceptionI
         && ($previous instanceof \Exception) === false)
         {
@@ -176,6 +211,16 @@ class BaseException extends \Exception implements BaseExceptionI
         {
             Registry::call_fatal_handler($this);
         }
+    }
+
+    /**
+     * Returns template message
+     *
+     * @return      string
+     */
+    public function template()
+    {
+        return $this->template;
     }
 
     /**
@@ -253,7 +298,7 @@ class BaseException extends \Exception implements BaseExceptionI
      */
     public function get_level()
     {
-        return empty($this->data['level']) ? self::ERR : $this->data['level'];
+        return empty($this->data['level']) ? self::ERROR : $this->data['level'];
     }
 
     /**
@@ -275,34 +320,7 @@ class BaseException extends \Exception implements BaseExceptionI
             return $this->source;
         }
 
-        return $this->source    = self::get_source_for($this);
-    }
-
-    /**
-     * The method defines the source of the exception.
-     *
-     * @param       \Exception      $e
-     * @param       boolean         $is_string
-     *
-     * @return      array|string
-     */
-    static public function get_source_for(\Exception $e, $is_string = false)
-    {
-        $res                    = $e->getTrace()[0];
-
-        if($is_string)
-        {
-            return  isset($res['source'])     ? $res['class']     : $res['file'].':'.$res['line'].
-                    isset($res['type'])       ? $res['type']      : '.'.
-                    isset($res['function'])   ? $res['function']  : '{}';
-        }
-
-        return
-        [
-            'source'    => isset($res['class'])      ? $res['class']     : $res['file'].':'.$res['line'],
-            'type'      => isset($res['type'])       ? $res['type']      : '.',
-            'function'  => isset($res['function'])   ? $res['function']  : '{}',
-        ];
+        return $this->source    = $this->get_source_for($this);
     }
 
     /**
@@ -319,15 +337,11 @@ class BaseException extends \Exception implements BaseExceptionI
      */
     public function get_previous()
     {
-        if(!$this->is_container())
-        {
-            return $this->getPrevious();
-        }
+        $previous       = $this->getPrevious();
 
-        $res = $this->getPrevious();
-        if($res instanceof \Exception)
+        if($previous instanceof \Exception)
         {
-            return $res;
+            return $previous;
         }
         elseif(isset($this->data['previous'])
         && $this->data['previous'] instanceof BaseExceptionI)
@@ -345,6 +359,13 @@ class BaseException extends \Exception implements BaseExceptionI
     public function get_data()
     {
         return $this->data;
+    }
+
+    public function append_data(array $data)
+    {
+        $this->data[]       = $data;
+
+        return $this;
     }
 
     /**
@@ -378,7 +399,7 @@ class BaseException extends \Exception implements BaseExceptionI
                 $res =
                 [
                     'type'      => get_class($previous),
-                    'source'    => self::get_source_for($previous),
+                    'source'    => $this->get_source_for($previous),
                     'message'   => $previous->getMessage(),
                     'code'      => $previous->getCode(),
                     'data'      => []
@@ -393,140 +414,38 @@ class BaseException extends \Exception implements BaseExceptionI
             return $res;
         }
 
+        // override the exception message if the template was defined
+        if($this->template() !== '')
+        {
+
+            $message    = isset($this->get_data()['message']) ? $this->get_data()['message'] : '';
+        }
+        else
+        {
+            $message    = $this->getMessage();
+        }
+
         return
         [
             'type'      => get_class($this),
             'source'    => $this->get_source(),
-            'message'   => $this->getMessage(),
+            'message'   => $message,
+            'template'  => $this->template(),
             'code'      => $this->getCode(),
             'data'      => $this->get_data()
         ];
     }
 
     /**
-     * The method serialized errors BaseExceptionI to an array
+     * Returns information about value type
      *
-     * @param 			array 			$errors		array of errors
-     * @param 			boolean 		$debug		debug data flag
+     * @param   mixed           $value      Value
+     *
+     * @return  string|array
      */
-    public static function errors_to_array($errors)
+    protected function type_info($value)
     {
-        if($errors instanceof BaseExceptionI)
-        {
-            $errors = [$errors];
-        }
-
-        $res = [];
-        foreach($errors as $error)
-        {
-            if($error instanceof BaseExceptionI)
-            {
-                /* @var BaseExceptionI $error */
-                $res[] = $error->to_array();
-            }
-            elseif($error instanceof \Exception)
-            {
-                /* @var \Exception $error */
-                $res[] =
-                [
-                    'type'     => get_class($error),
-                    'source'   => self::get_source_for($error),
-                    'message'  => $error->getMessage(),
-                    'code'     => $error->getCode(),
-                    'data'     => $error->getTrace()
-                ];
-            }
-        }
-        return $res;
-    }
-
-    /**
-     * The method deserialized array of array to array of errors.
-     *
-     * @param 			array 						$array array of array
-     *
-     * @throws          \UnexpectedValueException
-     */
-    public static function array_to_errors($array)
-    {
-        if(!is_array($array))
-        {
-            throw new \UnexpectedValueException('$array must be array');
-        }
-
-        $res = array();
-        foreach($array as $error)
-        {
-            if(!is_array($error))
-            {
-                throw new \UnexpectedValueException('$error must be array');
-            }
-            $res[] = new self($error);
-        }
-
-        return $res;
-    }
-
-    /**
-     * The method returns a type of $value or class name.
-     *
-     * It must use in order to exclude objects from the exception.
-     *
-     * @param           mixed           $value      value
-     *
-     * @return          string
-     */
-    public static function get_value_type($value)
-    {
-        if(is_bool($value))
-        {
-            return 'BOOLEAN:'.($value ? 'TRUE' : 'FALSE');
-        }
-        elseif(is_object($value))
-        {
-            return get_class($value);
-        }
-        elseif(is_null($value))
-        {
-            return 'NULL';
-        }
-        elseif(is_string($value))
-        {
-            return 'STRING';
-        }
-        elseif(is_int($value))
-        {
-            return 'INTEGER';
-        }
-        elseif(is_float($value))
-        {
-            return 'DOUBLE';
-        }
-        elseif(is_array($value))
-        {
-            return 'ARRAY';
-        }
-        elseif(is_resource($value))
-        {
-            $type           = get_resource_type($value);
-            $meta           = '';
-            if($type === 'stream' && is_array($meta = stream_get_meta_data($value)))
-            {
-                // array keys normalize
-                $meta       = array_merge
-                (
-                    ['stream_type' => '', 'wrapper_type' => '', 'mode' => '', 'uri' => ''],
-                    $meta
-                );
-                $meta       = " ({$meta['stream_type']},{$meta['wrapper_type']},{$meta['mode']}) {$meta['uri']}";
-            }
-
-            return 'RESOURCE: '.$type.$meta;
-        }
-        else
-        {
-            return gettype($value);
-        }
+        return $this->get_value_type($value);
     }
 
     /**
@@ -547,7 +466,7 @@ class BaseException extends \Exception implements BaseExceptionI
     /**
      * The method saved debug data if debug mode is active.
      *
-     * @param       mixed       $data           debug data
+     * @param       array       $data           debug data
      * @return      BaseExceptionI
      */
     protected function set_debug_data(array $data)
@@ -557,36 +476,8 @@ class BaseException extends \Exception implements BaseExceptionI
             return $this;
         }
 
-        if(!is_string($data))
-        {
-            $data           = print_r($data, true);
-        }
-
         $this->debug_data   = $data;
 
         return $this;
     }
-
-    /**
-     * The method truncate $value for exception journal.
-     *
-     * @param       mixed       $value
-     *
-     * @return      string
-     */
-    static public function truncate($value)
-    {
-        // Укорачивание данных
-        if(is_string($value) && strlen($value) > 63)
-        {
-            $value          = substr($value, 0, 63).'…';
-        }
-
-        if(!is_scalar($value))
-        {
-            $value          = '!object '.self::get_value_type($value);
-        }
-        return $value;
-    }
 }
-?>

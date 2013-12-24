@@ -3,11 +3,13 @@ namespace Exceptions\Resource;
 
 class ResourceDataWrong extends ResourceException
 {
+    protected $template =
+    '{system} error: data is wrong (expected {format}) for resource {resource}';
+
     public function __construct($resource, $type = 'resource', $format = 'format')
     {
         parent::__construct
         ([
-            'message'   => $this->system.' error: data wrong (expected "'.$format.'")',
             'resource'  => $resource,
             'operation' => 'format:'.$format,
             'format'    => $format,
@@ -15,5 +17,3 @@ class ResourceDataWrong extends ResourceException
         ]);
     }
 }
-
-?>

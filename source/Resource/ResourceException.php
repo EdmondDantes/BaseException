@@ -1,13 +1,20 @@
 <?PHP
 namespace Exceptions\Resource;
 
+use \Exceptions\SystemException;
+
 /**
  * The basic class for exceptions related to resources.
  *
  * Child classes must define the property $system to identify the system
  */
-class ResourceException extends \Exceptions\SystemException
+class ResourceException extends SystemException
 {
+    protected $template = '{system} error: operation {operation} for the resource {resource} ({type}) is failed';
+
+    /**
+     * @var string
+     */
     protected $system   = 'undefined';
 
     /**
@@ -75,5 +82,3 @@ class ResourceException extends \Exceptions\SystemException
         return isset($this->data['operation']) ? $this->data['operation'] : '';
     }
 }
-
-?>

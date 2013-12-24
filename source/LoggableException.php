@@ -13,4 +13,3 @@ class LoggableException extends BaseException
      */
     protected $is_loggable  = true;
 }
-?>

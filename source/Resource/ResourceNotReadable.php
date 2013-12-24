@@ -8,5 +8,3 @@ class ResourceNotReadable extends ResourceException
         parent::__construct($resource, $type, 'readable');
     }
 }
-
-?>

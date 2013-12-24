@@ -1,7 +1,9 @@
 <?PHP
 namespace Exceptions\Resource\FileSystem;
 
-class FileCloseError    extends   \Exceptions\Resource\ResourceCloseError
+use \Exceptions\Resource\ResourceCloseError;
+
+class FileCloseError    extends    ResourceCloseError
                         implements FileSystemExceptionI
 {
     protected $system   = self::SYSTEM;
@@ -11,5 +13,3 @@ class FileCloseError    extends   \Exceptions\Resource\ResourceCloseError
         parent::__construct($resource, $type);
     }
 }
-
-?>

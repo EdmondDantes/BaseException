@@ -2,17 +2,19 @@
 namespace Exceptions;
 
 /**
- * Rais if the method can not be called
+ * Raise if the method can not be called
  */
-class MethodNotCallable extends LogicalException
+class MethodNotCallable     extends LogicalException
 {
+    protected $template     = 'The method {method} is not callable';
+
     /**
      * MethodNotCallable
      *
      * @param       string|array        $method         Method
-     * @param       string              $message        Message
+     * @param       string              $message        Extended Message
      */
-    public function __construct($method, $message = null)
+    public function __construct($method, $message = '')
     {
         if(!is_scalar($method))
         {
@@ -20,9 +22,7 @@ class MethodNotCallable extends LogicalException
         }
         else
         {
-            parent::__construct(array('method'  => $method,
-                                      'message' => $message));
+            parent::__construct(['method'  => $method, 'message' => $message]);
         }
     }
 }
-?>

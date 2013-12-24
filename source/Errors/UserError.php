@@ -20,5 +20,3 @@ class UserError extends Error implements \Exceptions\RuntimeExceptionI
         }
     }
 }
-
-?>

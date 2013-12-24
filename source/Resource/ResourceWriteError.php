@@ -8,5 +8,3 @@ class ResourceWriteError extends ResourceException
         parent::__construct($resource, $type, 'write');
     }
 }
-
-?>

@@ -7,4 +7,3 @@ namespace Exceptions;
 class FatalRuntimeException extends FatalException implements RuntimeExceptionI
 {
 }
-?>

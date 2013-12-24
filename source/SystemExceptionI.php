@@ -13,5 +13,3 @@ namespace Exceptions;
 interface SystemExceptionI
 {
 }
-
-?>

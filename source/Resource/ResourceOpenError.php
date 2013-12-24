@@ -8,5 +8,3 @@ class ResourceOpenError extends ResourceException
         parent::__construct($resource, $type, 'open');
     }
 }
-
-?>

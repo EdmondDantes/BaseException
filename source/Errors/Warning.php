@@ -8,5 +8,3 @@ namespace Exceptions\Errors;
 class Warning extends Error
 {
 }
-
-?>

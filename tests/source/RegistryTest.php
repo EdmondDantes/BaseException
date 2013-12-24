@@ -1,5 +1,7 @@
-<?php
+<?PHP
 namespace Exceptions;
+
+use \Exceptions\Errors\Error;
 
 /**
  * Имитация PHP функции register_shutdown_function
@@ -49,7 +51,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 
         $this->test_data = array
         (
-            'level'         => BaseExceptionI::CRIT,
+            'level'         => BaseExceptionI::CRITICAL,
             'ident'         => 'test_ident',
             'exdata'        => array(1,2,'string')
         );
@@ -147,7 +149,9 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
         Registry::install_global_handlers();
 
         // WARNING
-        $test = ZUZUKA_CONSTANT_UNDEFINED;
+        /** @noinspection PhpUndefinedConstantInspection */
+        /** @noinspection PhpUnusedLocalVariableInspection */
+        $test = CONSTANT_UNDEFINED;
 
         $exceptions = Registry::get_exception_log();
 
@@ -162,7 +166,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals
         (
-            "Use of undefined constant ZUZUKA_CONSTANT_UNDEFINED - assumed 'ZUZUKA_CONSTANT_UNDEFINED'",
+            "Use of undefined constant CONSTANT_UNDEFINED - assumed 'CONSTANT_UNDEFINED'",
             $error->getMessage()
         );
 
@@ -221,24 +225,24 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testError_handler()
     {
-        $errors = array
-        (
-            E_ERROR              => BaseExceptionI::ERR,
-            E_WARNING            => BaseExceptionI::WARNING,
-            E_PARSE              => BaseExceptionI::CRIT,
-            E_NOTICE             => BaseExceptionI::NOTICE,
-            E_CORE_ERROR         => BaseExceptionI::EMERG,
-            E_CORE_WARNING       => BaseExceptionI::WARNING,
-            E_COMPILE_ERROR      => BaseExceptionI::EMERG,
-            E_COMPILE_WARNING    => BaseExceptionI::WARNING,
-            E_USER_ERROR         => BaseExceptionI::ERR,
-            E_USER_WARNING       => BaseExceptionI::INFO,
-            E_USER_NOTICE        => BaseExceptionI::DEBUG,
-            E_STRICT             => BaseExceptionI::ERR,
-            E_RECOVERABLE_ERROR  => BaseExceptionI::ERR,
-            E_DEPRECATED         => BaseExceptionI::INFO,
-            E_USER_DEPRECATED    => BaseExceptionI::INFO
-        );
+        $errors                     =
+        [
+            E_ERROR                 => BaseExceptionI::ERROR,
+            E_WARNING               => BaseExceptionI::WARNING,
+            E_PARSE                 => BaseExceptionI::CRITICAL,
+            E_NOTICE                => BaseExceptionI::NOTICE,
+            E_CORE_ERROR            => BaseExceptionI::EMERGENCY,
+            E_CORE_WARNING          => BaseExceptionI::WARNING,
+            E_COMPILE_ERROR         => BaseExceptionI::EMERGENCY,
+            E_COMPILE_WARNING       => BaseExceptionI::WARNING,
+            E_USER_ERROR            => BaseExceptionI::ERROR,
+            E_USER_WARNING          => BaseExceptionI::INFO,
+            E_USER_NOTICE           => BaseExceptionI::DEBUG,
+            E_STRICT                => BaseExceptionI::ERROR,
+            E_RECOVERABLE_ERROR     => BaseExceptionI::ERROR,
+            E_DEPRECATED            => BaseExceptionI::INFO,
+            E_USER_DEPRECATED       => BaseExceptionI::INFO
+        ];
 
 
         Registry::error_handler(E_ERROR, 'Error', __FILE__, __LINE__);
@@ -266,8 +270,8 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
         {
             list($code, $level) = each($errors);
 
-            $this->assertInstanceOf('\Exceptions\BaseExceptionI', $error);
-            $this->assertInstanceOf('\Exceptions\Errors\Error', $error);
+            $this->assertInstanceOf(BaseExceptionI::class, $error);
+            $this->assertInstanceOf(Error::class, $error);
             $this->assertEquals($code, $error->getCode(), '$error->getCode() failed');
             $this->assertEquals
             (
@@ -304,8 +308,8 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 
         $error = $exceptions[0];
 
-        $this->assertInstanceOf('\Exceptions\BaseExceptionI', $error);
-        $this->assertInstanceOf('\Exceptions\Errors\Error', $error);
+        $this->assertInstanceOf(BaseExceptionI::class, $error);
+        $this->assertInstanceOf(Error::class, $error);
 
         $this->assertEquals('error', $error->getMessage(), '$error->getMessage() failed');
         $this->assertEquals(11, $error->getLine(), '$error->getLine() failed');
@@ -367,7 +371,10 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 
         $callback   = function($actual_exception) use($exception, &$is_call)
         {
-            $this->assertInstanceOf('\Exceptions\FatalException', $actual_exception);
+            $this->assertInstanceOf(FatalException::class, $actual_exception);
+
+            /* @var $actual_exception \Exceptions\FatalException */
+
             $this->assertTrue
             (
                 $actual_exception->get_previous() === $exception,
@@ -389,7 +396,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 
         $callback   = function($actual_exception) use($exception, &$is_call)
         {
-            $this->assertInstanceOf('\Exceptions\BaseException', $actual_exception);
+            $this->assertInstanceOf(BaseException::class, $actual_exception);
             $this->assertTrue
             (
                 $actual_exception === $exception,
@@ -415,6 +422,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 
         $exception  = new LoggableException('test');
 
+        /** @noinspection PhpUnusedParameterInspection */
         $callback   = function(array $exceptions, callable $reset, $logger_opt,  $debug_opt)
                       use($exception, &$is_call)
         {
@@ -433,6 +441,4 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($is_call, '$callback isn\'t called');
     }
-
 }
-?>

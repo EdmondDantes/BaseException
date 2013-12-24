@@ -8,5 +8,3 @@ class ResourceReadError extends ResourceException
         parent::__construct($resource, $type, 'read');
     }
 }
-
-?>

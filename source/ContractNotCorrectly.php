@@ -3,7 +3,7 @@ namespace Exceptions;
 
 /**
  * Contract is not correctly
- * (When an object does not support the required conditions of Trait, 
+ * (When an object does not support the required conditions of Trait,
  * Traits
  * throws that exception)
  */
@@ -26,13 +26,13 @@ class ContractNotCorrectly   extends LoggableException
     {
         if(!is_string($value))
         {
-            $value          = self::truncate($value);
+            $value          = self::to_string($value);
         }
 
         parent::__construct
         ([
             'message'       => 'Contract is not correctly',
-            'object'        => $this->get_value_type($object),
+            'object'        => $this->type_info($object),
             'type'          => $type,
             'value'         => $value,
             'trait'         => $trait,
@@ -40,4 +40,3 @@ class ContractNotCorrectly   extends LoggableException
         ]);
     }
 }
-?>

@@ -16,7 +16,7 @@ class CallableException extends LoggableException
     {
         if(is_object($expression) || is_resource($expression))
         {
-            $expression = self::truncate($expression);
+            $expression = self::to_string($expression);
         }
 
         parent::__construct
@@ -26,4 +26,3 @@ class CallableException extends LoggableException
         ]);
     }
 }
-?>

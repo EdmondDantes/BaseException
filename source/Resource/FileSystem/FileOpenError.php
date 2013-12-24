@@ -1,7 +1,9 @@
 <?PHP
 namespace Exceptions\Resource\FileSystem;
 
-class FileOpenError     extends   \Exceptions\Resource\ResourceOpenError
+use \Exceptions\Resource\ResourceOpenError;
+
+class FileOpenError     extends    ResourceOpenError
                         implements FileSystemExceptionI
 {
     protected $system   = self::SYSTEM;
@@ -11,5 +13,3 @@ class FileOpenError     extends   \Exceptions\Resource\ResourceOpenError
         parent::__construct($resource, $type);
     }
 }
-
-?>

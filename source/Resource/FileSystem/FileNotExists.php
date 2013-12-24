@@ -1,7 +1,9 @@
 <?PHP
 namespace Exceptions\Resource\FileSystem;
 
-class FileNotExists     extends     \Exceptions\Resource\ResourceNotExists
+use \Exceptions\Resource\ResourceNotExists;
+
+class FileNotExists     extends     ResourceNotExists
                         implements  FileSystemExceptionI
 {
     protected $system   = self::SYSTEM;
@@ -11,5 +13,3 @@ class FileNotExists     extends     \Exceptions\Resource\ResourceNotExists
         parent::__construct($resource, $type);
     }
 }
-
-?>

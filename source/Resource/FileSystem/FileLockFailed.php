@@ -1,7 +1,9 @@
 <?PHP
 namespace Exceptions\Resource\FileSystem;
 
-class FileLockFailed    extends   \Exceptions\Resource\ResourceLockFailed
+use \Exceptions\Resource\ResourceLockFailed;
+
+class FileLockFailed    extends    ResourceLockFailed
                         implements FileSystemExceptionI
 {
     protected $system   = self::SYSTEM;
@@ -11,5 +13,3 @@ class FileLockFailed    extends   \Exceptions\Resource\ResourceLockFailed
         parent::__construct($resource, $type);
     }
 }
-
-?>

@@ -6,6 +6,8 @@ namespace Exceptions;
  */
 class ClassNotExist  extends LoggableException
 {
+    protected $template     = 'The class {class} does not exist';
+
     /**
      * ClassNotExist
      *
@@ -19,15 +21,7 @@ class ClassNotExist  extends LoggableException
         }
         else
         {
-            parent::__construct
-            (
-                array
-                (
-                    'message' => "Сlass '$class' does not exist",
-                    'class'   => $class
-                )
-            );
+            parent::__construct(['class'   => $class ]);
         }
     }
 }
-?>

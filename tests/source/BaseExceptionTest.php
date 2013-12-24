@@ -1,5 +1,24 @@
-<?php
+<?PHP
 namespace Exceptions;
+
+use \Exceptions\Errors\Error;
+
+class DebugException extends BaseException
+{
+    const DEBUG_DATA        = 'test debug data';
+
+    public function __construct($exception, $code = 0, $previous = null)
+    {
+        if($code === 1)
+        {
+            $this->is_debug = true;
+        }
+
+        parent::__construct($exception, $code, $previous);
+
+        $this->set_debug_data(['test' => self::DEBUG_DATA]);
+    }
+}
 
 /**
  * Test class for BaseException.
@@ -8,19 +27,19 @@ namespace Exceptions;
 class BaseExceptionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Тестовые данные для исключения
+     * Test data for the exception
      * @var array
      */
     protected $test_data;
 
     /**
-     * Информация об исключении
+     * Exception info
      * @var array
      */
     protected $test_base_data;
 
     /**
-     * Исключение
+     * Exception
      * @var BaseException
      */
     protected $BaseException;
@@ -31,19 +50,19 @@ class BaseExceptionTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->test_data = array
-        (
-            'level'         => BaseExceptionI::CRIT,
+        $this->test_data    =
+        [
+            'level'         => BaseExceptionI::CRITICAL,
             'ident'         => 'test_ident',
             'exdata'        => array(1,2,'string')
-        );
+        ];
 
-        $this->test_base_data = array
-        (
-            'message'   => 'test message',
-            'code'      => 11223344,
-            'previous'  => new \Exception('previous message', 123)
-        );
+        $this->test_base_data =
+        [
+            'message'       => 'test message',
+            'code'          => 11223344,
+            'previous'      => new \Exception('previous message', 123)
+        ];
 
         $this->BaseException = new BaseException(array_merge($this->test_data, $this->test_base_data));
     }
@@ -62,7 +81,7 @@ class BaseExceptionTest extends \PHPUnit_Framework_TestCase
      * @covers Exceptions\BaseException::set_loggable
      * @covers Exceptions\BaseException::is_loggable
      */
-    public function test__construct()
+    public function testConstruct()
     {
         $previous = new \Exception('ex', 2);
 
@@ -87,7 +106,7 @@ class BaseExceptionTest extends \PHPUnit_Framework_TestCase
      * @covers Exceptions\BaseException::__construct
      * @covers Exceptions\BaseException::get_previous
      */
-    public function test__construct_as_container()
+    public function testConstructAsContainer()
     {
         // 1. Случай контейнер для исключения \Exception
         $exception = new \UnderflowException
@@ -129,7 +148,7 @@ class BaseExceptionTest extends \PHPUnit_Framework_TestCase
      * @covers Exceptions\BaseException::set_loggable
      * @covers Exceptions\BaseException::is_loggable
      */
-    public function testSet_loggable()
+    public function testSetLoggable()
     {
         $this->BaseException->set_loggable(true);
         $this->assertTrue($this->BaseException->is_loggable(), 'Loggable flag must be TRUE');
@@ -144,13 +163,13 @@ class BaseExceptionTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Exceptions\BaseException::get_level
      */
-    public function testGet_level()
+    public function testGetLevel()
     {
         $this->assertEquals
         (
             $this->test_data['level'],
             $this->BaseException->get_level(),
-            'BaseException level must be BaseExceptionI::CRIT'
+            'BaseException level must be BaseExceptionI::CRITICAL'
         );
     }
 
@@ -158,15 +177,17 @@ class BaseExceptionTest extends \PHPUnit_Framework_TestCase
      * @covers Exceptions\BaseException::get_source
      * @covers Exceptions\BaseException::get_source_for
      */
-    public function testGet_source()
+    public function testGetSource()
     {
+        $this->assertEquals(__CLASS__.'->setUp', implode('', $this->BaseException->get_source()));
+        // called twice for check second call
         $this->assertEquals(__CLASS__.'->setUp', implode('', $this->BaseException->get_source()));
     }
 
     /**
      * @covers Exceptions\BaseException::get_data
      */
-    public function testGet_data()
+    public function testGetData()
     {
         $data = $this->BaseException->get_data();
 
@@ -182,19 +203,16 @@ class BaseExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(count($data) === 0, 'Data has contain unknown elements');
     }
 
-    /**
-     * @covers Exceptions\BaseException::to_array
-     * @covers Exceptions\BaseException::get_source_for
-     */
-    public function testTo_array()
+    public function testToArray()
     {
-        $data = $this->BaseException->to_array();
+        $data           = $this->BaseException->to_array();
 
-        $mockup = array
+        $mockup         = array
         (
-            'type'      => 'Exceptions\BaseException',
+            'type'      => BaseException::class,
             'source'    => ['source' => get_class($this), 'type' => '->', 'function' => 'setUp'],
             'message'   => $this->test_base_data['message'],
+            'template'  => '',
             'code'      => $this->test_base_data['code'],
             'data'      => ''
         );
@@ -230,20 +248,83 @@ class BaseExceptionTest extends \PHPUnit_Framework_TestCase
     /**
      * Тест to_array для исключения-контейнера
      */
-    public function testTo_array_for_container()
+    public function testToArrayForContainer()
     {
-        $exception  = new LoggableException(new \Exception('test', 2));
+        $exception      = new LoggableException(new \Exception('test', 2));
 
-        $data       = $exception->to_array();
+        $data           = $exception->to_array();
 
         $mockup = array
         (
-            'type'      => 'Exception',
-            'source'    => ['source' => get_class($this), 'type' => '->', 'function' => 'testTo_array_for_container'],
+            'type'      => \Exception::class,
+            'source'    => ['source' => get_class($this), 'type' => '->', 'function' => 'testToArrayForContainer'],
             'message'   => 'test',
             'code'      => 2,
             'data'      => [],
-            'container' => 'Exceptions\LoggableException'
+            'container' => LoggableException::class
+        );
+
+        $this->assertTrue(is_array($data), 'data must be array');
+
+        foreach($mockup as $main_key => $main_value)
+        {
+            $this->assertArrayHasKey($main_key, $data);
+            $this->assertEquals($mockup[$main_key], $main_value, "$main_key is not match");
+
+            unset($data[$main_key]);
+        }
+
+        $this->assertTrue(count($data) === 0, 'Data has contain unknown elements');
+    }
+
+    /**
+     * Тест to_array для исключения-контейнера
+     */
+    public function testToArrayForContainer2()
+    {
+        $exception      = new LoggableException(new BaseException(['message' => 'test', 'exdata' => 'data']));
+
+        $data           = $exception->to_array();
+
+        $mockup         =
+        [
+            'type'      => BaseException::class,
+            'source'    => ['source' => get_class($this), 'type' => '->', 'function' => 'testToArrayForContainer2'],
+            'message'   => 'test',
+            'template'  => '',
+            'code'      => 0,
+            'data'      => ['exdata' => $data],
+            'container' => LoggableException::class
+        ];
+
+        $this->assertTrue(is_array($data), 'data must be array');
+
+        foreach($mockup as $main_key => $main_value)
+        {
+            $this->assertArrayHasKey($main_key, $data);
+            $this->assertEquals($mockup[$main_key], $main_value);
+
+            unset($data[$main_key]);
+        }
+
+        $this->assertTrue(count($data) === 0, 'Data has contain unknown elements');
+    }
+
+    public function testToArrayForTemplate()
+    {
+        $test           = new \ArrayObject([1, 2, 3]);
+
+        $exception      = new UnexpectedValueType('$test', $test, 'string');
+
+        $data           = $exception->to_array();
+
+        $mockup         = array
+        (
+            'type'      => 'Exceptions\UnexpectedValueType',
+            'source'    => ['source' => get_class($this), 'type' => '->', 'function' => 'testToArrayForTemplate'],
+            'message'   => '',
+            'template'  => 'Unexpected type occurred for the value {name} and type {type}. Expected {expected}',
+            'code'      => 0
         );
 
         $this->assertTrue(is_array($data), 'data must be array');
@@ -252,189 +333,74 @@ class BaseExceptionTest extends \PHPUnit_Framework_TestCase
         {
             $this->assertArrayHasKey($main_key, $data);
 
-            if('data' === $main_key)
-            {
-                $this->assertTrue(is_array($data['data']), 'data[data] must be array');
-            }
-            elseif('source' === $main_key)
-            {
-                $this->assertEquals(serialize($main_value), serialize($data[$main_key]));
-            }
-            else
-            {
-                $this->assertEquals($main_value, $data[$main_key]);
-            }
-            unset($data[$main_key]);
+            $this->assertEquals($mockup[$main_key], $data[$main_key], "$main_key is failed");
         }
-
-        $this->assertTrue(count($data) === 0, 'Data has contain unknown elements');
     }
 
-    /**
-     * @covers Exceptions\BaseException::errors_to_array
-     */
-    public function testErrors_to_array()
+    public function testLoggableContainer()
     {
-        // Тест на одиночное исключение
-        $exceptions = BaseException::errors_to_array
-        (
-            new BaseException
-            (
-                array
-                (
-                    'message' => 'test message1',
-                    'code'    => 5,
-                    'exdata'  => array(2,3,4)
-                )
-            )
-        );
+        Registry::reset_exception_log();
 
-        $this->assertTrue(is_array($exceptions), '$exceptions must be array');
-        $this->assertTrue(count($exceptions) === 1, '$exceptions must have 1 elements');
+        $not_loggable_exception     = new BaseException('no logged message');
 
-        $res = array_shift($exceptions);
+        new LoggableException($not_loggable_exception);
 
-        $this->assertArrayHasKey('message', $res);
-        $this->assertArrayHasKey('code', $res);
-        $this->assertArrayHasKey('data', $res);
-        $this->assertArrayHasKey('exdata', $res['data']);
+        // $exception is container for BaseException
+        // and BaseException must be logged too.
 
-        $errors = array
-        (
-            new BaseException
-            (
-                array
-                (
-                    'message' => 'test message1',
-                    'code'    => 5,
-                    'exdata'  => array(2,3,4)
-                )
-            ),
-            new LoggableException
-            (
-                array
-                (
-                    'message' => 'test message2',
-                    'code'    => 6,
-                    'exdata'  => array(3,2,1)
-                )
-            ),
-            new \Exception('test message3', 7),
-            new BaseException('test message4',8)
-        );
+        $exceptions                 = Registry::get_exception_log();
 
-        $exceptions = BaseException::errors_to_array($errors);
-
-        $this->assertTrue(is_array($exceptions), '$exceptions must be array');
-        $this->assertTrue(count($exceptions) === 4, '$exceptions must have three elements');
-
-        $res = array_shift($exceptions);
-
-        $this->assertArrayHasKey('message', $res);
-        $this->assertArrayHasKey('code', $res);
-        $this->assertArrayHasKey('data', $res);
-
-        $this->assertEquals('test message1', $res['message']);
-        $this->assertEquals(5, $res['code']);
-        $this->assertTrue
-        (
-            isset($res['data']['exdata']) &&
-            is_array($res['data']['exdata']) &&
-            implode('|', $res['data']['exdata']) === '2|3|4',
-            'exdata failed'
-        );
-
-        $res = array_shift($exceptions);
-
-        $this->assertArrayHasKey('message', $res);
-        $this->assertArrayHasKey('code', $res);
-        $this->assertArrayHasKey('data', $res);
-
-        $this->assertEquals('test message2', $res['message']);
-        $this->assertEquals(6, $res['code']);
-        $this->assertTrue
-        (
-            isset($res['data']['exdata']) &&
-            is_array($res['data']['exdata']) &&
-            implode('|', $res['data']['exdata']) === '3|2|1',
-            'exdata failed'
-        );
-
-        $res = array_shift($exceptions);
-
-        $this->assertArrayHasKey('message', $res);
-        $this->assertArrayHasKey('code', $res);
-        $this->assertArrayHasKey('data', $res);
-
-        $this->assertEquals('test message3', $res['message']);
-        $this->assertEquals(7, $res['code']);
-
-        $res = array_shift($exceptions);
-
-        $this->assertArrayHasKey('message', $res);
-        $this->assertArrayHasKey('code', $res);
-        $this->assertArrayHasKey('data', $res);
-
-        $this->assertEquals('test message4', $res['message']);
-        $this->assertEquals(8, $res['code']);
-
+        $this->assertTrue(count($exceptions) === 1, 'count($exceptions) !== 1');
+        $this->assertTrue($not_loggable_exception === $exceptions[0], '$not_loggable_exception is failed');
     }
 
-    /**
-     * @covers Exceptions\BaseException::array_to_errors
-     */
-    public function testArray_to_errors()
+    public function testGetPrevious()
     {
-        $array = array();
+        // 1.
+        $exception                  = new BaseException('message');
 
-        for($i=0;$i<3;$i++)
-        {
-            $array[] = array
-            (
-                'message' => 'test message'.($i+5),
-                'code'    => ($i+10),
-                'exdata'  => ($i-10)
-            );
-        }
+        $previous                   = $exception->get_previous();
 
-        $results = BaseException::array_to_errors($array);
+        $this->assertEquals(null, $previous);
 
-        $i = 0;
-        foreach($results as $exception)
-        {
-            $this->assertInstanceOf('\Exceptions\BaseExceptionI', $exception);
-            $this->assertEquals('test message'.($i+5), $exception->getMessage(), '$exception->getMessage() failed');
-            $this->assertEquals(($i+10), $exception->getCode(), '$exception->getCode() failed');
-            $data = $exception->get_data();
-            $this->assertTrue(is_array($data), '$exception.data must be array');
-            $this->assertArrayHasKey('exdata', $data, '$exception.data.exdata no exists');
-            $this->assertEquals(($i-10), $data['exdata'], '$exception.data.exdata failed');
+        // 2.
+        $previous                   = new \Exception('previous');
 
-            $i++;
-        }
+        $exception                  = new BaseException('message', 0, $previous);
 
+        $this->assertTrue($previous === $exception->get_previous(), '$previous failed');
+
+        // 3.
+        $previous                   = new Error(Error::ERROR, 'test error', __FILE__, __LINE__);
+
+        $exception                  = new BaseException(['message' => 'test', 'previous' => $previous]);
+
+        $this->assertTrue($previous === $exception->get_previous(), '$previous failed for new Error');
     }
 
-    /**
-     * @covers Exceptions\BaseException::errors_to_array
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage $array must be array
-     */
-    public function testArray_to_errors_not_array()
+    public function testDebugData()
     {
-        BaseException::array_to_errors('not array');
+        $exception                  = new DebugException('message');
+
+        $this->assertEquals([], $exception->get_debug_data());
+
+        $exception                  = new DebugException('message', 1);
+
+        $this->assertEquals(['test' => DebugException::DEBUG_DATA], $exception->get_debug_data());
+
+        Registry::$Debug_options['debug'] = true;
+
+        $exception                  = new DebugException('message');
+
+        $this->assertEquals(['test' => DebugException::DEBUG_DATA], $exception->get_debug_data());
     }
 
-    /**
-     * @covers Exceptions\BaseException::errors_to_array
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage $error must be array
-     */
-    public function testArray_to_errors_error()
+    public function testAppendData()
     {
-        BaseException::array_to_errors(array(1,2,3));
-    }
+        $exception                  = new BaseException(['data' => 'test']);
 
+        $exception->append_data(['append_data' => 'data']);
+
+        $this->assertEquals(['data' => 'test', ['append_data' => 'data']], $exception->get_data());
+    }
 }
-
-?>

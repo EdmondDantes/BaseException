@@ -30,5 +30,3 @@ interface StorageI
      */
     public function reset_storage();
 }
-
-?>

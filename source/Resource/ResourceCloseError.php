@@ -8,5 +8,3 @@ class ResourceCloseError extends ResourceException
         parent::__construct($resource, $type, 'close');
     }
 }
-
-?>

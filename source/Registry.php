@@ -7,15 +7,15 @@ namespace Exceptions;
  * This is a static class which used as global registry for exceptions.
  * It defines the internal storage for exceptions which can be redefined by a programmer.
  *
- * Realy this class not log an exception.
+ * Really this class not log an exception.
  * It's stores them until called $save_handler.
  *
  * Prototype for *$save_handler*
  *
  * @param array             $exceptions         List of exceptions
  * @param callable          $reset_log          callback function for reset registry
- * @param ArrayAccess       $logger_options     options
- * @param ArrayAccess       $debug_options      and debug or profiler options
+ * @param \ArrayAccess      $logger_options     options
+ * @param \ArrayAccess      $debug_options      and debug or profiler options
  * function save_handler($exceptions, callable $reset_log, $logger_options = [], $debug_options = []);
  *
  */
@@ -23,20 +23,20 @@ class Registry
 {
     /**
      * Options for logger
-     * @var array|ArrayAccess
+     * @var array|\ArrayAccess
      */
     static public $Logger_options = [];
 
     /**
      * Options for debug mode
-     * @var array|ArrayAccess
+     * @var array|\ArrayAccess
      */
     static public $Debug_options  = [];
 
     /**
      * List of exception
      *
-     * @var array
+     * @var BaseException[]|\Exception[]|StorageI
      */
     static protected $exceptions = [];
 
@@ -73,7 +73,7 @@ class Registry
 
     /**
      * Setup global handler flag
-     * @var boolen
+     * @var boolean
      */
     static protected $install_global_handlers;
 
@@ -115,7 +115,7 @@ class Registry
     /**
      * Returns the list of exception
      *
-     * @return      array
+     * @return      BaseException[]|\Exception[]
      */
     static public function get_exception_log()
     {
@@ -270,9 +270,9 @@ class Registry
             return;
         }
 
-        register_shutdown_function(array(__CLASS__, 'shutdown_function'));
-        self::$old_error_handler        = set_error_handler(array(__CLASS__, 'error_handler'));
-        self::$old_exception_handler    = set_exception_handler(array(__CLASS__, 'exception_handler'));
+        register_shutdown_function([__CLASS__, 'shutdown_function']);
+        self::$old_error_handler        = set_error_handler([__CLASS__, 'error_handler']);
+        self::$old_exception_handler    = set_exception_handler([__CLASS__, 'exception_handler']);
         self::$install_global_handlers  = true;
     }
 
@@ -405,5 +405,3 @@ class Registry
         return false;
     }
 }
-
-?>

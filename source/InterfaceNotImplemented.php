@@ -2,12 +2,14 @@
 namespace Exceptions;
 
 /**
- * If class not implimented required interface
+ * If class not implemented required interface
  */
-class InterfaceNotImplemented  extends LoggableException
+class InterfaceNotImplemented   extends LoggableException
 {
+    protected $template         = 'Class {class} does not implement interface {interface}';
+
     /**
-     * Конструктор исключения
+     * Constructor for InterfaceNotImplemented
      *
      * @param       string|array|object     $class         Class name
      * @param       string                  $interface     Required interface
@@ -26,15 +28,10 @@ class InterfaceNotImplemented  extends LoggableException
         else
         {
             parent::__construct
-            (
-                array
-                (
-                    'message'   => "Class '$class' does not implement interface $interface",
-                    'class'     => $class,
-                    'interface' => $interface
-                )
-            );
+            ([
+                'class'     => $class,
+                'interface' => $interface
+            ]);
         }
     }
 }
-?>

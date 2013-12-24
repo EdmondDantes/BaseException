@@ -7,4 +7,3 @@ namespace Exceptions;
 class LogicalException      extends LoggableException
 {
 }
-?>

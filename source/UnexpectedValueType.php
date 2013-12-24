@@ -6,6 +6,8 @@ namespace Exceptions;
  */
 class UnexpectedValueType   extends LoggableException
 {
+    protected $template         = 'Unexpected type occurred for the value {name} and type {type}. Expected {expected}';
+
     /**
      * Value of variable has unexpected type.
      *
@@ -25,15 +27,10 @@ class UnexpectedValueType   extends LoggableException
         }
 
         parent::__construct
-        (
-            array
-            (
-                'message'     => 'Unexpected value type',
-                'name'        => $name,
-                'value'       => self::get_value_type($value),
-                'expected'    => $expected
-            )
-        );
+        ([
+            'name'        => $name,
+            'type'        => $this->type_info($value),
+            'expected'    => $expected
+        ]);
     }
 }
-?>

@@ -6,6 +6,8 @@ namespace Exceptions;
  */
 class SerializeException  extends LoggableException
 {
+    protected $template  = 'Serialize process was failed (type:{type}, object:{object}, src:{src_object}). {reason}';
+
     /**
      * Object can't be serialized!
      *
@@ -27,8 +29,8 @@ class SerializeException  extends LoggableException
             'message'       => 'Serialize Failed',
             'reason'        => $reason,
             'type'          => $type,
-            'object'        => $this->get_value_type($object),
-            'src_object'    => $this->get_value_type($src_object)
+            'object'        => $this->type_info($object),
+            'src_object'    => $this->type_info($src_object)
         ]);
     }
 }

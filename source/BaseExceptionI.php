@@ -6,56 +6,55 @@ interface BaseExceptionI
     /**
      * System is unusable
      */
-    const EMERG     = 1;
+    const EMERGENCY     = 1;
 
     /**
      * Immediate action required
      */
-    const ALERT     = 2;
+    const ALERT         = 2;
 
     /**
      * Critical conditions
      */
-    const CRIT      = 3;
+    const CRITICAL      = 3;
 
     /**
      * Error conditions
      */
-    const ERR       = 4;
+    const ERROR         = 4;
 
     /**
      * Warning conditions
      */
-    const WARNING   = 5;
+    const WARNING       = 5;
 
     /**
      * Normal but significant
      */
-    const NOTICE    = 6;
+    const NOTICE        = 6;
 
     /**
      * Informational
      */
-    const INFO      = 7;
+    const INFO          = 7;
 
     /**
      * 	Debug-level messages
      */
-    const DEBUG     = 8;
+    const DEBUG         = 8;
 
     /**
      * Mode for raise of exception
      */
-    const RISE      = false;
+    const RISE          = false;
     /**
      * Mode for mute of exception
      */
-    const MUTE      = true;
+    const MUTE          = true;
     /**
      * Mode, then function returns exception.
      */
-    const RESULT    = 1;
-
+    const RESULT        = 1;
 
     public function getMessage();
     public function getPrevious();
@@ -64,6 +63,14 @@ interface BaseExceptionI
     public function getLine();
     public function getTrace();
     public function getTraceAsString();
+
+
+    /**
+     * Template message
+     *
+     * @return string
+     */
+    public function template();
 
     /**
      * The method sets a logging flag.
@@ -151,9 +158,16 @@ interface BaseExceptionI
     public function get_data();
 
     /**
+     * @param       array       $data   The additional data
+     *
+     * @return      BaseExceptionI
+     */
+    public function append_data(array $data);
+
+    /**
      * The method returns debug data for exception
      *
-     * @return mixed
+     * @return      array
      */
     public function get_debug_data();
 
@@ -164,5 +178,3 @@ interface BaseExceptionI
      */
     public function to_array();
 }
-
-?>

@@ -2,7 +2,7 @@ BaseException [![Build Status](https://secure.travis-ci.org/EdmondDantes/BaseExc
 =============
 
 Base Exception Library for PHP 5.4+
-(The latest version: 1.3.0)
+(The latest version: 2.0.0)
 
 Missions:
 

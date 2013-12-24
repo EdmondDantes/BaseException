@@ -7,4 +7,3 @@ namespace Exceptions;
 class RuntimeException extends BaseException implements RuntimeExceptionI
 {
 }
-?>

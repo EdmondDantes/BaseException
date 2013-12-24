@@ -7,4 +7,3 @@ namespace Exceptions;
 class FatalSystemException extends FatalException implements SystemExceptionI
 {
 }
-?>

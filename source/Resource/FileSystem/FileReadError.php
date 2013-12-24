@@ -1,7 +1,9 @@
 <?PHP
 namespace Exceptions\Resource\FileSystem;
 
-class FileReadError     extends   \Exceptions\Resource\ResourceReadError
+use \Exceptions\Resource\ResourceReadError;
+
+class FileReadError     extends    ResourceReadError
                         implements FileSystemExceptionI
 {
     protected $system   = self::SYSTEM;
@@ -11,5 +13,3 @@ class FileReadError     extends   \Exceptions\Resource\ResourceReadError
         parent::__construct($resource, $type);
     }
 }
-
-?>

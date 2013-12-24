@@ -1,4 +1,4 @@
-<?php
+<?PHP
 namespace Exceptions;
 
 /**
@@ -7,14 +7,7 @@ namespace Exceptions;
  */
 class FatalExceptionTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @covers Exceptions\FatalException::__construct
-     * @covers Exceptions\BaseException::is_fatal
-     * @covers Exceptions\BaseException::set_fatal
-     * @covers Exceptions\Errors\Error::is_fatal
-     * @covers Exceptions\Errors\Error::set_fatal
-     */
-    public function test__construct()
+    public function testConstruct()
     {
         // 1. Случай контейнер для исключения \Exception
         $exception = new \Exception('message', 123);
@@ -61,7 +54,10 @@ class FatalExceptionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($e->is_fatal(), '$e->is_fatal() failed');
         $this->assertTrue($e->is_loggable(), '$e->is_loggable() failed');
+
+        // 4. Simple
+        $e = new FatalException('message');
+        $e->set_fatal();
+        $this->assertTrue($e->is_fatal(), '$e->is_fatal() failed');
     }
 }
-
-?>

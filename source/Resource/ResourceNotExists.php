@@ -3,11 +3,12 @@ namespace Exceptions\Resource;
 
 class ResourceNotExists extends ResourceException
 {
+    protected $template = '{system} error: {type} is not exist. Resource: {resource}, Operation: {operation}';
+
     public function __construct($resource, $type = 'resource')
     {
         parent::__construct
         ([
-            'message'   => $this->system.' Exception: '.$type.' not exists',
             'resource'  => $resource,
             'operation' => 'is_'.$type,
             'type'      => $type,
@@ -15,5 +16,3 @@ class ResourceNotExists extends ResourceException
         ]);
     }
 }
-
-?>

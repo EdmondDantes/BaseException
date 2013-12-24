@@ -6,6 +6,8 @@ namespace Exceptions;
  */
 class UnexpectedMethodMode  extends LoggableException
 {
+    protected $template         = 'Unexpected method mode occurred (method: {method}, mode: {mode} = {value})';
+
     /**
      * The method does not support this mode of work.
      *
@@ -26,16 +28,11 @@ class UnexpectedMethodMode  extends LoggableException
         else
         {
             parent::__construct
-            (
-                array
-                (
-                    'message' => 'Unexpected method mode',
-                    'method'  => $method,
-                    'mode'    => $mode,
-                    'value'   => $value
-                )
-            );
+            ([
+                'method'  => $method,
+                'mode'    => $mode,
+                'value'   => $value
+            ]);
         }
     }
 }
-?>

@@ -1,7 +1,9 @@
 <?PHP
 namespace Exceptions\Resource\FileSystem;
 
-class FileNotReadable   extends    \Exceptions\Resource\ResourceNotReadable
+use \Exceptions\Resource\ResourceNotReadable;
+
+class FileNotReadable   extends    ResourceNotReadable
                         implements FileSystemExceptionI
 {
     protected $system   = self::SYSTEM;
@@ -11,5 +13,3 @@ class FileNotReadable   extends    \Exceptions\Resource\ResourceNotReadable
         parent::__construct($resource, $type);
     }
 }
-
-?>

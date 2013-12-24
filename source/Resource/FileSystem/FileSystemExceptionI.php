@@ -5,5 +5,3 @@ interface FileSystemExceptionI
 {
     const SYSTEM        = 'FileSystem';
 }
-
-?>

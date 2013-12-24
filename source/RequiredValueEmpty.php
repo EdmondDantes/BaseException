@@ -4,8 +4,10 @@ namespace Exceptions;
 /**
  * If required value is empty
  */
-class RequiredValueEmpty extends LoggableException
+class RequiredValueEmpty        extends LoggableException
 {
+    protected $template         = 'The Required value {name} is empty ({expected})';
+
     /**
      * If required value is empty
      *
@@ -21,16 +23,7 @@ class RequiredValueEmpty extends LoggableException
         }
         else
         {
-            parent::__construct
-            (
-                array
-                (
-                    'message'     => 'Required value empty',
-                    'name'        => $name,
-                    'expected'    => $expected
-                )
-            );
+            parent::__construct(['name' => $name, 'expected' => $expected]);
         }
     }
 }
-?>

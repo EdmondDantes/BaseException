@@ -8,5 +8,3 @@ class ResourceUnLockFailed extends ResourceException
         parent::__construct($resource, $type, 'unlock');
     }
 }
-
-?>
