@@ -10,6 +10,11 @@ namespace Exceptions;
 class RegistryStorageTest extends RegistryTest
 {
     /**
+     * @var \Mockups\Storage
+     */
+    protected $Storage;
+
+    /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
@@ -36,7 +41,4 @@ class RegistryStorageTest extends RegistryTest
         $this->assertTrue(count(Registry::get_exception_log()) === 0, 'get_exception_log must have 0 items');
         $this->assertTrue(count($this->Storage->Exceptions) === 0, '$this->Storage->Exceptions must have 0 items');
     }
-
 }
-
-?>
