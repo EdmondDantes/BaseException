@@ -74,7 +74,7 @@ trait TemplateHandlerT
 
         foreach($data as $key => $value)
         {
-            $context['{'.$key.'}'] = $this->to_string($value);
+            $context['{'.$key.'}'] = $this->to_string($value, true);
         }
 
         $template               = strtr($template, $context);

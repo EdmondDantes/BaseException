@@ -6,7 +6,7 @@ namespace Exceptions;
  */
 class UnexpectedValue   extends LoggableException
 {
-    protected $template         = 'Unexpected value {name} occurred with type {type}';
+    protected $template         = 'Unexpected value {value} occurred in the variable {name}';
 
     /**
      * The variable has unexpected value!

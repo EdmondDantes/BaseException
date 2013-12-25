@@ -5,7 +5,7 @@ class TemplateHandlerTTest extends \PHPUnit_Framework_TestCase
 {
     use TemplateHandlerT;
 
-    protected function to_string($value, $is_quoted = true)
+    protected function to_string($value, $is_quoted = false)
     {
         if($is_quoted)
         {

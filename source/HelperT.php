@@ -101,7 +101,7 @@ trait HelperT
      *
      * @return      string
      */
-    protected function to_string($value, $is_quoted = true)
+    protected function to_string($value, $is_quoted = false)
     {
         // truncate data
         if(is_string($value) && strlen($value) > 63)
