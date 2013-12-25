@@ -10,7 +10,7 @@
 
     <filter>
         <whitelist>
-            <directory>./source</directory>
+            <directory>../source</directory>
         </whitelist>
     </filter>
 </phpunit>
