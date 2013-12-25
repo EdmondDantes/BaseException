@@ -11,7 +11,7 @@ trait TemplateHandlerT
      *
      * @return  string
      */
-    abstract protected function to_string($value, $is_quoted = true);
+    abstract protected function to_string($value, $is_quoted = false);
 
     /**
      * Handles the template message
