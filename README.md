@@ -16,7 +16,49 @@ Missions:
 
 # Overview
 
-## BaseException::__construct()
+## Templates for the error message
+
+```php
+class MyException extends \Exceptions\BaseException
+{
+    protected $template         = 'The template error message with {var}';
+
+    public function __construct($var)
+    {
+        parent::__construct
+        ([
+             'var'         => $this->to_string($var)
+         ]);
+    }
+}
+
+$exception = new MyException('string');
+
+// should be printed: The template error message with 'string'
+echo $exception->getMessage();
+```
+
+## Independent logging exceptions (Exceptions Registry)
+
+```php
+
+use \Exceptions\Registry;
+use \Exceptions\LoggableException;
+
+Registry::reset_exception_log();
+
+$exception      = new LoggableException('this is a loggable exception');
+
+$log            = Registry::get_exception_log();
+
+if($log[0] === $exception)
+{
+    echo 'this is loggable $exception';
+}
+
+```
+
+## Support of the exception context parameters
 
 The basic use:
 
@@ -43,7 +85,7 @@ List of parameters:
 
 ```
 
-Container-Exception:
+## Exception Container
 
 ```php
 
@@ -61,7 +103,7 @@ Container-Exception:
     }
     catch(BaseException $exception)
     {
-        // out "test"
+        // should be printed: "test"
         echo $exception->getMessage();
     }
 
@@ -95,6 +137,24 @@ The container is used to change the flag `is_loggable`:
 
 ```
 
+## Appends parameters after the exception has been thrown
+
+```php
+
+try
+{
+    dispatch_current_url();
+}
+catch(BaseException $my_exception)
+{
+    $my_exception->append_data(['browser' => get_browser()]);
+
+    // and throw exception on...
+    throw $my_exception;
+}
+
+```
+
 ## Inheriting from the BaseException
 
 ```php
@@ -111,13 +171,10 @@ class ClassNotExist  extends BaseException
     public function __construct($class)
     {
         parent::__construct
-        (
-            array
-            (
-                'message' => "Сlass '$class' does not exist",
-                'class'   => $class
-            )
-        );
+        ([
+             'template'    => 'Сlass {class} does not exist',
+             'class'       => $class
+        ]);
     }
 }
 ```
