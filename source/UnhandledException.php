@@ -7,7 +7,7 @@ namespace Exceptions;
  */
 class UnhandledException extends LoggableException
 {
-    protected $template = 'Unhandled Exception {type} occurred';
+    protected $template = 'Unhandled Exception {type} occurred in the {source}';
 
     /**
      * @param \Exception|BaseExceptionI $exception
@@ -16,8 +16,7 @@ class UnhandledException extends LoggableException
     {
         parent::__construct
         ([
-            'message'   => 'Unhandled Exception',
-            'type'      => get_class($exception),
+            'type'      => $this->type_info($exception),
             'source'    => $this->get_source_for($exception),
             'previous'  => $exception
         ]);

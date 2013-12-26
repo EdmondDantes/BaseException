@@ -6,7 +6,7 @@ namespace Exceptions;
  */
 class UnSerializeException  extends LoggableException
 {
-    protected $template = 'Unserialize process was failed (type: {type}, node: {node}). {reason}';
+    protected $template = 'Unserialize process was failed (type: {type}, node: {node})';
 
     /**
      * Object can't be serialized!
@@ -25,7 +25,7 @@ class UnSerializeException  extends LoggableException
 
         parent::__construct
         ([
-            'reason'        => $reason,
+            'message'       => $reason,
             'type'          => $type,
             'node'          => $this->type_info($node)
         ]);

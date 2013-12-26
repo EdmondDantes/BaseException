@@ -16,11 +16,6 @@ class InterfaceNotImplemented   extends LoggableException
      */
     public function __construct($class, $interface)
     {
-        if(is_object($class))
-        {
-            $class = get_class($class);
-        }
-
         if(is_array($class))
         {
             parent::__construct($class);
@@ -29,7 +24,7 @@ class InterfaceNotImplemented   extends LoggableException
         {
             parent::__construct
             ([
-                'class'     => $class,
+                'class'     => $this->type_info($class),
                 'interface' => $interface
             ]);
         }

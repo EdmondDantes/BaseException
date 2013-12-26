@@ -2,11 +2,13 @@
 namespace Exceptions;
 
 /**
- * Rais if the expression is not callable.
+ * Raise if the expression is not callable.
  * (Usually when using function is_callable)
  */
 class CallableException extends LoggableException
 {
+    protected $template     = 'Expression {expression} is not callable';
+
     /**
      * Expression is not callable!
      *
@@ -14,15 +16,9 @@ class CallableException extends LoggableException
      */
     public function __construct($expression)
     {
-        if(is_object($expression) || is_resource($expression))
-        {
-            $expression = self::to_string($expression);
-        }
-
         parent::__construct
         ([
-            'message'       => 'Expression is not callable',
-            'expression'    => $expression
+            'expression'    => $this->to_string($expression)
         ]);
     }
 }
