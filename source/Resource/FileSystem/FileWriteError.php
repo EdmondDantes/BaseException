@@ -1,7 +1,7 @@
 <?PHP
 namespace Exceptions\Resource\FileSystem;
 
-use \Exceptions\Resource\ResourceWriteError;
+use Exceptions\Resource\ResourceWriteError;
 
 class FileWriteError    extends    ResourceWriteError
                         implements FileSystemExceptionI

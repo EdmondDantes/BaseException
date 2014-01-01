@@ -1,7 +1,7 @@
 <?PHP
 namespace Exceptions\Resource\FileSystem;
 
-use \Exceptions\Resource\ResourceNotExists;
+use Exceptions\Resource\ResourceNotExists;
 
 class FileNotExists     extends     ResourceNotExists
                         implements  FileSystemExceptionI

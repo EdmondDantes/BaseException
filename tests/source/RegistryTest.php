@@ -1,7 +1,7 @@
 <?PHP
 namespace Exceptions;
 
-use \Exceptions\Errors\Error;
+use Exceptions\Errors\Error;
 
 /**
  * Имитация PHP функции register_shutdown_function

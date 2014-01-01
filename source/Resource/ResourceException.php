@@ -1,7 +1,7 @@
 <?PHP
 namespace Exceptions\Resource;
 
-use \Exceptions\SystemException;
+use Exceptions\SystemException;
 
 /**
  * The basic class for exceptions related to resources.

@@ -1,7 +1,7 @@
 <?PHP
 namespace Exceptions\Resource\FileSystem;
 
-use \Exceptions\Resource\ResourceOpenError;
+use Exceptions\Resource\ResourceOpenError;
 
 class FileOpenError     extends    ResourceOpenError
                         implements FileSystemExceptionI

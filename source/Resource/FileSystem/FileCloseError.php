@@ -1,7 +1,7 @@
 <?PHP
 namespace Exceptions\Resource\FileSystem;
 
-use \Exceptions\Resource\ResourceCloseError;
+use Exceptions\Resource\ResourceCloseError;
 
 class FileCloseError    extends    ResourceCloseError
                         implements FileSystemExceptionI

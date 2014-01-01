@@ -1,7 +1,7 @@
 <?PHP
 namespace Exceptions\Errors;
 
-use \Exceptions\BaseExceptionI;
+use Exceptions\BaseExceptionI;
 
 /**
  * The class for encapsulate of PHP Errors

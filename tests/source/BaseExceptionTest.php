@@ -1,7 +1,7 @@
 <?PHP
 namespace Exceptions;
 
-use \Exceptions\Errors\Error;
+use Exceptions\Errors\Error;
 
 class DebugException extends BaseException
 {

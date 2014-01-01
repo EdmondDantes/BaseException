@@ -1,7 +1,7 @@
 <?PHP
 namespace Exceptions\Resource\FileSystem;
 
-use \Exceptions\Resource\ResourceNotWritable;
+use Exceptions\Resource\ResourceNotWritable;
 
 class FileNotWritable  extends     ResourceNotWritable
                         implements FileSystemExceptionI

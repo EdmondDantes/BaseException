@@ -1,7 +1,7 @@
 <?PHP
 namespace Exceptions\Resource\FileSystem;
 
-use \Exceptions\Resource\ResourceLockFailed;
+use Exceptions\Resource\ResourceLockFailed;
 
 class FileLockFailed    extends    ResourceLockFailed
                         implements FileSystemExceptionI

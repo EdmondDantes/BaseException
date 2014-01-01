@@ -1,7 +1,7 @@
 <?PHP
 namespace Exceptions\Resource\FileSystem;
 
-use \Exceptions\Resource\ResourceReadError;
+use Exceptions\Resource\ResourceReadError;
 
 class FileReadError     extends    ResourceReadError
                         implements FileSystemExceptionI
