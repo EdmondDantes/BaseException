@@ -98,10 +98,11 @@ trait HelperT
      *
      * @param       mixed       $value          Value
      * @param       boolean     $is_quoted      If result has been quoted?
+     * @param       int         $array_max      Max count items of array
      *
      * @return      string
      */
-    protected function to_string($value, $is_quoted = false)
+    protected function to_string($value, $is_quoted = false, $array_max = 5)
     {
         // truncate data
         if(is_string($value) && strlen($value) > 63)
@@ -126,7 +127,7 @@ trait HelperT
         {
             $result         = [];
 
-            foreach(array_slice($value, 0, 4, true) as $key => $item)
+            foreach(array_slice($value, 0, $array_max, true) as $key => $item)
             {
                 if(is_scalar($item))
                 {
@@ -138,7 +139,7 @@ trait HelperT
                 }
             }
 
-            if(count($value) > 4)
+            if(count($value) > $array_max)
             {
                 $value      = count($value).'['.implode(', ', $result).']';
             }

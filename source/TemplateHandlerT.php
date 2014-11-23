@@ -8,10 +8,11 @@ trait TemplateHandlerT
      *
      * @param   mixed      $value
      * @param   bool       $is_quoted
+     * @param   int        $array_max
      *
      * @return  string
      */
-    abstract protected function to_string($value, $is_quoted = false);
+    abstract protected function to_string($value, $is_quoted = false, $array_max = 5);
 
     /**
      * Handles the template message
