@@ -287,6 +287,8 @@ class Registry
             return;
         }
 
+        self::$install_global_handlers  = false;
+
         if(!empty(self::$old_error_handler))
         {
             set_error_handler(self::$old_error_handler);

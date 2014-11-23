@@ -348,9 +348,12 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
             $is_call = true;
         };
 
-        Registry::set_unhandled_handler($callback);
+        $old         = Registry::set_unhandled_handler($callback);
 
         Registry::exception_handler($exception);
+
+        // restore
+        Registry::set_unhandled_handler($old);
 
         $this->assertTrue($is_call, '$callback isn\'t called');
     }
