@@ -82,7 +82,7 @@ class HelperTTest extends \PHPUnit_Framework_TestCase
         $data_set[]             = [[1, 2, 3], false, "[0:1, 1:2, 2:3]"];
         $data_set[]             = [['key' => 'value'], true, "[key:'value']"];
         $data_set[]             = [[], true, "[]"];
-        $data_set[]             = [array_fill(0, 100, 8), false, "100[0:8, 1:8, 2:8, 3:8]"];
+        $data_set[]             = [array_fill(0, 100, 8), false, "100[0:8, 1:8, 2:8, 3:8, 4:8]"];
         $data_set[]             = [[1, []], true, "[0:'1', 1:ARRAY(0)]"];
 
         $fh                     = fopen('php://memory', 'rw');
