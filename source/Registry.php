@@ -9,15 +9,6 @@ namespace Exceptions;
  *
  * Really this class not log an exception.
  * It's stores them until called $save_handler.
- *
- * Prototype for *$save_handler*
- *
- * @param array             $exceptions         List of exceptions
- * @param callable          $reset_log          callback function for reset registry
- * @param \ArrayAccess      $logger_options     options
- * @param \ArrayAccess      $debug_options      and debug or profiler options
- * function save_handler($exceptions, callable $reset_log, $logger_options = [], $debug_options = []);
- *
  */
 class Registry
 {
@@ -43,19 +34,19 @@ class Registry
     /**
      * Handler which called from save_exception_log
      *
-     * @var callback
+     * @var SaveHandlerI
      */
     static protected $save_handler;
 
     /**
      * Handler for unhandled exception
-     * @var callable
+     * @var HandlerI
      */
     static protected $unhandled_handler;
 
     /**
      * Handler called for fatal exception
-     * @var callable
+     * @var HandlerI
      */
     static protected $fatal_handler;
 
@@ -89,7 +80,7 @@ class Registry
     final private function __construct(){}
 
     /**
-     * Registred exception.
+     * Registered exception.
      *
      * This method may be used with set_exception_handler()
      *
@@ -152,7 +143,7 @@ class Registry
         }
         else
         {
-            self::$exceptions = array();
+            self::$exceptions = [];
         }
     }
 
@@ -161,11 +152,10 @@ class Registry
      */
     static public function save_exception_log()
     {
-        if(is_callable(self::$save_handler))
+        if(self::$save_handler instanceof SaveHandlerI)
         {
-            call_user_func
+            self::$save_handler->save_exceptions
             (
-                self::$save_handler,
                 (self::$exceptions instanceof StorageI) ? self::$exceptions->get_storage() : self::$exceptions,
                 [__CLASS__, 'reset_exception_log'],
                 self::$Logger_options,
@@ -193,33 +183,43 @@ class Registry
     /**
      * Setup save handler
      *
-     * @param       callable        $callback       Callback
+     * @param       SaveHandlerI                $handler       Handler
      *
-     * @return      callable                        Returns old handler if exists
+     * @return      SaveHandlerI|null           Returns old handler if exists
      */
-    static public function set_save_handler($callback)
+    static public function set_save_handler(SaveHandlerI $handler = null)
     {
         $old = self::$save_handler;
 
-        self::$save_handler = $callback;
+        self::$save_handler = $handler;
 
         return $old;
     }
 
-    static public function set_unhandled_handler($callback)
+    /**
+     * @param       HandlerI        $handler
+     *
+     * @return      HandlerI|null
+     */
+    static public function set_unhandled_handler(HandlerI $handler = null)
     {
         $old = self::$unhandled_handler;
 
-        self::$unhandled_handler = $callback;
+        self::$unhandled_handler = $handler;
 
         return $old;
     }
 
-    static public function set_fatal_handler($callback)
+    /**
+     * @param       HandlerI        $handler
+     *
+     * @return      HandlerI|null
+     */
+    static public function set_fatal_handler(HandlerI $handler = null)
     {
         $old = self::$fatal_handler;
 
-        self::$fatal_handler = $callback;
+        self::$fatal_handler = $handler;
 
         return $old;
     }
@@ -231,9 +231,9 @@ class Registry
      */
     static public function call_fatal_handler(BaseExceptionI $exception = null)
     {
-        if(is_callable(self::$fatal_handler))
+        if(self::$fatal_handler instanceof HandlerI)
         {
-            call_user_func(self::$fatal_handler, $exception);
+            self::$fatal_handler->exception_handler($exception);
         }
     }
 
@@ -251,7 +251,7 @@ class Registry
         }
         else
         {
-            return array();
+            return [];
         }
     }
 
@@ -330,9 +330,9 @@ class Registry
 
         new UnhandledException($exception);
 
-        if(is_callable(self::$unhandled_handler))
+        if(self::$unhandled_handler instanceof HandlerI)
         {
-            call_user_func(self::$unhandled_handler, $exception);
+            self::$unhandled_handler->exception_handler($exception);
         }
     }
 
