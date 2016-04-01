@@ -9,20 +9,20 @@ class ArraySerializerTTest extends \PHPUnit_Framework_TestCase
     public function testErrors_to_array()
     {
         // ones exception
-        $exceptions = $this->errors_to_array
+        $exceptions                     = $this->errors_to_array
         (
             new BaseException
             ([
-                'message'   => 'test message1',
-                'code'      => 5,
-                'exdata'    => array(2,3,4)
+                'message'               => 'test message1',
+                'code'                  => 5,
+                'exdata'                => [2,3,4]
             ])
         );
 
         $this->assertTrue(is_array($exceptions), '$exceptions must be array');
         $this->assertTrue(count($exceptions) === 1, '$exceptions must have 1 elements');
 
-        $res = array_shift($exceptions);
+        $res                            = array_shift($exceptions);
 
         $this->assertArrayHasKey('message', $res);
         $this->assertArrayHasKey('code', $res);
@@ -31,32 +31,32 @@ class ArraySerializerTTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('exdata', $res['data']);
 
         // several exceptions
-        $errors             =
+        $errors                         =
         [
             new BaseException
             ([
-                'message'   => 'test message1',
-                'code'      => 5,
-                'exdata'    => [2,3,4]
+                'message'               => 'test message1',
+                'code'                  => 5,
+                'exdata'                => [2,3,4]
             ]),
             new LoggableException
             ([
-                'message'   => 'test message2',
-                'code'      => 6,
-                'template'  => 'this LoggableException with {code}',
-                'exdata'    => [3,2,1]
+                'message'               => 'test message2',
+                'code'                  => 6,
+                'template'              => 'this LoggableException with {code}',
+                'exdata'                => [3,2,1]
             ]),
             new \Exception('test message3', 7),
             new BaseException('test message4',8)
         ];
 
-        $exceptions         = $this->errors_to_array($errors);
+        $exceptions                     = $this->errors_to_array($errors);
 
         $this->assertTrue(is_array($exceptions), '$exceptions must be array');
         $this->assertTrue(count($exceptions) === 4, '$exceptions must have three elements');
 
         // 1.
-        $res                = array_shift($exceptions);
+        $res                            = array_shift($exceptions);
 
         $this->assertArrayHasKey('message', $res);
         $this->assertArrayHasKey('code', $res);
@@ -74,7 +74,7 @@ class ArraySerializerTTest extends \PHPUnit_Framework_TestCase
         );
 
         // 2.
-        $res                = array_shift($exceptions);
+        $res                            = array_shift($exceptions);
 
         $this->assertArrayHasKey('message', $res);
         $this->assertArrayHasKey('code', $res);
@@ -92,16 +92,16 @@ class ArraySerializerTTest extends \PHPUnit_Framework_TestCase
             'exdata failed'
         );
 
-        $res                = array_shift($exceptions);
+        $res                            = array_shift($exceptions);
 
         $this->assertArrayHasKey('message', $res);
         $this->assertArrayHasKey('code', $res);
-        $this->assertArrayHasKey('data', $res);
+        //$this->assertArrayHasKey('data', $res);
 
         $this->assertEquals('test message3', $res['message']);
         $this->assertEquals(7, $res['code']);
 
-        $res = array_shift($exceptions);
+        $res                            = array_shift($exceptions);
 
         $this->assertArrayHasKey('message', $res);
         $this->assertArrayHasKey('code', $res);
@@ -114,22 +114,23 @@ class ArraySerializerTTest extends \PHPUnit_Framework_TestCase
 
     public function testArray_to_errors()
     {
-        $array              = array();
+        $array                          = [];
 
         for($i=0;$i<3;$i++)
         {
-            $array[]        =
+            $array[]                    =
             [
-                'message'   => 'test message'.($i+5),
-                'template'  => 'test template with {code} and {exdata}',
-                'code'      => ($i+10),
-                'exdata'    => ($i-10)
+                'message'               => 'test message'.($i+5),
+                'template'              => 'test template with {code} and {exdata}',
+                'code'                  => ($i+10),
+                'exdata'                => ($i-10)
             ];
         }
 
         $results = $this->array_to_errors($array);
 
-        $i = 0;
+        $i                              = 0;
+
         foreach($results as $exception)
         {
             $this->assertInstanceOf('\Exceptions\BaseExceptionI', $exception);

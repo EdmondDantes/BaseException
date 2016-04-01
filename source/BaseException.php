@@ -112,13 +112,13 @@ class BaseException extends \Exception implements BaseExceptionI
      * 3. $exception - BaseExceptionI
      *    In this case, exception acts as container,
      *    but it does not inherit a data from the $exception.
-     * 4. $exception - \Exception -
+     * 4. $exception - \Throwable -
      *    In this case, exception acts as container,
      *    and inherits a data from the $exception
      *
      * @param 		mixed 				$exception      Exception
      * @param 		int 				$code           Code
-     * @param 		\Exception 			$previous       Previous or aggregate exception
+     * @param 		\Throwable 			$previous       Previous or aggregate exception
      */
     public function __construct($exception, $code = 0, $previous = null)
     {
@@ -139,7 +139,7 @@ class BaseException extends \Exception implements BaseExceptionI
 
             $previous           = $exception;
         }
-        elseif($exception instanceof \Exception)
+        elseif($exception instanceof \Throwable)
         {
             $this->is_container = true;
 
@@ -189,7 +189,7 @@ class BaseException extends \Exception implements BaseExceptionI
 
         // parent construct
         if( $previous instanceof BaseExceptionI
-        && ($previous instanceof \Exception) === false)
+        && ($previous instanceof \Throwable) === false)
         {
             parent::__construct($message, $code);
 
@@ -333,13 +333,13 @@ class BaseException extends \Exception implements BaseExceptionI
      * Also if this exception is container, when that method may be used
      * for getting contained object of BaseExceptionI.
      *
-     * @return      BaseExceptionI|\Exception|null
+     * @return      BaseExceptionI|\Throwable|null
      */
     public function get_previous()
     {
         $previous       = $this->getPrevious();
 
-        if($previous instanceof \Exception)
+        if($previous instanceof \Throwable)
         {
             return $previous;
         }

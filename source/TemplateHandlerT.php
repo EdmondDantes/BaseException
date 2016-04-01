@@ -21,13 +21,13 @@ trait TemplateHandlerT
      * @param   array               $data           Extended data
      * @param   string              $message        Message of exception
      * @param   int                 $code           Code
-     * @param   \Exception          $previous       Previous Exception
+     * @param   \Throwable          $previous       Previous Exception
      *
      * @throws  \UnexpectedValueException
      *
      * @return string
      */
-    protected function handle_template($template, array $data, $message, $code, \Exception $previous = null)
+    protected function handle_template($template, array $data, $message, $code, \Throwable $previous = null)
     {
         if(!is_string($template))
         {

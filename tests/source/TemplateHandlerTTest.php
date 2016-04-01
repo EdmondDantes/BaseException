@@ -5,6 +5,13 @@ class TemplateHandlerTTest extends \PHPUnit_Framework_TestCase
 {
     use TemplateHandlerT;
 
+    /** @noinspection PhpHierarchyChecksInspection */
+    /**
+     * @param       string        $value
+     * @param       bool          $is_quoted
+     *
+     * @return      string
+     */
     protected function to_string($value, $is_quoted = false)
     {
         if($is_quoted)

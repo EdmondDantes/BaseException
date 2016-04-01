@@ -6,12 +6,12 @@ trait HelperT
     /**
      * The method defines the source of the exception.
      *
-     * @param       \Exception      $e
+     * @param       \Throwable      $e
      * @param       boolean         $is_string
      *
      * @return      array|string
      */
-    final protected function get_source_for(\Exception $e, $is_string = false)
+    final protected function get_source_for(\Throwable $e, $is_string = false)
     {
         $res                    = $e->getTrace()[0];
 
@@ -105,9 +105,9 @@ trait HelperT
     protected function to_string($value, $is_quoted = false, $array_max = 5)
     {
         // truncate data
-        if(is_string($value) && strlen($value) > 63)
+        if(is_string($value) && strlen($value) > 255)
         {
-            $value          = substr($value, 0, 63).'…';
+            $value          = substr($value, 0, 255).'…';
         }
         elseif(is_bool($value))
         {

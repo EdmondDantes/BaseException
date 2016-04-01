@@ -84,11 +84,13 @@ class Registry
      *
      * This method may be used with set_exception_handler()
      *
+     * @param BaseExceptionI|\Throwable     $exception
+     *
      */
     static public function register_exception($exception)
     {
         if(($exception instanceof BaseExceptionI)   === false
-        && ($exception instanceof \Exception)       === false )
+        && ($exception instanceof \Throwable)       === false )
         {
             return;
         }
@@ -309,7 +311,7 @@ class Registry
     }
 
 
-    static public function exception_handler(\Exception $exception)
+    static public function exception_handler(\Throwable $exception)
     {
         if($exception instanceof BaseExceptionI)
         {

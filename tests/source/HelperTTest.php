@@ -90,8 +90,8 @@ class HelperTTest extends \PHPUnit_Framework_TestCase
         $data_set[]             = [$fh, true, "RESOURCE: stream (MEMORY, PHP, w+b) php://memory"];
         $data_set[]             = [$fh, false, "RESOURCE: stream (MEMORY, PHP, w+b) php://memory"];
 
-        $string                 = array_fill(0, 64, 'A');
-        $expected               = array_fill(0, 63, 'A');
+        $string                 = array_fill(0, 256, 'A');
+        $expected               = array_fill(0, 255, 'A');
 
         $data_set[]             = [implode($string), true, "'".implode($expected)."…'"];
 

@@ -6,12 +6,12 @@ trait ArraySerializerT
     /**
      * The method defines the source of the exception.
      *
-     * @param       \Exception      $e
+     * @param       \Throwable      $e
      * @param       boolean         $is_string
      *
      * @return      array|string
      */
-    abstract protected function get_source_for(\Exception $e, $is_string = false);
+    abstract protected function get_source_for(\Throwable $e, $is_string = false);
 
     /**
      * The method serialized errors BaseExceptionI to an array
@@ -36,7 +36,7 @@ trait ArraySerializerT
                 /* @var BaseExceptionI $error */
                 $results[]      = $error->to_array();
             }
-            elseif($error instanceof \Exception)
+            elseif($error instanceof \Throwable)
             {
                 /* @var \Exception $error */
                 $results[]      =
@@ -44,24 +44,25 @@ trait ArraySerializerT
                     'type'      => get_class($error),
                     'source'    => $this->get_source_for($error),
                     'message'   => $error->getMessage(),
-                    'code'      => $error->getCode(),
-                    'data'      => $error->getTrace()
+                    'code'      => $error->getCode()
                 ];
             }
         }
+
         return $results;
     }
 
     /**
      * The method deserialized array of array to array of errors.
      *
-     * @param 			array 						$array array of array
+     * @param 			array 						$array      array of array
+     * @param           string                      $class      class for exception
      *
      * @return          BaseException[]
      *
      * @throws          \UnexpectedValueException
      */
-    protected function array_to_errors(array $array)
+    protected function array_to_errors(array $array, $class = BaseException::class)
     {
         $results                = [];
 
@@ -72,7 +73,7 @@ trait ArraySerializerT
                 throw new \UnexpectedValueException('$error must be array');
             }
 
-            $results[]          = new BaseException($error);
+            $results[]          = new $class($error);
         }
 
         return $results;

@@ -6,7 +6,7 @@ interface HandlerI
     /**
      * Exception handler
      *
-     * @param       \Exception|BaseExceptionI   $exception
+     * @param       \Throwable|BaseExceptionI   $exception
      *
      * @return      void
      */

@@ -10,9 +10,9 @@ class UnhandledException extends LoggableException
     protected $template = 'Unhandled Exception {type} occurred in the {source}';
 
     /**
-     * @param \Exception|BaseExceptionI $exception
+     * @param \Throwable|BaseExceptionI $exception
      */
-    public function __construct(\Exception $exception)
+    public function __construct(\Throwable $exception)
     {
         parent::__construct
         ([

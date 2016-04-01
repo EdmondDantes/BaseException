@@ -14,9 +14,9 @@ class FatalException extends LoggableException
     /**
      * FatalException
      *
-     * @param       \Exception|mixed    $exception
+     * @param       \Throwable|mixed    $exception
      * @param       int                 $code
-     * @param       \Exception          $previous
+     * @param       \Throwable          $previous
      */
     public function __construct($exception, $code = 0, $previous = null)
     {

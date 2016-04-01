@@ -80,7 +80,7 @@ interface BaseExceptionI
      *
      * @param   boolean     $flag   logging flag
      *
-     * @return  BaseExceptionI
+     * @return  $this
      */
     public function set_loggable($flag);
 
@@ -105,7 +105,7 @@ interface BaseExceptionI
      *
      * Calling this method may lead to a call handler fatal errors.
      *
-     * @return  BaseException
+     * @return  $this
      */
     public function set_fatal();
 
@@ -147,7 +147,7 @@ interface BaseExceptionI
      * Also if this exception is container, when that method may be used
      * for getting contained object of BaseExceptionI.
      *
-     * @return      BaseExceptionI|\Exception|null
+     * @return      BaseExceptionI|\Throwable|null
      */
     public function get_previous();
 
