@@ -4,9 +4,9 @@ namespace Exceptions;
 /**
  * If class not implemented required interface
  */
-class InterfaceNotImplemented   extends LoggableException
+class InterfaceNotImplemented       extends LoggableException
 {
-    protected $template         = 'Class {class} does not implement interface {interface}';
+    protected string $template      = 'Class {class} does not implement interface {interface}';
 
     /**
      * Constructor for InterfaceNotImplemented

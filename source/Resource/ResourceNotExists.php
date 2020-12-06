@@ -3,7 +3,7 @@ namespace Exceptions\Resource;
 
 class ResourceNotExists extends ResourceException
 {
-    protected $template = '{system} error: {type} is not exist. Resource: {resource}, Operation: {operation}';
+    protected string $template = '{system} error: {type} is not exist. Resource: {resource}, Operation: {operation}';
 
     public function __construct($resource, $type = 'resource')
     {

@@ -4,9 +4,9 @@ namespace Exceptions;
 /**
  * Object can't be serialized!
  */
-class SerializeException  extends LoggableException
+class SerializeException            extends LoggableException
 {
-    protected $template  = 'Serialize process was failed (type:{type}, object:{object}, src:{src_object}). {reason}';
+    protected string $template      = 'Serialize process was failed (type:{type}, object:{object}, src:{src_object}). {reason}';
 
     /**
      * Object can't be serialized!

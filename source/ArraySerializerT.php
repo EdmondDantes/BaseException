@@ -20,7 +20,7 @@ trait ArraySerializerT
      *
      * @return          array
      */
-    protected function errors_to_array($errors)
+    protected function errors_to_array($errors): array
     {
         if($errors instanceof BaseExceptionI)
         {
@@ -62,7 +62,7 @@ trait ArraySerializerT
      *
      * @throws          \UnexpectedValueException
      */
-    protected function array_to_errors(array $array, $class = BaseException::class)
+    protected function array_to_errors(array $array, $class = BaseException::class): array
     {
         $results                = [];
 

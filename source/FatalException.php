@@ -9,7 +9,7 @@ namespace Exceptions;
  * It is marked $exception as "fatal" and logged its
  *
  */
-class FatalException extends LoggableException
+class FatalException                extends LoggableException
 {
     /**
      * FatalException

@@ -4,9 +4,9 @@ namespace Exceptions;
 /**
  * If required value is empty
  */
-class RequiredValueEmpty        extends LoggableException
+class RequiredValueEmpty            extends LoggableException
 {
-    protected $template         = 'The Required value {name} is empty ({expected})';
+    protected string $template      = 'The Required value {name} is empty ({expected})';
 
     /**
      * If required value is empty

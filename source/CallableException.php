@@ -7,14 +7,14 @@ namespace Exceptions;
  */
 class CallableException extends LoggableException
 {
-    protected $template     = 'Expression {expression} is not callable';
-
+    protected string $template     = 'Expression {expression} is not callable';
+    
     /**
      * Expression is not callable!
      *
-     * @param       mixed        $expression     Expression
+     * @param mixed                 $expression Expression
      */
-    public function __construct($expression)
+    public function __construct(mixed $expression)
     {
         parent::__construct
         ([

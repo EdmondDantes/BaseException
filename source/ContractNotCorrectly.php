@@ -13,7 +13,7 @@ class ContractNotCorrectly      extends LoggableException
     const INT                   = 'interface';
     const METHOD                = 'method';
 
-    protected $template         = 'Contract is not correctly for {type} in the trait {trait} which used by {object}';
+    protected string $template  = 'Contract is not correctly for {type} in the trait {trait} which used by {object}';
 
     /**
      * Contract is not correctly

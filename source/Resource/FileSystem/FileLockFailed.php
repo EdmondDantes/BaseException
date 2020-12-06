@@ -6,7 +6,7 @@ use Exceptions\Resource\ResourceLockFailed;
 class FileLockFailed    extends    ResourceLockFailed
                         implements FileSystemExceptionI
 {
-    protected $system   = self::SYSTEM;
+    protected string $system   = self::SYSTEM;
 
     public function __construct($resource, $type = 'file')
     {

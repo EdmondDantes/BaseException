@@ -10,19 +10,18 @@ use Exceptions\SystemException;
  */
 class ResourceException extends SystemException
 {
-    protected $template = '{system} error: operation {operation} for the resource {resource} ({type}) is failed';
+    protected string $template  =
+        '{system} error: operation {operation} for the resource {resource} ({type}) is failed';
 
     /**
      * @var string
      */
-    protected $system   = 'undefined';
+    protected string $system    = 'undefined';
 
     /**
-     * Конструктор проблем с файловой системой
-     *
-     * @param       string|object       $resource       Ресурс
-     * @param       string              $operation      Операция
-     * @param       string              $type           Тип ресурса
+     * @param       string|object|array $resource
+     * @param       string              $operation
+     * @param       string              $type
      */
     public function __construct($resource, $type = '', $operation = '')
     {

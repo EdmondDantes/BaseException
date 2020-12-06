@@ -6,15 +6,15 @@ namespace Exceptions;
  */
 class MethodNotCallable     extends LogicalException
 {
-    protected $template     = 'The method {method} is not callable';
-
+    protected string $template      = 'The method {method} is not callable';
+    
     /**
      * MethodNotCallable
      *
-     * @param       string|array        $method         Method
-     * @param       string              $message        Extended Message
+     * @param   string|array        $method  Method
+     * @param   string              $message Extended Message
      */
-    public function __construct($method, $message = '')
+    public function __construct(array|string $method, $message = '')
     {
         if(!is_scalar($method))
         {

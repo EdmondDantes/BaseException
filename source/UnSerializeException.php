@@ -4,9 +4,9 @@ namespace Exceptions;
 /**
  * Object can't be unserialized!
  */
-class UnSerializeException  extends LoggableException
+class UnSerializeException          extends LoggableException
 {
-    protected $template = 'Unserialize process was failed (type: {type}, node: {node})';
+    protected string $template      = 'Unserialize process was failed (type: {type}, node: {node})';
 
     /**
      * Object can't be serialized!
