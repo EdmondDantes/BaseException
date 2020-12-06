@@ -70,19 +70,19 @@ interface BaseExceptionI
      *
      * @return string
      */
-    public function template();
-
+    public function template(): string;
+    
     /**
      * The method sets a logging flag.
      *
      * If set flag from TRUE to FALSE,
      * then the exception will not be saved to log (may be).
      *
-     * @param   boolean     $flag   logging flag
+     * @param   boolean         $flag logging flag
      *
      * @return  $this
      */
-    public function set_loggable($flag);
+    public function set_loggable(bool $flag);
 
     /**
      * The method returns a logging flag.
@@ -91,14 +91,14 @@ interface BaseExceptionI
      *
      * @return boolean
      */
-    public function is_loggable();
+    public function is_loggable(): bool;
 
     /**
      * The method returns TRUE - if an exception is fatal.
      *
      * @return boolean
      */
-    public function is_fatal();
+    public function is_fatal(): bool;
 
     /**
      * Method marks the exception as fatal.
@@ -113,18 +113,18 @@ interface BaseExceptionI
      * The method will return true, if an exception is the container.
      * @return boolean
      */
-    public function is_container();
+    public function is_container(): bool;
 
     /**
      * The method returns an error level
      * @return      int
      */
-    public function get_level();
+    public function get_level(): int;
 
     /**
      * The method returns the source of error.
      *
-     * The method returns an array of values​​:
+     * The method returns an array of values:
      * [
      *      'source'    => class name or file name, where the exception occurred
      *      'type'      => type of the call
@@ -133,9 +133,9 @@ interface BaseExceptionI
      *
      * Attention the order of elements in the array is important!
      *
-     * @return array
+     * @return array|null
      */
-    public function get_source();
+    public function get_source(): ?array;
 
     /**
      * The method returns previous exception.
@@ -149,13 +149,13 @@ interface BaseExceptionI
      *
      * @return      BaseExceptionI|\Throwable|null
      */
-    public function get_previous();
+    public function get_previous(): \Throwable|BaseExceptionI|null;
 
     /**
      * The method returns extra data for exception
      * @return array
      */
-    public function get_data();
+    public function get_data(): array;
 
     /**
      * @param       array       $data   The additional data
@@ -169,12 +169,12 @@ interface BaseExceptionI
      *
      * @return      array
      */
-    public function get_debug_data();
+    public function get_debug_data(): array;
 
     /**
      * The method serialized object to an array.
      *
      * @return array
      */
-    public function to_array();
+    public function to_array(): array;
 }

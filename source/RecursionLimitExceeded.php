@@ -6,7 +6,7 @@ namespace Exceptions;
  */
 class RecursionLimitExceeded extends LoggableException
 {
-    protected $template         = 'Recursion limit exceeded: {limit}';
+    protected string $template         = 'Recursion limit exceeded: {limit}';
 
     /**
      * Reached a maximum depth of recursion

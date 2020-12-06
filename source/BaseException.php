@@ -34,7 +34,8 @@ namespace Exceptions;
  * Class supports the template of the error message instead of the plain message.
  *
  */
-class BaseException extends \Exception implements BaseExceptionI
+class BaseException                 extends     \Exception
+                                    implements  BaseExceptionI
 {
     use HelperT;
     use ArraySerializerT;
@@ -44,37 +45,37 @@ class BaseException extends \Exception implements BaseExceptionI
      * Layout of the default properties
      * @var array
      */
-    static protected $base_props = ['message' => '', 'code' => 0, 'previous' => null, 'template' => ''];
+    static protected array $base_props = ['message' => '', 'code' => 0, 'previous' => null, 'template' => ''];
 
     /**
      * template message
      * @var string
      */
-    protected $template     = '';
+    protected string $template      = '';
 
     /**
      * Extra data to exception
      * @var         array
      */
-    protected $data         = [];
+    protected array $data           = [];
 
     /**
      * Source of error
-     * @var         array
+     * @var         array|null
      */
-    protected $source;
+    protected ?array $source        = null;
 
     /**
      * Debug data
      * @var         array
      */
-    protected $debug_data   = [];
+    protected array $debug_data     = [];
 
     /**
      * Container flag
      * @var         boolean
      */
-    protected $is_container = false;
+    protected bool $is_container    = false;
 
     /**
      * Logged flag.
@@ -83,21 +84,21 @@ class BaseException extends \Exception implements BaseExceptionI
      *
      * @var         boolean
      */
-    protected $is_loggable  = false;
+    protected bool $is_loggable     = false;
 
     /**
      * Fatal exception flag
      *
      * @var         boolean
      */
-    protected $is_fatal     = false;
+    protected bool $is_fatal        = false;
 
     /**
      * Debug mode flag
-     * @var         boolean
+     * @var         boolean|null
      */
-    protected $is_debug;
-
+    protected ?bool $is_debug        = null;
+    
     /**
      * BaseException constructor.
      *
@@ -116,11 +117,11 @@ class BaseException extends \Exception implements BaseExceptionI
      *    In this case, exception acts as container,
      *    and inherits a data from the $exception
      *
-     * @param 		mixed 				$exception      Exception
-     * @param 		int 				$code           Code
-     * @param 		\Throwable 			$previous       Previous or aggregate exception
+     * @param mixed $exception Exception
+     * @param int   $code      Code
+     * @param null  $previous  Previous or aggregate exception
      */
-    public function __construct($exception, $code = 0, $previous = null)
+    public function __construct(mixed $exception, $code = 0, $previous = null)
     {
         $template               = '';
         $message                = '';
@@ -218,7 +219,7 @@ class BaseException extends \Exception implements BaseExceptionI
      *
      * @return      string
      */
-    public function template()
+    public function template(): string
     {
         return $this->template;
     }
@@ -230,22 +231,22 @@ class BaseException extends \Exception implements BaseExceptionI
      *
      * @return boolean
      */
-    public function is_loggable()
+    public function is_loggable(): bool
     {
         return $this->is_loggable;
     }
-
+    
     /**
      * The method sets a logging flag.
      *
      * If set flag from TRUE to FALSE,
      * then the exception will not be saved to log (may be).
      *
-     * @param   boolean     $flag   logging flag
+     * @param boolean $flag logging flag
      *
-     * @return  BaseException
+     * @return  $this
      */
-    public function set_loggable($flag)
+    public function set_loggable(bool $flag)
     {
         $this->is_loggable = (boolean) $flag;
 
@@ -257,7 +258,7 @@ class BaseException extends \Exception implements BaseExceptionI
      *
      * @return boolean
      */
-    public function is_fatal()
+    public function is_fatal(): bool
     {
         return $this->is_fatal;
     }
@@ -287,7 +288,7 @@ class BaseException extends \Exception implements BaseExceptionI
      * The method will return true, if an exception is the container.
      * @return boolean
      */
-    public function is_container()
+    public function is_container(): bool
     {
         return $this->is_container;
     }
@@ -296,7 +297,7 @@ class BaseException extends \Exception implements BaseExceptionI
      * The method returns an error level
      * @return      int
      */
-    public function get_level()
+    public function get_level(): int
     {
         return empty($this->data['level']) ? self::ERROR : $this->data['level'];
     }
@@ -304,16 +305,16 @@ class BaseException extends \Exception implements BaseExceptionI
     /**
      * The method returns the source of error.
      *
-     * The method returns an array of values​​:
+     * The method returns an array of values:
      * [
      *      'source'    => class name or file name, where the exception occurred
      *      'type'      => type of the call
      *      'function'  => function or method or closure
      * ]
      *
-     * @return array
+     * @return array|null
      */
-    public function get_source()
+    public function get_source(): ?array
     {
         if(is_array($this->source))
         {
@@ -335,7 +336,7 @@ class BaseException extends \Exception implements BaseExceptionI
      *
      * @return      BaseExceptionI|\Throwable|null
      */
-    public function get_previous()
+    public function get_previous(): BaseExceptionI|\Throwable|null
     {
         $previous       = $this->getPrevious();
 
@@ -356,7 +357,7 @@ class BaseException extends \Exception implements BaseExceptionI
      * The method returns extra data for exception
      * @return array
      */
-    public function get_data()
+    public function get_data(): array
     {
         return $this->data;
     }
@@ -371,9 +372,9 @@ class BaseException extends \Exception implements BaseExceptionI
     /**
      * The method returns debug data for exception
      *
-     * @return mixed
+     * @return array
      */
-    public function get_debug_data()
+    public function get_debug_data(): array
     {
         return $this->debug_data;
     }
@@ -383,7 +384,7 @@ class BaseException extends \Exception implements BaseExceptionI
      *
      * @return array
      */
-    public function to_array()
+    public function to_array(): array
     {
         // If this exception is container, then it returns data of container.
         if($this->is_container())
@@ -443,7 +444,7 @@ class BaseException extends \Exception implements BaseExceptionI
      *
      * @return  string|array
      */
-    protected function type_info($value)
+    protected function type_info(mixed $value): string|array
     {
         return $this->get_value_type($value);
     }
@@ -453,7 +454,7 @@ class BaseException extends \Exception implements BaseExceptionI
      *
      * @return      boolean
      */
-    protected function is_debug()
+    protected function is_debug(): bool
     {
         if(is_bool($this->is_debug))
         {

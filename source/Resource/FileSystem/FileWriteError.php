@@ -6,7 +6,7 @@ use Exceptions\Resource\ResourceWriteError;
 class FileWriteError    extends    ResourceWriteError
                         implements FileSystemExceptionI
 {
-    protected $system   = self::SYSTEM;
+    protected string $system   = self::SYSTEM;
 
     public function __construct($resource, $type = 'file')
     {

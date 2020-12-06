@@ -1,16 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<phpunit
-    bootstrap="./autoload.php"
->
- <testsuites>
+<phpunit colors="true" bootstrap="./autoload.php">
+    <testsuites>
         <testsuite name="BaseException test suite">
             <directory>./source</directory>
         </testsuite>
     </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>../source</directory>
-        </whitelist>
-    </filter>
 </phpunit>

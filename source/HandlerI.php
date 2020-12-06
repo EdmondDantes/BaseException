@@ -10,5 +10,5 @@ interface HandlerI
      *
      * @return      void
      */
-    public function exception_handler($exception);
+    public function exception_handler(\Throwable|BaseExceptionI $exception): void;
 }

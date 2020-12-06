@@ -13,8 +13,8 @@ class Error implements BaseExceptionI
 	 * Conformity between PHP-errors and BaseExceptionI
 	 * @var array
 	 */
-	protected static $ERRORS = array
-    (
+	protected static array $ERRORS =
+    [
         E_ERROR              => self::ERROR,
         E_WARNING            => self::WARNING,
         E_PARSE              => self::CRITICAL,
@@ -30,26 +30,26 @@ class Error implements BaseExceptionI
         E_RECOVERABLE_ERROR  => self::ERROR,
         E_DEPRECATED         => self::INFO,
         E_USER_DEPRECATED    => self::INFO
-	);
+	];
 
-    protected $message;
-    protected $code;
-    protected $file;
-    protected $line;
-    protected $trace;
+    protected string $message;
+    protected int $code;
+    protected string $file;
+    protected string $line;
+    protected ?array $trace;
 
     /**
      * Loggable flag
      *
      * @var         boolean
      */
-    protected $is_loggable  = true;
+    protected bool $is_loggable = true;
 
     /**
      * Fatal error flag
      * @var         boolean
      */
-    protected $is_fatal     = false;
+    protected bool $is_fatal     = false;
 
     /**
      * Errors factory
@@ -58,11 +58,10 @@ class Error implements BaseExceptionI
      * @param        string         $errstr     Message
      * @param        string         $errfile    File
      * @param        string         $errline    Line
-     * @param        array          $errcontext Context
      *
      * @return       Error
     */
-    static public function create_error($errno, $errstr, $errfile, $errline, $errcontext = null)
+    static public function create_error(int $errno, string $errstr, string $errfile, string $errline)
     {
         if(!array_key_exists($errno, self::$ERRORS))
         {
@@ -71,7 +70,7 @@ class Error implements BaseExceptionI
 
         if(in_array($errno, array(E_USER_ERROR, E_USER_WARNING, E_USER_NOTICE)))
         {
-            return new UserError($errno, $errstr, $errfile, $errline, $errcontext);
+            return new UserError($errno, $errstr, $errfile, $errline);
         }
 
         switch(self::$ERRORS[$errno])
@@ -81,7 +80,7 @@ class Error implements BaseExceptionI
                 //
                 // EMERGENCY created as fatal error
                 //
-                $err = new Error($errno, $errstr, $errfile, $errline, $errcontext);
+                $err = new Error($errno, $errstr, $errfile, $errline);
                 $err->set_fatal();
 
                 return $err;
@@ -90,21 +89,21 @@ class Error implements BaseExceptionI
             case self::CRITICAL     :
             case self::ERROR      :
             {
-                return new Error($errno, $errstr, $errfile, $errline, $errcontext);
+                return new Error($errno, $errstr, $errfile, $errline);
             }
             case self::WARNING  :
             {
-                return new Warning($errno, $errstr, $errfile, $errline, $errcontext);
+                return new Warning($errno, $errstr, $errfile, $errline);
             }
             case self::NOTICE   :
             case self::INFO     :
             case self::DEBUG    :
             {
-                return new Notice($errno, $errstr, $errfile, $errline, $errcontext);
+                return new Notice($errno, $errstr, $errfile, $errline);
             }
             default:
             {
-                return new Error($errno, $errstr, $errfile, $errline, $errcontext);
+                return new Error($errno, $errstr, $errfile, $errline);
             }
         }
     }
@@ -116,19 +115,17 @@ class Error implements BaseExceptionI
      * @param        string         $errstr     Message
      * @param        string         $errfile    File
      * @param        string         $errline    Line
-     * @param        array          $errcontext Context
      *
     */
-    public function __construct($errno, $errstr, $errfile, $errline, $errcontext = null)
+    public function __construct(int $errno, string $errstr, string $errfile, string $errline)
     {
         $this->code    = $errno;
         $this->message = $errstr;
         $this->file    = $errfile;
         $this->line    = $errline;
-        $this->trace   = $errcontext;
     }
 
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
@@ -138,27 +135,27 @@ class Error implements BaseExceptionI
         return null;
     }
 
-    public function getCode()
+    public function getCode(): int
     {
         return $this->code;
     }
 
-    public function getFile()
+    public function getFile(): string
     {
         return $this->file;
     }
 
-    public function getLine()
+    public function getLine(): string
     {
         return $this->line;
     }
 
-    public function getTrace()
+    public function getTrace(): ?array
     {
         return $this->trace;
     }
 
-    public function getTraceAsString()
+    public function getTraceAsString(): string
     {
         if(empty($this->trace))
         {
@@ -168,19 +165,19 @@ class Error implements BaseExceptionI
         return print_r($this->trace, true);
     }
 
-    public function is_loggable()
+    public function is_loggable(): bool
     {
         return $this->is_loggable;
     }
 
-    public function set_loggable($flag)
+    public function set_loggable(bool $flag)
     {
         $this->is_loggable = (boolean) $flag;
 
         return $this;
     }
 
-    public function is_fatal()
+    public function is_fatal(): bool
     {
         return $this->is_fatal;
     }
@@ -192,7 +189,7 @@ class Error implements BaseExceptionI
         return $this;
     }
 
-    public function is_container()
+    public function is_container(): bool
     {
         return false;
     }
@@ -201,7 +198,7 @@ class Error implements BaseExceptionI
      * Returns level of error
      * @return      int
      */
-    public function get_level()
+    public function get_level(): int
     {
         if(!array_key_exists($this->code, self::$ERRORS))
         {
@@ -210,37 +207,37 @@ class Error implements BaseExceptionI
 
         return self::$ERRORS[$this->code];
     }
-
-    public function get_source()
+    
+    public function get_source(): array
     {
         return ['source' => $this->getFile(), 'type' => '', 'function' => ''];
     }
 
-    public function get_previous()
+    public function get_previous(): \Throwable|BaseExceptionI|null
     {
         return null;
     }
 
-    public function get_data()
+    public function get_data(): array
     {
-        return array();
+        return [];
     }
 
-    public function get_debug_data()
+    public function get_debug_data(): array
     {
-        return '';
+        return [];
     }
 
-    public function to_array()
+    public function to_array(): array
     {
-        return array
-        (
+        return
+        [
             'type'      => get_class($this),
             'source'    => $this->get_source(),
             'message'   => $this->getMessage(),
             'code'      => $this->getCode(),
-            'data'      => array()
-        );
+            'data'      => []
+        ];
     }
 
     public function append_data(array $data)
@@ -249,7 +246,7 @@ class Error implements BaseExceptionI
         return $this;
     }
 
-    public function template()
+    public function template(): string
     {
         return '';
     }

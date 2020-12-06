@@ -1,18 +1,18 @@
 <?PHP
 namespace Exceptions;
 
-class TemplateHandlerTTest extends \PHPUnit_Framework_TestCase
+class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
 {
     use TemplateHandlerT;
 
     /** @noinspection PhpHierarchyChecksInspection */
     /**
-     * @param       string        $value
-     * @param       bool          $is_quoted
+     * @param string $value
+     * @param bool   $is_quoted
      *
      * @return      string
      */
-    protected function to_string($value, $is_quoted = false)
+    protected function to_string(mixed $value, bool $is_quoted = false, int $array_max = 5): string
     {
         if($is_quoted)
         {

@@ -12,7 +12,7 @@ trait TemplateHandlerT
      *
      * @return  string
      */
-    abstract protected function to_string($value, $is_quoted = false, $array_max = 5);
+    abstract protected function to_string(mixed $value, bool $is_quoted = false, int $array_max = 5);
 
     /**
      * Handles the template message

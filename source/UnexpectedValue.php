@@ -4,9 +4,9 @@ namespace Exceptions;
 /**
  * The variable has unexpected value!
  */
-class UnexpectedValue   extends LoggableException
+class UnexpectedValue               extends LoggableException
 {
-    protected $template         = 'Unexpected value {value} occurred in the variable {name}';
+    protected string $template      = 'Unexpected value {value} occurred in the variable {name}';
 
     /**
      * The variable has unexpected value!

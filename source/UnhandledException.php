@@ -5,9 +5,9 @@ namespace Exceptions;
  * Special exception, which is used to mark an unhandled exception.
  * Is used in the `Registry`.
  */
-class UnhandledException extends LoggableException
+class UnhandledException            extends LoggableException
 {
-    protected $template = 'Unhandled Exception {type} occurred in the {source}';
+    protected string $template      = 'Unhandled Exception {type} occurred in the {source}';
 
     /**
      * @param \Throwable|BaseExceptionI $exception

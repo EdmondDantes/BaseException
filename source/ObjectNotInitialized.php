@@ -5,9 +5,9 @@ namespace Exceptions;
  * If object not initialized
  * but using!
  */
-class ObjectNotInitialized  extends LoggableException
+class ObjectNotInitialized          extends LoggableException
 {
-    protected $template     = 'Object {object} is not initialized';
+    protected string $template      = 'Object {object} is not initialized';
 
     /**
      * If object not initialized

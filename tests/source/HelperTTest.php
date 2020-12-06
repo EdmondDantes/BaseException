@@ -1,7 +1,7 @@
 <?PHP
 namespace Exceptions;
 
-class HelperTTest extends \PHPUnit_Framework_TestCase
+class HelperTTest               extends \PHPUnit\Framework\TestCase
 {
     use HelperT;
 

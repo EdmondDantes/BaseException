@@ -11,5 +11,5 @@ class LoggableException extends BaseException
      *
      * @var         boolean
      */
-    protected $is_loggable  = true;
+    protected bool $is_loggable  = true;
 }

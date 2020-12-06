@@ -4,9 +4,9 @@ namespace Exceptions;
 /**
  * The method does not support this mode of work.
  */
-class UnexpectedMethodMode  extends LoggableException
+class UnexpectedMethodMode          extends LoggableException
 {
-    protected $template         = 'Unexpected method mode occurred (method: {method}, mode: {mode} = {value})';
+    protected string $template      = 'Unexpected method mode occurred (method: {method}, mode: {mode} = {value})';
 
     /**
      * The method does not support this mode of work.

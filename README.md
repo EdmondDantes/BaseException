@@ -1,8 +1,8 @@
 BaseException [![Build Status](https://secure.travis-ci.org/EdmondDantes/BaseException.png)](http://travis-ci.org/EdmondDantes/BaseException)
 =============
 
-Base Exception Library for PHP 7.0+
-(The latest version: 3.0.0)
+Base Exception Library for PHP 8.0+
+(The latest version: 4.0.0)
 
 Missions:
 
@@ -21,7 +21,7 @@ Missions:
 ```php
 class MyException extends \Exceptions\BaseException
 {
-    protected $template         = 'The template error message with {var}';
+    protected string $template      = 'The template error message with {var}';
 
     public function __construct($var)
     {
@@ -161,14 +161,14 @@ catch(BaseException $my_exception)
 class ClassNotExist  extends BaseException
 {
     // This exception will be logged
-    protected $is_loggable = true;
+    protected bool $is_loggable = true;
 
     /**
      * ClassNotExist
      *
      * @param       string      $class         Class name
      */
-    public function __construct($class)
+    public function __construct(string $class)
     {
         parent::__construct
         ([
@@ -185,7 +185,7 @@ class ClassNotExist  extends BaseException
 class MyFatalException  extends BaseException
 {
     // This exception has aspect: "fatal"
-    protected $is_fatal    = true;
+    protected bool $is_fatal    = true;
 }
 ```
 

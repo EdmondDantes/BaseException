@@ -6,14 +6,14 @@ namespace Exceptions;
  */
 class ClassNotExist  extends LoggableException
 {
-    protected $template     = 'The class {class} does not exist';
-
+    protected string $template     = 'The class {class} does not exist';
+    
     /**
      * ClassNotExist
      *
-     * @param       string|array    $class         Class name
+     * @param string|array          $class Class name
      */
-    public function __construct($class)
+    public function __construct(array|string $class)
     {
         if(!is_scalar($class))
         {
