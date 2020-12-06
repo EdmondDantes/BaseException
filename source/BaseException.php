@@ -63,7 +63,7 @@ class BaseException                 extends     \Exception
      * Source of error
      * @var         array|null
      */
-    protected ?array $source        = [];
+    protected ?array $source        = null;
 
     /**
      * Debug data
@@ -95,9 +95,9 @@ class BaseException                 extends     \Exception
 
     /**
      * Debug mode flag
-     * @var         boolean
+     * @var         boolean|null
      */
-    protected bool $is_debug        = false;
+    protected ?bool $is_debug        = null;
     
     /**
      * BaseException constructor.

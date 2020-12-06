@@ -1,7 +1,7 @@
 <?PHP
 namespace Exceptions;
 
-class ArraySerializerTTest extends \PHPUnit_Framework_TestCase
+class ArraySerializerTTest extends \PHPUnit\Framework\TestCase
 {
     use HelperT;
     use ArraySerializerT;
@@ -150,13 +150,11 @@ class ArraySerializerTTest extends \PHPUnit_Framework_TestCase
             $i++;
         }
     }
-
-    /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage $error must be array
-     */
+    
     public function testArray_to_errors_error()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('$error must be array');
         $this->array_to_errors([1,2,3]);
     }
 }

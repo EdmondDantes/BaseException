@@ -345,15 +345,14 @@ class Registry
      * @param        string         $errstr     Description
      * @param        string         $errfile    File
      * @param        string         $errline    Line
-     * @param        array          $errcontext Context
      *
      * @return       boolean
     */
-    static public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
+    static public function error_handler($errno, $errstr, $errfile, $errline)
     {
         self::register_exception
         (
-            Errors\Error::create_error($errno, $errstr, $errfile, $errline, $errcontext)
+            Errors\Error::create_error($errno, $errstr, $errfile, $errline)
         );
 
         /* Don't execute PHP internal error handler */

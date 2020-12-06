@@ -102,7 +102,7 @@ trait HelperT
      *
      * @return      string
      */
-    protected function to_string($value, $is_quoted = false, $array_max = 5)
+    protected function to_string(mixed $value, bool $is_quoted = false, int $array_max = 5)
     {
         // truncate data
         if(is_string($value) && strlen($value) > 255)
