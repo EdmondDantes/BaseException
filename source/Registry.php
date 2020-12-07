@@ -313,25 +313,19 @@ class Registry
 
     static public function exception_handler(\Throwable $exception)
     {
-        if($exception instanceof BaseExceptionI)
-        {
+        if($exception instanceof BaseExceptionI === false) {
+            self::register_exception($exception);
+        } else if(!($exception->is_loggable() || $exception->is_container())) {
             // When exception reaches this handler
             // its not logged if:
             // - already was logged
             // - or is container
-            if($exception->is_loggable() || $exception->is_container())
-            {
-                new UnhandledException($exception);
-                return;
-            }
-
             $exception->set_loggable(true);
+            self::register_exception($exception);
         }
-
-        self::register_exception($exception);
-
+        
         new UnhandledException($exception);
-
+        
         if(self::$unhandled_handler instanceof HandlerI)
         {
             self::$unhandled_handler->exception_handler($exception);
