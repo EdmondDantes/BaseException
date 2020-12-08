@@ -89,7 +89,7 @@ trait HelperT
         }
         else
         {
-            return gettype($value);
+            return get_debug_type($value);
         }
     }
 
