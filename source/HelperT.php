@@ -47,7 +47,7 @@ trait HelperT
         }
         elseif(is_object($value))
         {
-            return get_class($value);
+            return get_debug_type($value);
         }
         elseif(is_null($value))
         {
