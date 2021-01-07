@@ -1,4 +1,5 @@
-<?PHP
+<?php declare(strict_types=1);
+
 namespace Exceptions;
 
 class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
@@ -104,7 +105,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
             'message'       => new \ArrayObject([]),
             'code'          => 5,
             'previous'      => null,
-            'expected'      => new \UnexpectedValueException()
+            'expected'      => new \TypeError()
         ];
     }
 
@@ -120,7 +121,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
             'message'       => '',
             'code'          => '5',
             'previous'      => null,
-            'expected'      => new \UnexpectedValueException()
+            'expected'      => new \TypeError()
         ];
     }
 
@@ -136,7 +137,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
             'message'       => '',
             'code'          => 10,
             'previous'      => null,
-            'expected'      => new \UnexpectedValueException()
+            'expected'      => new \TypeError()
         ];
     }
 
@@ -172,7 +173,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
      */
     public function test($template, array $data, $message, $code, $previous, $excepted)
     {
-        if($excepted instanceof \Exception)
+        if($excepted instanceof \Throwable)
         {
             $e              = null;
 
@@ -180,7 +181,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
             {
                 $this->handle_template($template, $data, $message, $code, $previous);
             }
-            catch(\Exception $e)
+            catch(\Throwable $e)
             {
             }
 

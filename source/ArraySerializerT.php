@@ -11,7 +11,7 @@ trait ArraySerializerT
      *
      * @return      array|string
      */
-    abstract protected function get_source_for(\Throwable $e, $is_string = false);
+    abstract protected function get_source_for(\Throwable $e, $is_string = false): array|string;
 
     /**
      * The method serialized errors BaseExceptionI to an array
@@ -20,7 +20,7 @@ trait ArraySerializerT
      *
      * @return          array
      */
-    protected function errors_to_array($errors): array
+    protected function errors_to_array(mixed $errors): array
     {
         if($errors instanceof BaseExceptionI)
         {

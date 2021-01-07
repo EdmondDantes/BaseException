@@ -12,7 +12,7 @@ trait TemplateHandlerT
      *
      * @return  string
      */
-    abstract protected function to_string(mixed $value, bool $is_quoted = false, int $array_max = 5);
+    abstract protected function to_string(mixed $value, bool $is_quoted = false, int $array_max = 5): string;
 
     /**
      * Handles the template message
@@ -21,29 +21,21 @@ trait TemplateHandlerT
      * @param   array               $data           Extended data
      * @param   string              $message        Message of exception
      * @param   int                 $code           Code
-     * @param   \Throwable          $previous       Previous Exception
+     * @param   ?\Throwable         $previous       Previous Exception
      *
      * @throws  \UnexpectedValueException
      *
      * @return string
      */
-    protected function handle_template($template, array $data, $message, $code, \Throwable $previous = null)
+    protected function handle_template
+    (
+        string      $template,
+        array       $data,
+        string      $message,
+        int         $code,
+        \Throwable  $previous   = null
+    ): string
     {
-        if(!is_string($template))
-        {
-            throw new \UnexpectedValueException('$template must be a string');
-        }
-
-        if(!is_string($message))
-        {
-            throw new \UnexpectedValueException('$message must be a string');
-        }
-
-        if(!is_int($code))
-        {
-            throw new \UnexpectedValueException('$code must be a string');
-        }
-
         // for PSR-3 previous also interpreted as the exception
         if(isset($data['previous']) && $previous === null)
         {
