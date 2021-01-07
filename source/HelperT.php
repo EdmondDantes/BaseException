@@ -11,7 +11,7 @@ trait HelperT
      *
      * @return      array|string
      */
-    final protected function get_source_for(\Throwable $e, $is_string = false)
+    final protected function get_source_for(\Throwable $e, $is_string = false): array|string
     {
         $res                    = $e->getTrace()[0];
 
@@ -39,7 +39,7 @@ trait HelperT
      *
      * @return          string
      */
-    final protected function get_value_type($value)
+    final protected function get_value_type(mixed $value): string
     {
         if(is_bool($value))
         {
@@ -102,7 +102,7 @@ trait HelperT
      *
      * @return      string
      */
-    protected function to_string(mixed $value, bool $is_quoted = false, int $array_max = 5)
+    protected function to_string(mixed $value, bool $is_quoted = false, int $array_max = 5): string
     {
         // truncate data
         if(is_string($value) && strlen($value) > 255)
