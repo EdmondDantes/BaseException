@@ -11,6 +11,7 @@ Missions:
 3. Aggregation exceptions within exceptions.
 4. Registration exceptions in the global registry for logging.
 5. Support for the concept of message templates.
+6. Support tags for exceptions (for elastic logging as example).
 
 **And most importantly: make it all easy and simple ;)**
 
@@ -161,7 +162,7 @@ catch(BaseException $myException)
 class ClassNotExist  extends BaseException
 {
     // This exception will be logged
-    protected bool $is_loggable = true;
+    protected bool $isLoggable = true;
 
     /**
      * ClassNotExist
