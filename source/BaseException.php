@@ -61,6 +61,12 @@ class BaseException                 extends     \Exception
      * @var         array
      */
     protected array $data           = [];
+    
+    /**
+     * Tags for logging
+     * @var string[]
+     */
+    protected array $tags           = [];
 
     /**
      * Source of error
@@ -128,6 +134,7 @@ class BaseException                 extends     \Exception
     {
         $template               = '';
         $message                = '';
+        $tags                   = [];
 
         if($exception instanceof BaseExceptionI)
         {
@@ -178,6 +185,8 @@ class BaseException                 extends     \Exception
             $template           = $this->template;
         }
 
+        $this->tags             += $tags;
+        
         if(!empty($template))
         {
             $this->template     = $template;
@@ -188,7 +197,7 @@ class BaseException                 extends     \Exception
                 $this->data['message'] = $message;
             }
 
-            $message            = $this->handle_template($this->template, $this->data, $message, $code, $previous);
+            $message            = $this->handleTemplate($this->template, $this->data, $message, $code, $previous);
         }
 
         // parent construct
@@ -226,7 +235,12 @@ class BaseException                 extends     \Exception
     {
         return $this->template;
     }
-
+    
+    public function getTags(): array
+    {
+        return $this->tags;
+    }
+    
     /**
      * The method returns a logging flag.
      *
@@ -249,9 +263,9 @@ class BaseException                 extends     \Exception
      *
      * @return  $this
      */
-    public function setLoggable(bool $flag)
+    public function setLoggable(bool $flag): static
     {
-        $this->isLoggable = (boolean) $flag;
+        $this->isLoggable           = $flag;
 
         return $this;
     }
@@ -273,7 +287,7 @@ class BaseException                 extends     \Exception
      *
      * @return  BaseException
      */
-    public function markAsFatal()
+    public function markAsFatal(): static
     {
         if(!$this->isFatal)
         {
@@ -365,7 +379,7 @@ class BaseException                 extends     \Exception
         return $this->data;
     }
 
-    public function appendData(array $data)
+    public function appendData(array $data): static
     {
         $this->data[]       = $data;
 
@@ -422,7 +436,7 @@ class BaseException                 extends     \Exception
         if($this->template() !== '')
         {
 
-            $message    = isset($this->getExceptionData()['message']) ? $this->getExceptionData()['message'] : '';
+            $message    = $this->getExceptionData()['message'] ?? '';
         }
         else
         {
@@ -435,6 +449,7 @@ class BaseException                 extends     \Exception
             'source'    => $this->getSource(),
             'message'   => $message,
             'template'  => $this->template(),
+            'tags'      => $this->getTags(),
             'code'      => $this->getCode(),
             'data'      => $this->getExceptionData()
         ];
@@ -457,7 +472,7 @@ class BaseException                 extends     \Exception
      *
      * @return      boolean
      */
-    protected function is_debug(): bool
+    protected function isDebug(): bool
     {
         if(is_bool($this->isDebug))
         {
@@ -471,11 +486,11 @@ class BaseException                 extends     \Exception
      * The method saved debug data if debug mode is active.
      *
      * @param       array       $data           debug data
-     * @return      BaseExceptionI
+     * @return      $this
      */
-    protected function set_debug_data(array $data)
+    protected function setDebugData(array $data): static
     {
-        if(!$this->is_debug())
+        if(!$this->isDebug())
         {
             return $this;
         }

@@ -179,7 +179,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
 
             try
             {
-                $this->handle_template($template, $data, $message, $code, $previous);
+                $this->handleTemplate($template, $data, $message, $code, $previous);
             }
             catch(\Throwable $e)
             {
@@ -189,7 +189,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
         }
         else
         {
-            $result        = $this->handle_template($template, $data, $message, $code, $previous);
+            $result        = $this->handleTemplate($template, $data, $message, $code, $previous);
             $this->assertEquals($excepted, $result);
         }
     }

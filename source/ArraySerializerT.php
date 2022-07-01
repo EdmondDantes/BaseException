@@ -6,12 +6,12 @@ trait ArraySerializerT
     /**
      * The method defines the source of the exception.
      *
-     * @param       \Throwable      $e
-     * @param       boolean         $is_string
+     * @param       \Throwable $e
+     * @param       boolean    $isString
      *
      * @return      array|string
      */
-    abstract protected function get_source_for(\Throwable $e, $is_string = false): array|string;
+    abstract protected function getSourceFor(\Throwable $e, bool $isString = false): array|string;
 
     /**
      * The method serialized errors BaseExceptionI to an array

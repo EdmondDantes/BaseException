@@ -16,7 +16,7 @@ class DebugException extends BaseException
 
         parent::__construct($exception, $code, $previous);
 
-        $this->set_debug_data(['test' => self::DEBUG_DATA]);
+        $this->setDebugData(['test' => self::DEBUG_DATA]);
     }
 }
 
@@ -175,7 +175,7 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Exceptions\BaseException::getSource
-     * @covers \Exceptions\BaseException::get_source_for
+     * @covers \Exceptions\BaseException::getSourceFor
      */
     public function testGetSource()
     {

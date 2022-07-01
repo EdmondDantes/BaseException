@@ -27,7 +27,7 @@ trait TemplateHandlerT
      *
      * @return string
      */
-    protected function handle_template
+    protected function handleTemplate
     (
         string      $template,
         array       $data,

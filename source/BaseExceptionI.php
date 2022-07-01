@@ -75,16 +75,21 @@ interface BaseExceptionI
     public function template(): string;
     
     /**
+     * @return string[]
+     */
+    public function getTags(): array;
+    
+    /**
      * The method sets a logging flag.
      *
      * If set flag from TRUE to FALSE,
-     * then the exception will not be saved to log (may be).
+     * then the exception will not be saved to log (maybe).
      *
      * @param   boolean         $flag logging flag
      *
      * @return  $this
      */
-    public function setLoggable(bool $flag);
+    public function setLoggable(bool $flag): static;
 
     /**
      * The method returns a logging flag.
