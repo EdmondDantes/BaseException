@@ -1,6 +1,9 @@
-<?PHP
+<?php declare(strict_types=1);
 namespace Exceptions;
 
+/**
+ * Main interface for BaseExceptionI
+ */
 interface BaseExceptionI
 {
     /**
@@ -64,7 +67,6 @@ interface BaseExceptionI
     public function getTrace();
     public function getTraceAsString();
 
-
     /**
      * Template message
      *
@@ -82,7 +84,7 @@ interface BaseExceptionI
      *
      * @return  $this
      */
-    public function set_loggable(bool $flag);
+    public function setLoggable(bool $flag);
 
     /**
      * The method returns a logging flag.
@@ -91,14 +93,14 @@ interface BaseExceptionI
      *
      * @return boolean
      */
-    public function is_loggable(): bool;
+    public function isLoggable(): bool;
 
     /**
      * The method returns TRUE - if an exception is fatal.
      *
      * @return boolean
      */
-    public function is_fatal(): bool;
+    public function isFatal(): bool;
 
     /**
      * Method marks the exception as fatal.
@@ -107,19 +109,19 @@ interface BaseExceptionI
      *
      * @return  $this
      */
-    public function set_fatal();
+    public function markAsFatal(): static;
 
     /**
      * The method will return true, if an exception is the container.
      * @return boolean
      */
-    public function is_container(): bool;
+    public function isContainer(): bool;
 
     /**
      * The method returns an error level
      * @return      int
      */
-    public function get_level(): int;
+    public function getLevel(): int;
 
     /**
      * The method returns the source of error.
@@ -135,7 +137,7 @@ interface BaseExceptionI
      *
      * @return array|null
      */
-    public function get_source(): ?array;
+    public function getSource(): ?array;
 
     /**
      * The method returns previous exception.
@@ -149,32 +151,32 @@ interface BaseExceptionI
      *
      * @return      BaseExceptionI|\Throwable|null
      */
-    public function get_previous(): \Throwable|BaseExceptionI|null;
+    public function getPreviousException(): \Throwable|BaseExceptionI|null;
 
     /**
      * The method returns extra data for exception
      * @return array
      */
-    public function get_data(): array;
+    public function getExceptionData(): array;
 
     /**
      * @param       array       $data   The additional data
      *
      * @return      BaseExceptionI
      */
-    public function append_data(array $data);
+    public function appendData(array $data): static;
 
     /**
      * The method returns debug data for exception
      *
      * @return      array
      */
-    public function get_debug_data(): array;
+    public function getDebugData(): array;
 
     /**
      * The method serialized object to an array.
      *
      * @return array
      */
-    public function to_array(): array;
+    public function toArray(): array;
 }

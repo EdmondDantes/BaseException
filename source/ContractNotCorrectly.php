@@ -1,4 +1,4 @@
-<?PHP
+<?php declare(strict_types=1);
 namespace Exceptions;
 
 /**
@@ -31,7 +31,7 @@ class ContractNotCorrectly      extends LoggableException
             'message'       => $notice,
             'object'        => $this->type_info($object),
             'type'          => $type,
-            'value'         => $this->to_string($value),
+            'value'         => $this->toString($value),
             'trait'         => $trait
         ]);
     }

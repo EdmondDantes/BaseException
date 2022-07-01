@@ -1,4 +1,4 @@
-<?PHP
+<?php declare(strict_types=1);
 namespace Exceptions;
 
 /**
@@ -28,7 +28,7 @@ class UnexpectedValue               extends LoggableException
         parent::__construct
         ([
             'name'        => $name,
-            'value'       => $this->to_string($value),
+            'value'       => $this->toString($value),
             'message'     => $rules,
             'type'        => $this->type_info($value)
         ]);

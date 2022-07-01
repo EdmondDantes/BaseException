@@ -1,4 +1,4 @@
-<?PHP
+<?php declare(strict_types=1);
 namespace Exceptions;
 
 trait HelperT
@@ -6,27 +6,27 @@ trait HelperT
     /**
      * The method defines the source of the exception.
      *
-     * @param       \Throwable      $e
-     * @param       boolean         $is_string
+     * @param       \Throwable $e
+     * @param       boolean    $isString
      *
      * @return      array|string
      */
-    final protected function get_source_for(\Throwable $e, $is_string = false): array|string
+    final protected function getSourceFor(\Throwable $e, bool $isString = false): array|string
     {
         $res                    = $e->getTrace()[0];
 
-        if($is_string)
+        if($isString)
         {
-            return  (isset($res['class'])      ? $res['class']     : $res['file'].':'.$res['line']).
-                    (isset($res['type'])       ? $res['type']      : '.').
-                    (isset($res['function'])   ? $res['function']  : '{}');
+            return  ($res['class'] ?? $res['file'] . ':' . $res['line']).
+                    ($res['type'] ?? '.').
+                    ($res['function'] ?? '{}');
         }
 
         return
         [
-            'source'    => isset($res['class'])      ? $res['class']     : $res['file'].':'.$res['line'],
-            'type'      => isset($res['type'])       ? $res['type']      : '.',
-            'function'  => isset($res['function'])   ? $res['function']  : '{}',
+            'source'            => $res['class'] ?? $res['file'] . ':' . $res['line'],
+            'type'              => $res['type'] ?? '.',
+            'function'          => $res['function'] ?? '{}',
         ];
     }
 
@@ -39,7 +39,7 @@ trait HelperT
      *
      * @return          string
      */
-    final protected function get_value_type(mixed $value): string
+    final protected function getValueType(mixed $value): string
     {
         if(is_bool($value))
         {
@@ -96,13 +96,13 @@ trait HelperT
     /**
      * The method convert $value to string.
      *
-     * @param       mixed       $value          Value
-     * @param       boolean     $is_quoted      If result has been quoted?
-     * @param       int         $array_max      Max count items of array
+     * @param       mixed   $value    Value
+     * @param       boolean $isQuoted If result has been quoted?
+     * @param       int     $arrayMax Max count items of array
      *
      * @return      string
      */
-    protected function to_string(mixed $value, bool $is_quoted = false, int $array_max = 5): string
+    protected function toString(mixed $value, bool $isQuoted = false, int $arrayMax = 5): string
     {
         // truncate data
         if(is_string($value) && strlen($value) > 255)
@@ -112,12 +112,12 @@ trait HelperT
         elseif(is_bool($value))
         {
             $value          = $value ? 'TRUE' : 'FALSE';
-            $is_quoted      = false;
+            $isQuoted       = false;
         }
         elseif(is_null($value))
         {
             $value          = 'NULL';
-            $is_quoted      = false;
+            $isQuoted       = false;
         }
         elseif(is_scalar($value))
         {
@@ -127,19 +127,19 @@ trait HelperT
         {
             $result         = [];
 
-            foreach(array_slice($value, 0, $array_max, true) as $key => $item)
+            foreach(array_slice($value, 0, $arrayMax, true) as $key => $item)
             {
                 if(is_scalar($item))
                 {
-                    $result[] = $this->to_string($key, false).':'.$this->to_string($item, $is_quoted);
+                    $result[] = $this->toString($key, false).':'.$this->toString($item, $isQuoted);
                 }
                 else
                 {
-                    $result[] = $this->to_string($key, false).':'.$this->get_value_type($item);
+                    $result[] = $this->toString($key, false).':'.$this->getValueType($item);
                 }
             }
 
-            if(count($value) > $array_max)
+            if(count($value) > $arrayMax)
             {
                 $value      = count($value).'['.implode(', ', $result).']';
             }
@@ -148,15 +148,15 @@ trait HelperT
                 $value      = '['.implode(', ', $result).']';
             }
 
-            $is_quoted      = false;
+            $isQuoted      = false;
         }
         else
         {
-            $value          = $this->get_value_type($value);
-            $is_quoted      = false;
+            $value          = $this->getValueType($value);
+            $isQuoted       = false;
         }
 
-        if($is_quoted)
+        if($isQuoted)
         {
             $value          = '\''.$value.'\'';
         }

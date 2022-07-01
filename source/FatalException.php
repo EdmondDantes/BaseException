@@ -1,4 +1,4 @@
-<?PHP
+<?php declare(strict_types=1);
 namespace Exceptions;
 
 /**
@@ -22,11 +22,11 @@ class FatalException                extends LoggableException
     {
         if($exception instanceof BaseExceptionI)
         {
-            parent::__construct($exception->set_fatal());
+            parent::__construct($exception->markAsFatal());
         }
         else
         {
-            $this->is_fatal = true;
+            $this->isFatal = true;
             parent::__construct($exception, $code = 0, $previous);
         }
     }

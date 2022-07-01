@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Exceptions;
 
@@ -46,7 +48,7 @@ class BaseException                 extends     \Exception
      * Layout of the default properties
      * @var array
      */
-    static protected array $base_props = ['message' => '', 'code' => 0, 'previous' => null, 'template' => ''];
+    static protected array $baseProps = ['message' => '', 'code' => 0, 'previous' => null, 'template' => '', 'tags' => []];
 
     /**
      * template message
@@ -70,13 +72,13 @@ class BaseException                 extends     \Exception
      * Debug data
      * @var         array
      */
-    protected array $debug_data     = [];
+    protected array $debugData      = [];
 
     /**
      * Container flag
      * @var         boolean
      */
-    protected bool $is_container    = false;
+    protected bool $isContainer    = false;
 
     /**
      * Logged flag.
@@ -85,20 +87,20 @@ class BaseException                 extends     \Exception
      *
      * @var         boolean
      */
-    protected bool $is_loggable     = false;
+    protected bool $isLoggable      = false;
 
     /**
      * Fatal exception flag
      *
      * @var         boolean
      */
-    protected bool $is_fatal        = false;
+    protected bool $isFatal         = false;
 
     /**
      * Debug mode flag
      * @var         boolean|null
      */
-    protected ?bool $is_debug        = null;
+    protected ?bool $isDebug        = null;
     
     /**
      * BaseException constructor.
@@ -118,32 +120,32 @@ class BaseException                 extends     \Exception
      *    In this case, exception acts as container,
      *    and inherits a data from the $exception
      *
-     * @param mixed $exception Exception
-     * @param int   $code      Code
-     * @param null  $previous  Previous or aggregate exception
+     * @param BaseExceptionI|array|string $exception    Exception data
+     * @param int                         $code         Code
+     * @param \Throwable|null             $previous     Previous or aggregate exception
      */
-    public function __construct(mixed $exception, $code = 0, $previous = null)
+    public function __construct(BaseExceptionI|array|string $exception, int $code = 0, \Throwable $previous = null)
     {
         $template               = '';
         $message                = '';
 
         if($exception instanceof BaseExceptionI)
         {
-            $this->is_container = true;
+            $this->isContainer = true;
 
             // If aggregate $exception wasn't journaled,
             // and this is going to be to journal,
             // then an $exception should be registered.
-            if(!$exception->is_loggable() && $this->is_loggable)
+            if(!$exception->isLoggable() && $this->isLoggable)
             {
-                Registry::register_exception($exception);
+                Registry::registerException($exception);
             }
 
             $previous           = $exception;
         }
         elseif($exception instanceof \Throwable)
         {
-            $this->is_container = true;
+            $this->isContainer  = true;
 
             // Inherit properties from the aggregated $exception
             $this->file         = $exception->getFile();
@@ -153,17 +155,17 @@ class BaseException                 extends     \Exception
             $code               = $exception->getCode();
             $previous           = $exception;
 
-            if($this->is_loggable)
+            if($this->isLoggable)
             {
-                Registry::register_exception($exception);
+                Registry::registerException($exception);
             }
         }
         elseif(is_array($exception))
         {
             // The code separating the parameters on the basic and additional
-            $base_props         = array_intersect_key($exception, self::$base_props);
-            $this->data         = array_diff_key($exception, $base_props);
-            extract($base_props);
+            $baseProps          = array_intersect_key($exception, self::$baseProps);
+            $this->data         = array_diff_key($exception, $baseProps);
+            extract($baseProps);
         }
         else
         {
@@ -203,15 +205,15 @@ class BaseException                 extends     \Exception
         }
 
         // The container is never in the journal
-        if($this->is_loggable && $this->is_container === false)
+        if($this->isLoggable && $this->isContainer === false)
         {
-            Registry::register_exception($this);
+            Registry::registerException($this);
         }
 
         // The handler for fatal exceptions
-        if($this->is_fatal)
+        if($this->isFatal)
         {
-            Registry::call_fatal_handler($this);
+            Registry::callFatalHandler($this);
         }
     }
 
@@ -232,9 +234,9 @@ class BaseException                 extends     \Exception
      *
      * @return boolean
      */
-    public function is_loggable(): bool
+    public function isLoggable(): bool
     {
-        return $this->is_loggable;
+        return $this->isLoggable;
     }
     
     /**
@@ -247,9 +249,9 @@ class BaseException                 extends     \Exception
      *
      * @return  $this
      */
-    public function set_loggable(bool $flag)
+    public function setLoggable(bool $flag)
     {
-        $this->is_loggable = (boolean) $flag;
+        $this->isLoggable = (boolean) $flag;
 
         return $this;
     }
@@ -259,9 +261,9 @@ class BaseException                 extends     \Exception
      *
      * @return boolean
      */
-    public function is_fatal(): bool
+    public function isFatal(): bool
     {
-        return $this->is_fatal;
+        return $this->isFatal;
     }
 
     /**
@@ -271,16 +273,16 @@ class BaseException                 extends     \Exception
      *
      * @return  BaseException
      */
-    public function set_fatal()
+    public function markAsFatal()
     {
-        if(!$this->is_fatal)
+        if(!$this->isFatal)
         {
-            $this->is_fatal     = true;
-            Registry::call_fatal_handler($this);
+            $this->isFatal     = true;
+            Registry::callFatalHandler($this);
             return $this;
         }
 
-        $this->is_fatal         = true;
+        $this->isFatal         = true;
 
         return $this;
     }
@@ -289,16 +291,16 @@ class BaseException                 extends     \Exception
      * The method will return true, if an exception is the container.
      * @return boolean
      */
-    public function is_container(): bool
+    public function isContainer(): bool
     {
-        return $this->is_container;
+        return $this->isContainer;
     }
 
     /**
      * The method returns an error level
      * @return      int
      */
-    public function get_level(): int
+    public function getLevel(): int
     {
         return empty($this->data['level']) ? self::ERROR : $this->data['level'];
     }
@@ -315,14 +317,14 @@ class BaseException                 extends     \Exception
      *
      * @return array|null
      */
-    public function get_source(): ?array
+    public function getSource(): ?array
     {
         if(is_array($this->source))
         {
             return $this->source;
         }
 
-        return $this->source    = $this->get_source_for($this);
+        return $this->source    = $this->getSourceFor($this);
     }
 
     /**
@@ -337,7 +339,7 @@ class BaseException                 extends     \Exception
      *
      * @return      BaseExceptionI|\Throwable|null
      */
-    public function get_previous(): BaseExceptionI|\Throwable|null
+    public function getPreviousException(): BaseExceptionI|\Throwable|null
     {
         $previous       = $this->getPrevious();
 
@@ -358,12 +360,12 @@ class BaseException                 extends     \Exception
      * The method returns extra data for exception
      * @return array
      */
-    public function get_data(): array
+    public function getExceptionData(): array
     {
         return $this->data;
     }
 
-    public function append_data(array $data)
+    public function appendData(array $data)
     {
         $this->data[]       = $data;
 
@@ -375,9 +377,9 @@ class BaseException                 extends     \Exception
      *
      * @return array
      */
-    public function get_debug_data(): array
+    public function getDebugData(): array
     {
-        return $this->debug_data;
+        return $this->debugData;
     }
 
     /**
@@ -385,23 +387,23 @@ class BaseException                 extends     \Exception
      *
      * @return array
      */
-    public function to_array(): array
+    public function toArray(): array
     {
         // If this exception is container, then it returns data of container.
-        if($this->is_container())
+        if($this->isContainer())
         {
-            $previous       = $this->get_previous();
+            $previous       = $this->getPreviousException();
 
             if($previous instanceof BaseExceptionI)
             {
-                $res        = $previous->to_array();
+                $res        = $previous->toArray();
             }
             else
             {
                 $res =
                 [
                     'type'      => get_class($previous),
-                    'source'    => $this->get_source_for($previous),
+                    'source'    => $this->getSourceFor($previous),
                     'message'   => $previous->getMessage(),
                     'code'      => $previous->getCode(),
                     'data'      => []
@@ -420,7 +422,7 @@ class BaseException                 extends     \Exception
         if($this->template() !== '')
         {
 
-            $message    = isset($this->get_data()['message']) ? $this->get_data()['message'] : '';
+            $message    = isset($this->getExceptionData()['message']) ? $this->getExceptionData()['message'] : '';
         }
         else
         {
@@ -430,11 +432,11 @@ class BaseException                 extends     \Exception
         return
         [
             'type'      => get_class($this),
-            'source'    => $this->get_source(),
+            'source'    => $this->getSource(),
             'message'   => $message,
             'template'  => $this->template(),
             'code'      => $this->getCode(),
-            'data'      => $this->get_data()
+            'data'      => $this->getExceptionData()
         ];
     }
 
@@ -447,7 +449,7 @@ class BaseException                 extends     \Exception
      */
     protected function type_info(mixed $value): string|array
     {
-        return $this->get_value_type($value);
+        return $this->getValueType($value);
     }
 
     /**
@@ -457,12 +459,12 @@ class BaseException                 extends     \Exception
      */
     protected function is_debug(): bool
     {
-        if(is_bool($this->is_debug))
+        if(is_bool($this->isDebug))
         {
-            return $this->is_debug;
+            return $this->isDebug;
         }
 
-        return $this->is_debug = Registry::is_debug(get_class($this));
+        return $this->isDebug = Registry::isDebug(get_class($this));
     }
 
     /**
@@ -478,7 +480,7 @@ class BaseException                 extends     \Exception
             return $this;
         }
 
-        $this->debug_data   = $data;
+        $this->debugData   = $data;
 
         return $this;
     }

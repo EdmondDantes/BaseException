@@ -1,4 +1,4 @@
-<?PHP
+<?php declare(strict_types=1);
 namespace Exceptions;
 
 trait TemplateHandlerT
@@ -6,13 +6,13 @@ trait TemplateHandlerT
     /**
      * Returns string view for the $value
      *
-     * @param   mixed      $value
-     * @param   bool       $is_quoted
-     * @param   int        $array_max
+     * @param   mixed $value
+     * @param   bool  $isQuoted
+     * @param   int   $arrayMax
      *
      * @return  string
      */
-    abstract protected function to_string(mixed $value, bool $is_quoted = false, int $array_max = 5): string;
+    abstract protected function toString(mixed $value, bool $isQuoted = false, int $arrayMax = 5): string;
 
     /**
      * Handles the template message
@@ -67,7 +67,7 @@ trait TemplateHandlerT
 
         foreach($data as $key => $value)
         {
-            $context['{'.$key.'}'] = $this->to_string($value, true);
+            $context['{'.$key.'}'] = $this->toString($value, true);
         }
 
         $template               = strtr($template, $context);

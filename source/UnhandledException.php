@@ -1,4 +1,4 @@
-<?PHP
+<?php declare(strict_types=1);
 namespace Exceptions;
 
 /**
@@ -17,7 +17,7 @@ class UnhandledException            extends LoggableException
         parent::__construct
         ([
             'type'      => $this->type_info($exception),
-            'source'    => $this->get_source_for($exception),
+            'source'    => $this->getSourceFor($exception),
             'previous'  => $exception
         ]);
     }

@@ -1,4 +1,5 @@
-<?PHP
+<?php declare(strict_types=1);
+
 namespace Exceptions;
 
 /**
@@ -18,7 +19,7 @@ class CallableException extends LoggableException
     {
         parent::__construct
         ([
-            'expression'    => $this->to_string($expression)
+            'expression'    => $this->toString($expression)
         ]);
     }
 }

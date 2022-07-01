@@ -1,4 +1,4 @@
-<?PHP
+<?php declare(strict_types=1);
 namespace Exceptions;
 
 /**
@@ -14,19 +14,19 @@ interface StorageI
      *
      * @return      StorageI
      */
-    public function add_exception($exception);
+    public function addException(BaseExceptionI|\Throwable $exception): static;
 
     /**
      * Returns list of exceptions
      *
      * @return      array
      */
-    public function get_storage();
+    public function getStorageExceptions(): array;
 
     /**
      * Reset storage
      *
      * @return      StorageI
      */
-    public function reset_storage();
+    public function resetStorage(): static;
 }

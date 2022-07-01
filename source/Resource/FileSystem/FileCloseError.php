@@ -1,4 +1,4 @@
-<?PHP
+<?php declare(strict_types=1);
 namespace Exceptions\Resource\FileSystem;
 
 use Exceptions\Resource\ResourceCloseError;

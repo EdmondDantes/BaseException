@@ -1,4 +1,4 @@
-<?PHP
+<?php declare(strict_types=1);
 namespace Exceptions;
 
 class ArraySerializerTTest extends \PHPUnit\Framework\TestCase
@@ -142,7 +142,7 @@ class ArraySerializerTTest extends \PHPUnit\Framework\TestCase
                 '$exception->getMessage() failed'
             );
             $this->assertEquals(($i+10), $exception->getCode(), '$exception->getCode() failed');
-            $data = $exception->get_data();
+            $data = $exception->getExceptionData();
             $this->assertTrue(is_array($data), '$exception.data must be array');
             $this->assertArrayHasKey('exdata', $data, '$exception.data.exdata no exists');
             $this->assertEquals(($i-10), $data['exdata'], '$exception.data.exdata failed');

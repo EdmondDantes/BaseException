@@ -1,4 +1,4 @@
-<?PHP
+<?php declare(strict_types=1);
 namespace Exceptions;
 
 use Exceptions\Errors\Error;
@@ -100,7 +100,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        Registry::reset_exception_log();
+        Registry::resetExceptionLog();
 
         $this->test_data = array
         (
@@ -123,12 +123,12 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown(): void
     {
-        Registry::restore_global_handlers();
+        Registry::restoreGlobalHandlers();
     }
 
     protected function init_Registry()
     {
-        Registry::register_exception
+        Registry::registerException
         (
             new \Exception
             (
@@ -136,7 +136,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
                 10
             )
         );
-        Registry::register_exception
+        Registry::registerException
         (
             new \Exception
             (
@@ -144,7 +144,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
                 11
             )
         );
-        Registry::register_exception
+        Registry::registerException
         (
             new \Exception
             (
@@ -173,7 +173,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
         $exceptions[] = new RequiredValueEmpty('var', 'var_expected');
         $exceptions[] = new UnexpectedValueType('var', '112233', '11');
 
-        foreach(Registry::get_exception_log() as $exception)
+        foreach(Registry::getExceptionLog() as $exception)
         {
             $expected = array_shift($exceptions);
             $this->assertTrue($exception === $expected);
@@ -187,9 +187,9 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
      */
     public function testRegister_exception_null()
     {
-        Registry::register_exception(array());
+        Registry::registerException(array());
 
-        $exceptions = Registry::get_exception_log();
+        $exceptions = Registry::getExceptionLog();
 
         $this->assertTrue(count($exceptions) === 0, '$exceptions contains unknowns elements');
     }
@@ -199,14 +199,14 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
      */
     public function _testInstall_global_handlers()
     {
-        Registry::install_global_handlers();
+        Registry::installGlobalHandlers();
 
         // WARNING
         /** @noinspection PhpUndefinedConstantInspection */
         /** @noinspection PhpUnusedLocalVariableInspection */
         $test                       = CONSTANT_UNDEFINED;
 
-        $exceptions                 = Registry::get_exception_log();
+        $exceptions                 = Registry::getExceptionLog();
 
         $this->assertTrue(count($exceptions) === 1, '$exceptions count must equal 1');
 
@@ -225,7 +225,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue(is_callable($GLOBALS['shutdown_function']));
 
-        Registry::restore_global_handlers();
+        Registry::restoreGlobalHandlers();
     }
 
     /**
@@ -238,35 +238,35 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
         $exception  = new LoggableException('test');
 
         // Исключение логируется как необработанное
-        Registry::exception_handler(new BaseException('test2'));
+        Registry::exceptionHandler(new BaseException('test2'));
 
-        $exceptions = Registry::get_exception_log();
+        $exceptions = Registry::getExceptionLog();
 
         $this->assertTrue(count($exceptions) === 3, '$exceptions count must equal 3');
         $this->assertTrue($exception === $exceptions[0], 'Exception not found in registry');
         $this->assertTrue($exceptions[2] instanceof UnhandledException, 'Last exception not instance of UnhandledException');
 
-        Registry::reset_exception_log();
+        Registry::resetExceptionLog();
 
         // Это исключение не должно логироваться повторно
         $exception = new LoggableException('test');
-        Registry::exception_handler($exception);
+        Registry::exceptionHandler($exception);
 
-        $exceptions = Registry::get_exception_log();
+        $exceptions = Registry::getExceptionLog();
 
         $this->assertTrue(count($exceptions) === 2, '$exceptions count must equal 2');
         $this->assertTrue($exception === $exceptions[0], 'Exception not found in registry');
         $this->assertTrue($exceptions[1] instanceof UnhandledException, 'Exception5 not instance of UnhandledException');
 
-        Registry::reset_exception_log();
+        Registry::resetExceptionLog();
 
         // А это контейнер - он не должен логироваться сам по себе
         // зато журнализирует \Exception
         $exception = new \Exception('test');
-        Registry::exception_handler(new LoggableException($exception));
+        Registry::exceptionHandler(new LoggableException($exception));
 
         // Проверим наши предположения
-        $exceptions = Registry::get_exception_log();
+        $exceptions = Registry::getExceptionLog();
 
         $this->assertTrue(count($exceptions) === 2, '$exceptions count must equal 2');
         $this->assertTrue($exception === $exceptions[0], 'Exception not found in registry');
@@ -298,30 +298,30 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
         ];
 
 
-        Registry::error_handler(E_ERROR, 'Error', __FILE__, __LINE__);
-        Registry::error_handler(E_WARNING, 'Warning', __FILE__, __LINE__);
-        Registry::error_handler(E_PARSE, 'Error', __FILE__, __LINE__);
-        Registry::error_handler(E_NOTICE, 'Notice', __FILE__, __LINE__);
-        Registry::error_handler(E_CORE_ERROR, 'Error', __FILE__, __LINE__);
-        Registry::error_handler(E_CORE_WARNING, 'Warning', __FILE__, __LINE__);
-        Registry::error_handler(E_COMPILE_ERROR, 'Error', __FILE__, __LINE__);
-        Registry::error_handler(E_COMPILE_WARNING, 'Warning', __FILE__, __LINE__);
-        Registry::error_handler(E_USER_ERROR, 'UserError', __FILE__, __LINE__);
-        Registry::error_handler(E_USER_WARNING, 'UserError', __FILE__, __LINE__);
-        Registry::error_handler(E_USER_NOTICE, 'UserError', __FILE__, __LINE__);
-        Registry::error_handler(E_STRICT, 'Error', __FILE__, __LINE__);
-        Registry::error_handler(E_RECOVERABLE_ERROR, 'Error', __FILE__, __LINE__);
-        Registry::error_handler(E_DEPRECATED, 'Notice', __FILE__, __LINE__);
-        Registry::error_handler(E_USER_DEPRECATED, 'Notice', __FILE__, __LINE__);
+        Registry::errorHandler(E_ERROR, 'Error', __FILE__, __LINE__);
+        Registry::errorHandler(E_WARNING, 'Warning', __FILE__, __LINE__);
+        Registry::errorHandler(E_PARSE, 'Error', __FILE__, __LINE__);
+        Registry::errorHandler(E_NOTICE, 'Notice', __FILE__, __LINE__);
+        Registry::errorHandler(E_CORE_ERROR, 'Error', __FILE__, __LINE__);
+        Registry::errorHandler(E_CORE_WARNING, 'Warning', __FILE__, __LINE__);
+        Registry::errorHandler(E_COMPILE_ERROR, 'Error', __FILE__, __LINE__);
+        Registry::errorHandler(E_COMPILE_WARNING, 'Warning', __FILE__, __LINE__);
+        Registry::errorHandler(E_USER_ERROR, 'UserError', __FILE__, __LINE__);
+        Registry::errorHandler(E_USER_WARNING, 'UserError', __FILE__, __LINE__);
+        Registry::errorHandler(E_USER_NOTICE, 'UserError', __FILE__, __LINE__);
+        Registry::errorHandler(E_STRICT, 'Error', __FILE__, __LINE__);
+        Registry::errorHandler(E_RECOVERABLE_ERROR, 'Error', __FILE__, __LINE__);
+        Registry::errorHandler(E_DEPRECATED, 'Notice', __FILE__, __LINE__);
+        Registry::errorHandler(E_USER_DEPRECATED, 'Notice', __FILE__, __LINE__);
 
         // Проверим наши предположения
-        $exceptions = Registry::get_exception_log();
+        $exceptions = Registry::getExceptionLog();
 
         $this->assertTrue(count($exceptions) === count($errors), '$exceptions count must equal $errors');
 
         foreach($exceptions as $error)
         {
-            list($code, $level)     = [key($errors), current($errors)];
+            [$code, $level]     = [key($errors), current($errors)];
             next($errors);
 
             $this->assertInstanceOf(BaseExceptionI::class, $error);
@@ -330,7 +330,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
             $this->assertEquals
             (
                 $level,
-                $error->get_level(),
+                $error->getLevel(),
                 '$error->get_level() failed (line: '.$error->getLine().')'
             );
             $this->assertInstanceOf
@@ -352,9 +352,9 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
             'file'    => 'file'
         );
 
-        Registry::fatal_error_handler();
+        Registry::fatalErrorHandler();
 
-        $exceptions = Registry::get_exception_log();
+        $exceptions = Registry::getExceptionLog();
 
         $this->assertTrue(count($exceptions) === 1, '$exceptions count must equal 1');
 
@@ -378,7 +378,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
         $this->init_Registry();
 
         $i = 0;
-        foreach(Registry::get_exception_log() as $exception)
+        foreach(Registry::getExceptionLog() as $exception)
         {
             $this->assertEquals('test code'.($i+1), $exception->getMessage(), '$exception->getMessage() failed');
             $this->assertEquals(($i+10), $exception->getCode(), '$exception->getCode() failed');
@@ -402,12 +402,12 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
             $is_call = true;
         };
 
-        $old         = Registry::set_unhandled_handler(new ExceptionHandler($callback));
+        $old         = Registry::setUnhandledHandler(new ExceptionHandler($callback));
 
-        Registry::exception_handler($exception);
+        Registry::exceptionHandler($exception);
 
         // restore
-        Registry::set_unhandled_handler($old);
+        Registry::setUnhandledHandler($old);
 
         $this->assertTrue($is_call, '$callback isn\'t called');
     }
@@ -434,13 +434,13 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
 
             $this->assertTrue
             (
-                $actual_exception->get_previous() === $exception,
+                $actual_exception->getPreviousException() === $exception,
                 '$actual_exception not equal $exception'
             );
             $is_call = true;
         };
 
-        Registry::set_fatal_handler(new ExceptionHandler($callback));
+        Registry::setFatalHandler(new ExceptionHandler($callback));
 
         new FatalException($exception);
 
@@ -462,10 +462,10 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
             $is_call = true;
         };
 
-        Registry::set_fatal_handler(new ExceptionHandler($callback));
+        Registry::setFatalHandler(new ExceptionHandler($callback));
 
         // call this
-        $exception->set_fatal();
+        $exception->markAsFatal();
 
         $this->assertTrue($is_call, '$callback isn\'t called');
     }
@@ -492,9 +492,9 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
             $is_call = true;
         };
 
-        Registry::set_save_handler(new SaveHandler($callback));
+        Registry::setSaveHandler(new SaveHandler($callback));
 
-        Registry::save_exception_log();
+        Registry::saveExceptionLog();
 
         $this->assertTrue($is_call, '$callback isn\'t called');
     }

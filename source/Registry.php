@@ -1,4 +1,4 @@
-<?PHP
+<?php declare(strict_types=1);
 namespace Exceptions;
 
 /**
@@ -16,63 +16,63 @@ class Registry
      * Options for logger
      * @var array|\ArrayAccess
      */
-    static public $Logger_options = [];
+    static public array $LoggerOptions = [];
 
     /**
      * Options for debug mode
      * @var array|\ArrayAccess
      */
-    static public $Debug_options  = [];
+    static public array $DebugOptions  = [];
 
     /**
      * List of exception
      *
      * @var BaseException[]|\Exception[]|StorageI
      */
-    static protected $exceptions = [];
+    static protected array|StorageI $exceptions = [];
 
     /**
      * Handler which called from save_exception_log
      *
      * @var SaveHandlerI
      */
-    static protected $save_handler;
+    static protected SaveHandlerI $saveHandler;
 
     /**
      * Handler for unhandled exception
      * @var HandlerI
      */
-    static protected $unhandled_handler;
+    static protected ?HandlerI $unhandledHandler = null;
 
     /**
      * Handler called for fatal exception
      * @var HandlerI
      */
-    static protected $fatal_handler;
+    static protected HandlerI $fatalHandler;
 
     /**
      * Old error handler
      * @var callback
      */
-    static protected $old_error_handler;
+    static protected $oldErrorHandler;
 
     /**
      * Old exception handler
      * @var callback
      */
-    static protected $old_exception_handler;
+    static protected $oldExceptionHandler;
 
     /**
      * Setup global handler flag
      * @var boolean
      */
-    static protected $install_global_handlers;
+    static protected $installGlobalHandlers;
 
     /**
      * List of fatal php error
      * @var array
      */
-    protected static $FATAL = array
+    protected static array $FATAL = array
     (
         E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR
     );
@@ -87,21 +87,15 @@ class Registry
      * @param BaseExceptionI|\Throwable     $exception
      *
      */
-    static public function register_exception($exception)
+    static public function registerException(BaseExceptionI|\Throwable $exception): void
     {
-        if(($exception instanceof BaseExceptionI)   === false
-        && ($exception instanceof \Throwable)       === false )
-        {
-            return;
-        }
-
         if(is_array(self::$exceptions))
         {
             self::$exceptions[] = $exception;
         }
         elseif(self::$exceptions instanceof StorageI)
         {
-            self::$exceptions->add_exception($exception);
+            self::$exceptions->addException($exception);
         }
     }
 
@@ -110,7 +104,7 @@ class Registry
      *
      * @return      BaseException[]|\Exception[]
      */
-    static public function get_exception_log()
+    static public function getExceptionLog(): array
     {
         if(is_array(self::$exceptions))
         {
@@ -118,7 +112,7 @@ class Registry
         }
         elseif(self::$exceptions instanceof StorageI)
         {
-            $result = self::$exceptions->get_storage();
+            $result = self::$exceptions->getStorageExceptions();
             if(!is_array($result))
             {
                 return array(new \UnexpectedValueException('StorageI->get_storage() return not array'));
@@ -130,18 +124,18 @@ class Registry
         }
         else
         {
-            return array();
+            return [];
         }
     }
 
     /**
      * Resets exception storage
      */
-    static public function reset_exception_log()
+    static public function resetExceptionLog(): void
     {
         if(self::$exceptions instanceof StorageI)
         {
-            self::$exceptions->reset_storage();
+            self::$exceptions->resetStorage();
         }
         else
         {
@@ -152,16 +146,16 @@ class Registry
     /**
      * Saves registry exceptions to log.
      */
-    static public function save_exception_log()
+    static public function saveExceptionLog(): void
     {
-        if(self::$save_handler instanceof SaveHandlerI)
+        if(self::$saveHandler instanceof SaveHandlerI)
         {
-            self::$save_handler->save_exceptions
+            self::$saveHandler->save_exceptions
             (
-                (self::$exceptions instanceof StorageI) ? self::$exceptions->get_storage() : self::$exceptions,
-                [__CLASS__, 'reset_exception_log'],
-                self::$Logger_options,
-                self::$Debug_options
+                (self::$exceptions instanceof StorageI) ? self::$exceptions->getStorageExceptions() : self::$exceptions,
+                [__CLASS__, 'resetExceptionLog'],
+                self::$LoggerOptions,
+                self::$DebugOptions
             );
         }
     }
@@ -171,9 +165,9 @@ class Registry
      *
      * @param       StorageI     $storage      Custom storage
      *
-     * @return      StorageI                   returns older storage if exists
+     * @return      ?StorageI                   returns older storage if exists
      */
-    static public function set_registry_storage(StorageI $storage)
+    static public function setRegistryStorage(StorageI $storage): ?StorageI
     {
         $old = self::$exceptions;
 
@@ -185,15 +179,29 @@ class Registry
     /**
      * Setup save handler
      *
-     * @param       SaveHandlerI                $handler       Handler
+     * @param       ?SaveHandlerI                $handler       Handler
      *
      * @return      SaveHandlerI|null           Returns old handler if exists
      */
-    static public function set_save_handler(SaveHandlerI $handler = null)
+    static public function setSaveHandler(SaveHandlerI $handler = null): ?SaveHandlerI
     {
-        $old = self::$save_handler;
+        $old = self::$saveHandler;
 
-        self::$save_handler = $handler;
+        self::$saveHandler = $handler;
+
+        return $old;
+    }
+
+    /**
+     * @param       ?HandlerI        $handler
+     *
+     * @return      HandlerI|null
+     */
+    static public function setUnhandledHandler(HandlerI $handler = null): ?HandlerI
+    {
+        $old                        = self::$unhandledHandler;
+
+        self::$unhandledHandler     = $handler;
 
         return $old;
     }
@@ -203,25 +211,11 @@ class Registry
      *
      * @return      HandlerI|null
      */
-    static public function set_unhandled_handler(HandlerI $handler = null)
+    static public function setFatalHandler(HandlerI $handler = null): HandlerI|null
     {
-        $old = self::$unhandled_handler;
+        $old                        = self::$fatalHandler;
 
-        self::$unhandled_handler = $handler;
-
-        return $old;
-    }
-
-    /**
-     * @param       HandlerI        $handler
-     *
-     * @return      HandlerI|null
-     */
-    static public function set_fatal_handler(HandlerI $handler = null)
-    {
-        $old = self::$fatal_handler;
-
-        self::$fatal_handler = $handler;
+        self::$fatalHandler         = $handler;
 
         return $old;
     }
@@ -229,13 +223,13 @@ class Registry
     /**
      * Invokes the handler if there is
      *
-     * @param       BaseExceptionI      $exception
+     * @param       ?BaseExceptionI      $exception
      */
-    static public function call_fatal_handler(BaseExceptionI $exception = null)
+    static public function callFatalHandler(BaseExceptionI $exception = null): void
     {
-        if(self::$fatal_handler instanceof HandlerI)
+        if(self::$fatalHandler instanceof HandlerI)
         {
-            self::$fatal_handler->exception_handler($exception);
+            self::$fatalHandler->exception_handler($exception);
         }
     }
 
@@ -244,12 +238,12 @@ class Registry
      *
      * @return      array
      */
-    static public function get_logger_options()
+    static public function getLoggerOptions(): array
     {
-        if(is_array(self::$Logger_options) ||
-        self::$Logger_options instanceof \ArrayAccess)
+        if(is_array(self::$LoggerOptions) ||
+        self::$LoggerOptions instanceof \ArrayAccess)
         {
-            return self::$Logger_options;
+            return self::$LoggerOptions;
         }
         else
         {
@@ -265,44 +259,44 @@ class Registry
      * 3.  exception_handler
      *
      */
-    static public function install_global_handlers()
+    static public function installGlobalHandlers(): void
     {
-        if(self::$install_global_handlers)
+        if(self::$installGlobalHandlers)
         {
             return;
         }
 
         register_shutdown_function([__CLASS__, 'shutdown_function']);
-        self::$old_error_handler        = set_error_handler([__CLASS__, 'error_handler']);
-        self::$old_exception_handler    = set_exception_handler([__CLASS__, 'exception_handler']);
-        self::$install_global_handlers  = true;
+        self::$oldErrorHandler        = set_error_handler([__CLASS__, 'errorHandler']);
+        self::$oldExceptionHandler    = set_exception_handler([__CLASS__, 'exceptionHandler']);
+        self::$installGlobalHandlers  = true;
     }
 
     /**
      * Restores default handlers.
      *
      */
-    static public function restore_global_handlers()
+    static public function restoreGlobalHandlers(): void
     {
-        if(!self::$install_global_handlers)
+        if(!self::$installGlobalHandlers)
         {
             return;
         }
 
-        self::$install_global_handlers  = false;
+        self::$installGlobalHandlers  = false;
 
-        if(!empty(self::$old_error_handler))
+        if(!empty(self::$oldErrorHandler))
         {
-            set_error_handler(self::$old_error_handler);
+            set_error_handler(self::$oldErrorHandler);
         }
         else
         {
             restore_error_handler();
         }
 
-        if(!empty(self::$old_exception_handler))
+        if(!empty(self::$oldExceptionHandler))
         {
-            set_exception_handler(self::$old_exception_handler);
+            set_exception_handler(self::$oldExceptionHandler);
         }
         else
         {
@@ -311,24 +305,24 @@ class Registry
     }
 
 
-    static public function exception_handler(\Throwable $exception)
+    static public function exceptionHandler(\Throwable $exception): void
     {
         if($exception instanceof BaseExceptionI === false) {
-            self::register_exception($exception);
-        } else if(!($exception->is_loggable() || $exception->is_container())) {
+            self::registerException($exception);
+        } else if(!($exception->isLoggable() || $exception->isContainer())) {
             // When exception reaches this handler
             // its not logged if:
             // - already was logged
             // - or is container
-            $exception->set_loggable(true);
-            self::register_exception($exception);
+            $exception->setLoggable(true);
+            self::registerException($exception);
         }
         
         new UnhandledException($exception);
         
-        if(self::$unhandled_handler instanceof HandlerI)
+        if(self::$unhandledHandler instanceof HandlerI)
         {
-            self::$unhandled_handler->exception_handler($exception);
+            self::$unhandledHandler->exception_handler($exception);
         }
     }
 
@@ -342,9 +336,9 @@ class Registry
      *
      * @return       boolean
     */
-    static public function error_handler($errno, $errstr, $errfile, $errline)
+    static public function errorHandler($errno, $errstr, $errfile, $errline): bool
     {
-        self::register_exception
+        self::registerException
         (
             Errors\Error::create_error($errno, $errstr, $errfile, $errline)
         );
@@ -353,47 +347,49 @@ class Registry
         return true;
     }
 
-    static public function fatal_error_handler()
+    static public function fatalErrorHandler(): void
     {
-        $error = error_get_last();
+        $error                      = error_get_last();
+        
         if (!is_array($error) || !in_array($error['type'], self::$FATAL))
         {
             return;
         }
-        self::error_handler($error['type'], $error['message'], $error['file'], $error['line']);
+        
+        self::errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
     }
 
     static public function shutdown_function()
     {
-        self::fatal_error_handler();
-        self::save_exception_log();
+        self::fatalErrorHandler();
+        self::saveExceptionLog();
     }
 
     /**
      * Returns true if debug mode was enabled
      *
-     * @param       string      $class          name of class or namespace
+     * @param       ?string      $class          name of class or namespace
      *
      * @return      boolean
      */
-    static public function is_debug($class = null)
+    static public function isDebug(string $class = null): bool
     {
         // If global debug mode on - return true.
-        if(isset(self::$Debug_options['debug']) && self::$Debug_options['debug'])
+        if(isset(self::$DebugOptions['debug']) && self::$DebugOptions['debug'])
         {
             return true;
         }
 
         // if namespaces not defined - return
-        if(is_null($class) || empty(self::$Debug_options['namespaces']))
+        if(is_null($class) || empty(self::$DebugOptions['namespaces']))
         {
             return false;
         }
 
         // Searching for matches
-        foreach(self::$Debug_options['namespaces'] as $namespace)
+        foreach(self::$DebugOptions['namespaces'] as $namespace)
         {
-            if(strpos($class, $namespace) === 0)
+            if(str_starts_with($class, $namespace))
             {
                 return true;
             }

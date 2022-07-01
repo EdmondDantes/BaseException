@@ -27,7 +27,7 @@ class MyException extends \Exceptions\BaseException
     {
         parent::__construct
         ([
-             'var'         => $this->to_string($var)
+             'var'         => $this->toString($var)
          ]);
     }
 }
@@ -45,11 +45,11 @@ echo $exception->getMessage();
 use \Exceptions\Registry;
 use \Exceptions\LoggableException;
 
-Registry::reset_exception_log();
+Registry::resetExceptionLog();
 
 $exception      = new LoggableException('this is a loggable exception');
 
-$log            = Registry::get_exception_log();
+$log            = Registry::getExceptionLog();
 
 if($log[0] === $exception)
 {
@@ -145,12 +145,12 @@ try
 {
     dispatch_current_url();
 }
-catch(BaseException $my_exception)
+catch(BaseException $myException)
 {
-    $my_exception->append_data(['browser' => get_browser()]);
+    $myException->appendData(['browser' => get_browser()]);
 
     // and throw exception on...
-    throw $my_exception;
+    throw $myException;
 }
 
 ```

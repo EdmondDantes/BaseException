@@ -1,4 +1,4 @@
-<?PHP
+<?php declare(strict_types=1);
 namespace Exceptions\Errors;
 
 use Exceptions\BaseExceptionI;
@@ -81,7 +81,7 @@ class Error implements BaseExceptionI
                 // EMERGENCY created as fatal error
                 //
                 $err = new Error($errno, $errstr, $errfile, $errline);
-                $err->set_fatal();
+                $err->markAsFatal();
 
                 return $err;
             }
@@ -165,31 +165,31 @@ class Error implements BaseExceptionI
         return print_r($this->trace, true);
     }
 
-    public function is_loggable(): bool
+    public function isLoggable(): bool
     {
         return $this->is_loggable;
     }
 
-    public function set_loggable(bool $flag)
+    public function setLoggable(bool $flag)
     {
         $this->is_loggable = (boolean) $flag;
 
         return $this;
     }
 
-    public function is_fatal(): bool
+    public function isFatal(): bool
     {
         return $this->is_fatal;
     }
 
-    public function set_fatal()
+    public function markAsFatal()
     {
         $this->is_fatal = true;
 
         return $this;
     }
 
-    public function is_container(): bool
+    public function isContainer(): bool
     {
         return false;
     }
@@ -198,7 +198,7 @@ class Error implements BaseExceptionI
      * Returns level of error
      * @return      int
      */
-    public function get_level(): int
+    public function getLevel(): int
     {
         if(!array_key_exists($this->code, self::$ERRORS))
         {
@@ -208,39 +208,39 @@ class Error implements BaseExceptionI
         return self::$ERRORS[$this->code];
     }
     
-    public function get_source(): array
+    public function getSource(): array
     {
         return ['source' => $this->getFile(), 'type' => '', 'function' => ''];
     }
 
-    public function get_previous(): \Throwable|BaseExceptionI|null
+    public function getPreviousException(): \Throwable|BaseExceptionI|null
     {
         return null;
     }
 
-    public function get_data(): array
+    public function getExceptionData(): array
     {
         return [];
     }
 
-    public function get_debug_data(): array
+    public function getDebugData(): array
     {
         return [];
     }
 
-    public function to_array(): array
+    public function toArray(): array
     {
         return
         [
             'type'      => get_class($this),
-            'source'    => $this->get_source(),
+            'source'    => $this->getSource(),
             'message'   => $this->getMessage(),
             'code'      => $this->getCode(),
             'data'      => []
         ];
     }
 
-    public function append_data(array $data)
+    public function appendData(array $data)
     {
         /** nothing to do */
         return $this;

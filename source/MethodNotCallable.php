@@ -1,4 +1,4 @@
-<?PHP
+<?php declare(strict_types=1);
 namespace Exceptions;
 
 /**
@@ -22,7 +22,7 @@ class MethodNotCallable     extends LogicalException
         }
         else
         {
-            parent::__construct(['method'  => $this->to_string($method), 'message' => $message]);
+            parent::__construct(['method'  => $this->toString($method), 'message' => $message]);
         }
     }
 }

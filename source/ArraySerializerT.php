@@ -1,4 +1,4 @@
-<?PHP
+<?php declare(strict_types=1);
 namespace Exceptions;
 
 trait ArraySerializerT
@@ -34,7 +34,7 @@ trait ArraySerializerT
             if($error instanceof BaseExceptionI)
             {
                 /* @var BaseExceptionI $error */
-                $results[]      = $error->to_array();
+                $results[]      = $error->toArray();
             }
             elseif($error instanceof \Throwable)
             {
@@ -42,7 +42,7 @@ trait ArraySerializerT
                 $results[]      =
                 [
                     'type'      => get_class($error),
-                    'source'    => $this->get_source_for($error),
+                    'source'    => $this->getSourceFor($error),
                     'message'   => $error->getMessage(),
                     'code'      => $error->getCode()
                 ];

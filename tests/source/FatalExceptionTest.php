@@ -1,4 +1,4 @@
-<?PHP
+<?php declare(strict_types=1);
 namespace Exceptions;
 
 /**
@@ -19,10 +19,10 @@ class FatalExceptionTest            extends \PHPUnit\Framework\TestCase
         $this->assertEquals($exception->getFile(), $e->getFile(), '$e->getFile() failed');
         $this->assertEquals($exception->getLine(), $e->getLine(), '$e->getLine() failed');
         $this->assertTrue(($exception === $e->getPrevious()), '$e->getPrevious() failed');
-        $this->assertTrue(($exception === $e->get_previous()), '$e->get_previous() failed');
+        $this->assertTrue(($exception === $e->getPreviousException()), '$e->get_previous() failed');
 
-        $this->assertTrue($e->is_fatal(), '$e->is_fatal() failed');
-        $this->assertTrue($e->is_loggable(), '$e->is_loggable() failed');
+        $this->assertTrue($e->isFatal(), '$e->is_fatal() failed');
+        $this->assertTrue($e->isLoggable(), '$e->is_loggable() failed');
 
         // 2. Случай контейнер для BaseExceptionI
         $exception = new LoggableException('message', 123);
@@ -32,13 +32,13 @@ class FatalExceptionTest            extends \PHPUnit\Framework\TestCase
         $this->assertEquals('', $e->getMessage(), '$e->getMessage() failed');
         $this->assertEquals(0, $e->getCode(), '$e->getCode() failed');
         $this->assertTrue(($exception === $e->getPrevious()), '$e->getPrevious() failed');
-        $this->assertTrue(($exception === $e->get_previous()), '$e->get_previous() failed');
+        $this->assertTrue(($exception === $e->getPreviousException()), '$e->get_previous() failed');
 
-        $this->assertTrue($exception->is_fatal(), '$exception->is_fatal() failed');
-        $this->assertTrue($exception->is_loggable(), '$exception->is_loggable() failed');
+        $this->assertTrue($exception->isFatal(), '$exception->is_fatal() failed');
+        $this->assertTrue($exception->isLoggable(), '$exception->is_loggable() failed');
 
-        $this->assertFalse($e->is_fatal(), '$e->is_fatal() failed');
-        $this->assertTrue($e->is_loggable(), '$e->is_loggable() failed');
+        $this->assertFalse($e->isFatal(), '$e->is_fatal() failed');
+        $this->assertTrue($e->isLoggable(), '$e->is_loggable() failed');
 
         // 3. Случай контейнер для BaseExceptionI, но используется класс ошибки
         $exception = new Errors\Error(1, 'message', __FILE__, __LINE__);
@@ -47,17 +47,17 @@ class FatalExceptionTest            extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('', $e->getMessage(), '$e->getMessage() failed');
         $this->assertEquals(0, $e->getCode(), '$e->getCode() failed');
-        $this->assertTrue(($exception === $e->get_previous()), '$e->get_previous() failed');
+        $this->assertTrue(($exception === $e->getPreviousException()), '$e->get_previous() failed');
 
-        $this->assertTrue($exception->is_fatal(), '$exception->is_fatal() failed');
-        $this->assertTrue($exception->is_loggable(), '$exception->is_loggable() failed');
+        $this->assertTrue($exception->isFatal(), '$exception->is_fatal() failed');
+        $this->assertTrue($exception->isLoggable(), '$exception->is_loggable() failed');
 
-        $this->assertFalse($e->is_fatal(), '$e->is_fatal() failed');
-        $this->assertTrue($e->is_loggable(), '$e->is_loggable() failed');
+        $this->assertFalse($e->isFatal(), '$e->is_fatal() failed');
+        $this->assertTrue($e->isLoggable(), '$e->is_loggable() failed');
 
         // 4. Simple
         $e = new FatalException('message');
-        $e->set_fatal();
-        $this->assertTrue($e->is_fatal(), '$e->is_fatal() failed');
+        $e->markAsFatal();
+        $this->assertTrue($e->isFatal(), '$e->is_fatal() failed');
     }
 }

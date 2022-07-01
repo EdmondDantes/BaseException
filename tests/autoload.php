@@ -1,4 +1,4 @@
-<?PHP
+<?php declare(strict_types=1);
 // зарегистрируем функцию для автоматического
 // подключения файлов классов
 define('UNIT_TEST_ROOT', dirname(__FILE__));
