@@ -2,7 +2,7 @@ BaseException [![Build Status](https://secure.travis-ci.org/EdmondDantes/BaseExc
 =============
 
 Base Exception Library for PHP 8.0+
-(The latest version: 4.0.1)
+(The latest version: 5.0.0)
 
 Missions:
 
@@ -186,7 +186,7 @@ class ClassNotExist  extends BaseException
 class MyFatalException  extends BaseException
 {
     // This exception has aspect: "fatal"
-    protected bool $is_fatal    = true;
+    protected bool $isFatal    = true;
 }
 ```
 
@@ -197,7 +197,7 @@ class MyException  extends BaseException
 {
     public function __construct($object)
     {
-        $this->set_debug_data($object);
+        $this->setDebugData($object);
         parent::__construct('its too bad!');
     }
 }
