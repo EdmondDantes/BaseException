@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace Exceptions;
 
 use Exceptions\Errors\Error;
@@ -187,7 +190,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
      */
     public function testRegister_exception_null()
     {
-        Registry::registerException(array());
+        Registry::registerException([]);
 
         $exceptions = Registry::getExceptionLog();
 
@@ -413,10 +416,10 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Exceptions\Registry::call_fatal_handler
-     * @covers Exceptions\Registry::set_fatal_handler
-     * @covers Exceptions\BaseException::is_fatal
-     * @covers Exceptions\BaseException::set_fatal
+     * @covers Registry::call_fatal_handler
+     * @covers Registry::set_fatal_handler
+     * @covers BaseException::is_fatal
+     * @covers BaseException::set_fatal
      */
     public function testFatal_handler()
     {
@@ -479,7 +482,6 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
 
         $exception  = new LoggableException('test');
 
-        /** @noinspection PhpUnusedParameterInspection */
         $callback   = function(array $exceptions, callable $reset, $logger_opt,  $debug_opt)
                       use($exception, &$is_call)
         {

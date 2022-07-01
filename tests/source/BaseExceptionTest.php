@@ -213,6 +213,7 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
             'source'    => ['source' => get_class($this), 'type' => '->', 'function' => 'setUp'],
             'message'   => $this->test_base_data['message'],
             'template'  => '',
+            'tags'      => [],
             'code'      => $this->test_base_data['code'],
             'data'      => ''
         );
@@ -292,6 +293,7 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
             'source'    => ['source' => get_class($this), 'type' => '->', 'function' => 'testToArrayForContainer2'],
             'message'   => 'test',
             'template'  => '',
+            'tags'      => [],
             'code'      => 0,
             'data'      => ['exdata' => $data],
             'container' => LoggableException::class

@@ -1,15 +1,29 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace Exceptions;
+
+class TestClass
+{
+    use HelperT {
+        toString as public _toString;
+    }
+    
+    use ArraySerializerT {
+        errorsToArray as public _errorsToArray;
+        arrayToErrors as public _arrayToErrors;
+    }
+}
 
 class ArraySerializerTTest extends \PHPUnit\Framework\TestCase
 {
-    use HelperT;
-    use ArraySerializerT;
-
     public function testErrors_to_array()
     {
+        $testedObject                   = new TestClass();
+        
         // ones exception
-        $exceptions                     = $this->errors_to_array
+        $exceptions                     = $testedObject->_errorsToArray
         (
             new BaseException
             ([
@@ -50,7 +64,7 @@ class ArraySerializerTTest extends \PHPUnit\Framework\TestCase
             new BaseException('test message4',8)
         ];
 
-        $exceptions                     = $this->errors_to_array($errors);
+        $exceptions                     = $testedObject->_errorsToArray($errors);
 
         $this->assertTrue(is_array($exceptions), '$exceptions must be array');
         $this->assertTrue(count($exceptions) === 4, '$exceptions must have three elements');
@@ -114,9 +128,11 @@ class ArraySerializerTTest extends \PHPUnit\Framework\TestCase
 
     public function testArray_to_errors()
     {
+        $testedObject                   = new TestClass();
+        
         $array                          = [];
 
-        for($i=0;$i<3;$i++)
+        for($i=0; $i<3; $i++)
         {
             $array[]                    =
             [
@@ -127,7 +143,7 @@ class ArraySerializerTTest extends \PHPUnit\Framework\TestCase
             ];
         }
 
-        $results = $this->array_to_errors($array);
+        $results = $testedObject->_arrayToErrors($array);
 
         $i                              = 0;
 
@@ -153,8 +169,10 @@ class ArraySerializerTTest extends \PHPUnit\Framework\TestCase
     
     public function testArray_to_errors_error()
     {
+        $testedObject                   = new TestClass();
+        
         $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage('$error must be array');
-        $this->array_to_errors([1,2,3]);
+        $testedObject->_arrayToErrors([1,2,3]);
     }
 }
