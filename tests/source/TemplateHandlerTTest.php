@@ -1,21 +1,25 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Exceptions;
 
-class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
-{
-    use TemplateHandlerT;
-
-    /** @noinspection PhpHierarchyChecksInspection */
+class TestedTemplateHandler {
+    
+    use TemplateHandlerT {
+        handleTemplate as public _handleTemplate;
+    }
+    
     /**
      * @param string $value
-     * @param bool   $is_quoted
+     * @param bool   $isQuoted
+     * @param int    $arrayMax
      *
      * @return      string
      */
-    protected function to_string(mixed $value, bool $is_quoted = false, int $array_max = 5): string
+    protected function toString(mixed $value, bool $isQuoted = false, int $arrayMax = 5): string
     {
-        if($is_quoted)
+        if($isQuoted)
         {
             return '\''.$value.'\'';
         }
@@ -24,11 +28,50 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
             return (string)$value;
         }
     }
+}
+
+class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
+{
+    
+    /**
+     * @dataProvider dataProvider
+     *
+     * @param string     $template
+     * @param   array    $data
+     * @param string|array     $message
+     * @param int|string        $code
+     * @param ?\Throwable $previous
+     * @param mixed     $excepted
+     */
+    public function test(mixed $template, array $data, string|array|\ArrayObject $message, int|string $code, \Throwable $previous = null, mixed $excepted = null)
+    {
+        $testedObject           = new TestedTemplateHandler();
+        
+        if($excepted instanceof \Throwable)
+        {
+            $e              = null;
+            
+            try
+            {
+                $testedObject->_handleTemplate($template, $data, $message, $code, $previous);
+            }
+            catch(\Throwable $e)
+            {
+            }
+            
+            $this->assertInstanceOf(get_class($excepted), $e);
+        }
+        else
+        {
+            $result        = $testedObject->_handleTemplate($template, $data, $message, $code, $previous);
+            $this->assertEquals($excepted, $result);
+        }
+    }
 
     /**
      * @dataSet On
      */
-    protected function data_set_1()
+    protected function data_set_1(): array
     {
         return
         [
@@ -45,7 +88,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
     /**
      * @dataSet On
      */
-    protected function data_set_2()
+    protected function data_set_2(): array
     {
         return
         [
@@ -62,7 +105,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
     /**
      * @dataSet On
      */
-    protected function data_set_3()
+    protected function data_set_3(): array
     {
         return
         [
@@ -79,7 +122,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
     /**
      * @dataSet On
      */
-    protected function data_set_4()
+    protected function data_set_4(): array
     {
         return
         [
@@ -96,7 +139,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
     /**
      * @dataSet On
      */
-    protected function data_set_error_1()
+    protected function data_set_error_1(): array
     {
         return
         [
@@ -112,7 +155,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
     /**
      * @dataSet On
      */
-    protected function data_set_error_2()
+    protected function data_set_error_2(): array
     {
         return
         [
@@ -128,7 +171,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
     /**
      * @dataSet On
      */
-    protected function data_set_error_3()
+    protected function data_set_error_3(): array
     {
         return
         [
@@ -141,7 +184,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function data_provider()
+    public function dataProvider(): array
     {
         $reflection             = new \ReflectionClass($this);
 
@@ -159,38 +202,5 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
         }
 
         return $results;
-    }
-
-    /**
-     * @dataProvider data_provider
-     *
-     * @param   string          $template
-     * @param   array           $data
-     * @param   string          $message
-     * @param   string          $code
-     * @param   \Exception      $previous
-     * @param   string          $excepted
-     */
-    public function test($template, array $data, $message, $code, $previous, $excepted)
-    {
-        if($excepted instanceof \Throwable)
-        {
-            $e              = null;
-
-            try
-            {
-                $this->handle_template($template, $data, $message, $code, $previous);
-            }
-            catch(\Throwable $e)
-            {
-            }
-
-            $this->assertInstanceOf(get_class($excepted), $e);
-        }
-        else
-        {
-            $result        = $this->handle_template($template, $data, $message, $code, $previous);
-            $this->assertEquals($excepted, $result);
-        }
     }
 }

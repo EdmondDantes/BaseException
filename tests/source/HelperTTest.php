@@ -1,13 +1,23 @@
-<?PHP
+<?php declare(strict_types=1);
+
 namespace Exceptions;
+
+class TestedClass {
+    use HelperT {
+        toString as public _toString;
+        getSourceFor as public _getSourceFor;
+        getValueType as public _getValueType;
+    }
+}
 
 class HelperTTest               extends \PHPUnit\Framework\TestCase
 {
-    use HelperT;
 
     public function testGetSourceFor()
     {
-        $result                 = $this->get_source_for(new \Exception('this'));
+        $testedObject           = new TestedClass();
+        
+        $result                 = $testedObject->_getSourceFor(new \Exception('this'));
 
         $this->assertEquals
         (
@@ -19,7 +29,7 @@ class HelperTTest               extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $result                 = $this->get_source_for(new \Exception('this'), true);
+        $result                 = $testedObject->_getSourceFor(new \Exception('this'), true);
 
         $this->assertEquals(__CLASS__.'->testGetSourceFor', $result);
     }
@@ -53,7 +63,9 @@ class HelperTTest               extends \PHPUnit\Framework\TestCase
      */
     public function testGetValueType($value, $expected)
     {
-        $result                 = $this->get_value_type($value);
+        $testedObject           = new TestedClass();
+        
+        $result                 = $testedObject->_getValueType($value);
 
         $this->assertEquals($expected, $result);
     }
@@ -107,7 +119,9 @@ class HelperTTest               extends \PHPUnit\Framework\TestCase
      */
     public function testToString($value, $is_quoted, $expected)
     {
-        $result                 = $this->to_string($value, $is_quoted);
+        $testedObject           = new TestedClass();
+        
+        $result                 = $testedObject->_toString($value, $is_quoted);
 
         $this->assertEquals($expected, $result);
     }

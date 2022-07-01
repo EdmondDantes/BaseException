@@ -1,4 +1,7 @@
-<?PHP
+<?php
+
+declare(strict_types=1);
+
 namespace Mockups;
 
 use Exceptions\BaseExceptionI;
@@ -6,44 +9,28 @@ use Exceptions\StorageI;
 
 class Storage implements \Exceptions\StorageI
 {
-    public $Exceptions = array();
+    public array $Exceptions = [];
 
     /**
-     * Метод добавляет исключение
      *
-     * @param       BaseExceptionI|\Throwable      $exception      Исключение
+     *
+     * @param       BaseExceptionI|\Throwable      $exception
      *
      * @return      StorageI
      */
-    public function add_exception($exception)
+    public function addException(BaseExceptionI|\Throwable $exception): static
     {
-        if(($exception instanceof \Exceptions\BaseExceptionI) === false
-        && ($exception instanceof \Throwable) === false )
-        {
-            return $this;
-        }
-
         $this->Exceptions[] = $exception;
 
         return $this;
     }
 
-    /**
-     * Метод вернёт список исключений как массив.
-     *
-     * @return      array
-     */
-    public function get_storage()
+    public function getStorageExceptions(): array
     {
         return $this->Exceptions;
     }
 
-    /**
-     * Метод сбрасывает журнал исключений, если он есть.
-     *
-     * @return      StorageI
-     */
-    public function reset_storage()
+    public function resetStorage(): static
     {
         $this->Exceptions = array();
 

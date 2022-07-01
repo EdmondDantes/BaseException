@@ -11,7 +11,7 @@
     }
     catch(BaseException $e)
     {
-        throw $e->set_fatal();
+        throw $e->markAsFatal();
     }
 ```
 

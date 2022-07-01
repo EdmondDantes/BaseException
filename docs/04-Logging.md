@@ -122,7 +122,7 @@
         (
             'неправда',
             0,
-            $kingdoms->set_loggable(false)
+            $kingdoms->setLoggable(false)
         );
     }
 ```

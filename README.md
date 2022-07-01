@@ -2,7 +2,7 @@ BaseException [![Build Status](https://secure.travis-ci.org/EdmondDantes/BaseExc
 =============
 
 Base Exception Library for PHP 8.0+
-(The latest version: 4.0.1)
+(The latest version: 5.0.0)
 
 Missions:
 
@@ -11,6 +11,7 @@ Missions:
 3. Aggregation exceptions within exceptions.
 4. Registration exceptions in the global registry for logging.
 5. Support for the concept of message templates.
+6. Support tags for exceptions (for elastic logging as example).
 
 **And most importantly: make it all easy and simple ;)**
 
@@ -27,7 +28,7 @@ class MyException extends \Exceptions\BaseException
     {
         parent::__construct
         ([
-             'var'         => $this->to_string($var)
+             'var'         => $this->toString($var)
          ]);
     }
 }
@@ -45,11 +46,11 @@ echo $exception->getMessage();
 use \Exceptions\Registry;
 use \Exceptions\LoggableException;
 
-Registry::reset_exception_log();
+Registry::resetExceptionLog();
 
 $exception      = new LoggableException('this is a loggable exception');
 
-$log            = Registry::get_exception_log();
+$log            = Registry::getExceptionLog();
 
 if($log[0] === $exception)
 {
@@ -145,12 +146,12 @@ try
 {
     dispatch_current_url();
 }
-catch(BaseException $my_exception)
+catch(BaseException $myException)
 {
-    $my_exception->append_data(['browser' => get_browser()]);
+    $myException->appendData(['browser' => get_browser()]);
 
     // and throw exception on...
-    throw $my_exception;
+    throw $myException;
 }
 
 ```
@@ -161,7 +162,7 @@ catch(BaseException $my_exception)
 class ClassNotExist  extends BaseException
 {
     // This exception will be logged
-    protected bool $is_loggable = true;
+    protected bool $isLoggable = true;
 
     /**
      * ClassNotExist
@@ -185,7 +186,7 @@ class ClassNotExist  extends BaseException
 class MyFatalException  extends BaseException
 {
     // This exception has aspect: "fatal"
-    protected bool $is_fatal    = true;
+    protected bool $isFatal    = true;
 }
 ```
 
@@ -196,7 +197,7 @@ class MyException  extends BaseException
 {
     public function __construct($object)
     {
-        $this->set_debug_data($object);
+        $this->setDebugData($object);
         parent::__construct('its too bad!');
     }
 }
