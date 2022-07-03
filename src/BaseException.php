@@ -40,6 +40,21 @@ namespace Exceptions;
 class BaseException                 extends     \Exception
                                     implements  BaseExceptionI
 {
+    public static function serializeToArray(\Throwable $throwable = null): array
+    {
+        if($throwable instanceof BaseException) {
+            return $throwable->toArray();
+        } else {
+            return [
+                'message'           => $throwable->getMessage(),
+                'code'              => $throwable->getCode(),
+                'file'              => $throwable->getFile(),
+                'line'              => $throwable->getLine(),
+                'trace'             => $throwable->getTrace()
+            ];
+        }
+    }
+    
     use HelperT;
     use ArraySerializerT;
     use TemplateHandlerT;
