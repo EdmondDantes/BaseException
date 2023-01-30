@@ -17,7 +17,7 @@ function register_shutdown_function($handler)
 }
 
 /**
- * Макет для замены error_get_last
+ * error_get_last simulation
  *
  * @return array
  */
@@ -45,7 +45,7 @@ class ExceptionHandler implements HandlerI
      *
      * @return      void
      */
-    public function exception_handler(\Throwable|BaseExceptionI $exception): void
+    public function exceptionHandler(\Throwable|BaseExceptionI $exception): void
     {
         call_user_func($this->handler, $exception);
     }
@@ -232,15 +232,14 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Тестирование обработчика исключений
+     *
      */
-    public function testException_handler()
+    public function testExceptionHandler()
     {
-        // Это исключение должно залогироваться
-        // в конструкторе
+        // Should be registered in constructor
         $exception  = new LoggableException('test');
 
-        // Исключение логируется как необработанное
+        // Should be registered as unhandled
         Registry::exceptionHandler(new BaseException('test2'));
 
         $exceptions = Registry::getExceptionLog();
@@ -263,12 +262,9 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
 
         Registry::resetExceptionLog();
 
-        // А это контейнер - он не должен логироваться сам по себе
-        // зато журнализирует \Exception
         $exception = new \Exception('test');
         Registry::exceptionHandler(new LoggableException($exception));
 
-        // Проверим наши предположения
         $exceptions = Registry::getExceptionLog();
 
         $this->assertTrue(count($exceptions) === 2, '$exceptions count must equal 2');
@@ -277,9 +273,9 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Тестирование обработчика ошибок
+     * error handler
      */
-    public function testError_handler()
+    public function testErrorHandler(): void
     {
         $errors                     =
         [
@@ -317,7 +313,6 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
         Registry::errorHandler(E_DEPRECATED, 'Notice', __FILE__, __LINE__);
         Registry::errorHandler(E_USER_DEPRECATED, 'Notice', __FILE__, __LINE__);
 
-        // Проверим наши предположения
         $exceptions = Registry::getExceptionLog();
 
         $this->assertTrue(count($exceptions) === count($errors), '$exceptions count must equal $errors');
@@ -345,7 +340,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testFatal_error_handler()
+    public function testFatalErrorHandler(): void
     {
         $GLOBALS['Last_error'] = array
         (
@@ -373,10 +368,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
         $this->assertEquals('file', $error->getFile(), '$error->getFile() failed');
     }
 
-    /**
-     * Журнализирование
-     */
-    public function testGet_exception_log()
+    public function testGetExceptionLog(): void
     {
         $this->init_Registry();
 
@@ -390,10 +382,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
         }
     }
 
-    /**
-     * Обработчик несловленных исключений
-     */
-    public function testUnhandled_handler()
+    public function testUnhandledHandler(): void
     {
         $is_call    = false;
 
@@ -421,7 +410,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
      * @covers BaseException::is_fatal
      * @covers BaseException::set_fatal
      */
-    public function testFatal_handler()
+    public function testFatalHandler(): void
     {
         // Case 1: Exception-container
 
@@ -473,10 +462,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
         $this->assertTrue($is_call, '$callback isn\'t called');
     }
 
-    /**
-     * Тестирование обработчика журнала
-     */
-    public function testSave_exception_handler()
+    public function testSaveExceptionHandler(): void
     {
         $is_call    = false;
 

@@ -230,7 +230,7 @@ class Registry
     {
         if(self::$fatalHandler instanceof HandlerI)
         {
-            self::$fatalHandler->exception_handler($exception);
+            self::$fatalHandler->exceptionHandler($exception);
         }
     }
 
@@ -323,7 +323,7 @@ class Registry
         
         if(self::$unhandledHandler instanceof HandlerI)
         {
-            self::$unhandledHandler->exception_handler($exception);
+            self::$unhandledHandler->exceptionHandler($exception);
         }
     }
     
