@@ -1,7 +1,7 @@
 BaseException [![Build Status](https://secure.travis-ci.org/EdmondDantes/BaseException.png)](http://travis-ci.org/EdmondDantes/BaseException)
 =============
 
-Base Exception Library for PHP 8.0+
+Base Exception Library for PHP 8.2+
 (The latest version: 5.0.0)
 
 Missions:
@@ -82,7 +82,7 @@ List of parameters:
     ...
 
     // print_r([1,2,3]);
-    print_r($exception->get_data());
+    print_r($exception->getExceptionData());
 
 ```
 
