@@ -35,10 +35,6 @@ class Error implements BaseExceptionI
         E_USER_DEPRECATED    => self::INFO
 	];
 
-    protected string $message;
-    protected int $code;
-    protected string $file;
-    protected int $line;
     protected ?array $trace;
 
     /**
@@ -54,78 +50,76 @@ class Error implements BaseExceptionI
      */
     protected bool $isFatal         = false;
 
+    static public function createFromLastError(array $error = null): ?static
+    {
+        if($error === null) {
+            return null;
+        }
+        
+        return static::createError(
+            $error['type'] ?? 0, $error['message'] ?? '', $error['file'] ?? '', $error['line'] ?? 0
+        );
+    }
+    
     /**
      * Errors factory
      *
-     * @param        int            $errno      Class of error
-     * @param        string         $errstr     Message
-     * @param        string         $errfile    File
-     * @param        string         $errline    Line
+     * @param        int    $code    Class of error
+     * @param        string $message Message
+     * @param        string $file    File
+     * @param        int    $line    Line
      *
      * @return       Error
     */
-    static public function createError(int $errno, string $errstr, string $errfile, string $errline): static
+    static public function createError(int $code, string $message, string $file, int $line): static
     {
-        if(!array_key_exists($errno, self::$ERRORS))
+        if(!array_key_exists($code, self::$ERRORS))
         {
-            $errno = self::ERROR;
+            $code                   = self::ERROR;
         }
 
-        if(in_array($errno, array(E_USER_ERROR, E_USER_WARNING, E_USER_NOTICE)))
+        if(in_array($code, array(E_USER_ERROR, E_USER_WARNING, E_USER_NOTICE)))
         {
-            return new UserError($errno, $errstr, $errfile, $errline);
+            return new UserError($code, $message, $file, $line);
         }
 
-        switch(self::$ERRORS[$errno])
+        switch(self::$ERRORS[$code])
         {
             case self::EMERGENCY    :
             {
                 //
                 // EMERGENCY created as fatal error
                 //
-                $err = new Error($errno, $errstr, $errfile, (int)$errline);
+                $err = new Error($code, $message, $file, (int)$line);
                 $err->markAsFatal();
 
                 return $err;
             }
-            case self::ALERT    :
-            case self::CRITICAL     :
-            case self::ERROR      :
-            {
-                return new Error($errno, $errstr, $errfile, (int)$errline);
-            }
             case self::WARNING  :
             {
-                return new Warning($errno, $errstr, $errfile, (int)$errline);
+                return new Warning($code, $message, $file, (int)$line);
             }
             case self::NOTICE   :
             case self::INFO     :
             case self::DEBUG    :
             {
-                return new Notice($errno, $errstr, $errfile, (int)$errline);
+                return new Notice($code, $message, $file, (int)$line);
             }
+            case self::ALERT    :
+            case self::CRITICAL :
+            case self::ERROR    :
             default:
             {
-                return new Error($errno, $errstr, $errfile, (int)$errline);
+                return new Error($code, $message, $file, (int)$line);
             }
         }
     }
 
     /**
      * Errors constructor
-     *
-     * @param        int            $errno      Class of error
-     * @param        string         $errstr     Message
-     * @param        string         $errfile    File
-     * @param        int            $errline    Line
-     *
     */
-    public function __construct(int $errno, string $errstr, string $errfile, int $errline)
+    public function __construct(protected int $code, protected string $message, protected string $file, protected int $line)
     {
-        $this->code    = $errno;
-        $this->message = $errstr;
-        $this->file    = $errfile;
-        $this->line    = $errline;
     }
 
     public function getMessage(): string

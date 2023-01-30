@@ -11,7 +11,7 @@ class DebugException extends BaseException
     {
         if($code === 1)
         {
-            $this->is_debug = true;
+            $this->isDebug = true;
         }
 
         parent::__construct($exception, $code, $previous);

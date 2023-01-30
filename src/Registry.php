@@ -34,13 +34,13 @@ class Registry
     /**
      * Handler which called from save_exception_log
      *
-     * @var SaveHandlerI
+     * @var SaveHandlerI|null
      */
     static protected ?SaveHandlerI $saveHandler = null;
 
     /**
      * Handler for unhandled exception
-     * @var HandlerI
+     * @var HandlerI|null
      */
     static protected ?HandlerI $unhandledHandler = null;
 
@@ -66,16 +66,13 @@ class Registry
      * Setup global handler flag
      * @var boolean
      */
-    static protected $installGlobalHandlers;
+    static protected bool $installGlobalHandlers = false;
 
     /**
      * List of fatal php error
      * @var array
      */
-    protected static array $FATAL = array
-    (
-        E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR
-    );
+    protected static array $FATAL = [\E_ERROR, \E_PARSE, \E_CORE_ERROR, \E_COMPILE_ERROR];
 
     final private function __construct(){}
 
@@ -154,10 +151,10 @@ class Registry
     {
         if(self::$saveHandler instanceof SaveHandlerI)
         {
-            self::$saveHandler->save_exceptions
+            self::$saveHandler->saveExceptions
             (
                 (self::$exceptions instanceof StorageI) ? self::$exceptions->getStorageExceptions() : self::$exceptions,
-                [__CLASS__, 'resetExceptionLog'],
+                self::resetExceptionLog(...),
                 self::$LoggerOptions,
                 self::$DebugOptions
             );
@@ -177,7 +174,7 @@ class Registry
 
         self::$exceptions = $storage;
 
-        return $old;
+        return $old instanceof StorageI ? $old : null;
     }
 
     /**
@@ -211,7 +208,7 @@ class Registry
     }
 
     /**
-     * @param       HandlerI        $handler
+     * @param       HandlerI|null   $handler
      *
      * @return      HandlerI|null
      */
@@ -270,9 +267,9 @@ class Registry
             return;
         }
 
-        register_shutdown_function([__CLASS__, 'shutdown_function']);
-        self::$oldErrorHandler        = set_error_handler([__CLASS__, 'errorHandler']);
-        self::$oldExceptionHandler    = set_exception_handler([__CLASS__, 'exceptionHandler']);
+        register_shutdown_function(self::shutdownFunction(...));
+        self::$oldErrorHandler        = set_error_handler(self::errorHandler(...));
+        self::$oldExceptionHandler    = set_exception_handler(self::exceptionHandler(...));
         self::$installGlobalHandlers  = true;
     }
 
@@ -329,22 +326,22 @@ class Registry
             self::$unhandledHandler->exception_handler($exception);
         }
     }
-
+    
     /**
      * The method for set_error_handler
      *
-     * @param        int            $errno      Class of error
-     * @param        string         $errstr     Description
-     * @param        string         $errfile    File
-     * @param        string         $errline    Line
+     * @param       int             $code
+     * @param       string          $message
+     * @param       string          $file
+     * @param       int|string      $line
      *
      * @return       boolean
-    */
-    static public function errorHandler($errno, $errstr, $errfile, $errline): bool
+     */
+    static public function errorHandler(int $code, string $message, string $file, int|string $line): bool
     {
         self::registerException
         (
-            Errors\Error::createError($errno, $errstr, $errfile, $errline)
+            Errors\Error::createError($code, $message, $file, (int)$line)
         );
 
         /* Don't execute PHP internal error handler */
@@ -363,7 +360,7 @@ class Registry
         self::errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
     }
 
-    static public function shutdown_function()
+    static public function shutdownFunction(): void
     {
         self::fatalErrorHandler();
         self::saveExceptionLog();

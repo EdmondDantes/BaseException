@@ -9,55 +9,55 @@ interface BaseExceptionI
     /**
      * System is unusable
      */
-    const EMERGENCY     = 1;
+    final public const EMERGENCY    = 1;
 
     /**
      * Immediate action required
      */
-    const ALERT         = 2;
+    final public const ALERT         = 2;
 
     /**
      * Critical conditions
      */
-    const CRITICAL      = 3;
+    final public const CRITICAL      = 3;
 
     /**
      * Error conditions
      */
-    const ERROR         = 4;
+    final public const ERROR         = 4;
 
     /**
      * Warning conditions
      */
-    const WARNING       = 5;
+    final public const WARNING       = 5;
 
     /**
      * Normal but significant
      */
-    const NOTICE        = 6;
+    final public const NOTICE        = 6;
 
     /**
      * Informational
      */
-    const INFO          = 7;
+    final public const INFO          = 7;
 
     /**
      * 	Debug-level messages
      */
-    const DEBUG         = 8;
+    final public const DEBUG         = 8;
 
     /**
      * Mode for raise of exception
      */
-    const RISE          = false;
+    final public const RISE          = false;
     /**
      * Mode for mute of exception
      */
-    const MUTE          = true;
+    final public const MUTE          = true;
     /**
      * Mode, then function returns exception.
      */
-    const RESULT        = 1;
+    final public const RESULT        = 1;
 
     public function getMessage();
     public function getPrevious();

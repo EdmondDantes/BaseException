@@ -6,12 +6,12 @@ interface SaveHandlerI
     /**
      * Save handler method
      *
-     * @param       array                            $exceptions
-     * @param       callable                         $reset_log
-     * @param       array|\ArrayAccess               $logger_options
-     * @param       array|\ArrayAccess               $debug_options
+     * @param       array               $exceptions
+     * @param       callable            $resetLog
+     * @param       array               $loggerOptions
+     * @param       array               $debugOptions
      *
      * @return      void
      */
-    public function save_exceptions(array $exceptions , callable $reset_log, $logger_options = [], $debug_options = []);
+    public function saveExceptions(array $exceptions , callable $resetLog, array $loggerOptions = [], array $debugOptions = []): void;
 }

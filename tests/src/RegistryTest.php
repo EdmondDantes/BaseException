@@ -7,7 +7,7 @@ namespace Exceptions;
 use Exceptions\Errors\Error;
 
 /**
- * Имитация PHP функции register_shutdown_function
+ * Simulating PHP's register_shutdown_function
  *
  * @param       callback      $handler
  */
@@ -66,16 +66,16 @@ class SaveHandler implements SaveHandlerI
     /**
      * Save handler method
      *
-     * @param       array              $exceptions
-     * @param       callable           $reset_log
-     * @param       array|\ArrayAccess $logger_options
-     * @param       array|\ArrayAccess $debug_options
+     * @param       array               $exceptions
+     * @param       callable            $resetLog
+     * @param       array               $loggerOptions
+     * @param       array               $debugOptions
      *
      * @return      void
      */
-    public function save_exceptions(array $exceptions, callable $reset_log, $logger_options = [], $debug_options = [])
+    public function saveExceptions(array $exceptions, callable $resetLog, array $loggerOptions = [], array $debugOptions = []): void
     {
-        call_user_func($this->handler, $exceptions, $reset_log, $logger_options, $debug_options);
+        call_user_func($this->handler, $exceptions, $resetLog, $loggerOptions, $debugOptions);
     }
 }
 
@@ -86,16 +86,16 @@ class SaveHandler implements SaveHandlerI
 class RegistryTest      extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Тестовые данные для исключения
+     * Test data for exception
      * @var array
      */
-    protected $test_data;
+    protected array $testData;
 
     /**
-     * Информация об исключении
+     * Exception Information
      * @var array
      */
-    protected $test_base_data;
+    protected array $testBaseData;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -105,14 +105,14 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
     {
         Registry::resetExceptionLog();
 
-        $this->test_data = array
+        $this->testData = array
         (
             'level'         => BaseExceptionI::CRITICAL,
             'ident'         => 'test_ident',
-            'exdata'        => array(1,2,'string')
+            'exdata'        => [1,2,'string']
         );
 
-        $this->test_base_data = array
+        $this->testBaseData = array
         (
             'message'   => 'test message',
             'code'      => 11223344,
@@ -159,7 +159,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
 
 
     /**
-     * Тестирование регистрации исключения
+     * Testing the Exception Log
      */
     public function testRegister_exception()
     {
@@ -186,7 +186,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Эти исключения не должны регистрироваться
+     * These exceptions should not be logged
      */
     public function testRegister_exception_null()
     {
@@ -198,7 +198,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Тестирование глобальных обработчиков
+     * Testing global handlers
      */
     public function _testInstall_global_handlers()
     {

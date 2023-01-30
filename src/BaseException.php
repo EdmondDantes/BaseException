@@ -272,7 +272,7 @@ class BaseException                 extends     \Exception
      * The method sets a logging flag.
      *
      * If set flag from TRUE to FALSE,
-     * then the exception will not be saved to log (may be).
+     * then the exception will not be saved to log (maybe).
      *
      * @param boolean $flag logging flag
      *
@@ -363,7 +363,7 @@ class BaseException                 extends     \Exception
      * and it allows to work with objects which not inherited from Exception class,
      * but they are instances of BaseExceptionI.
      *
-     * Also if this exception is container, when that method may be used
+     * Also, if this exception is container, when that method may be used
      * for getting contained object of BaseExceptionI.
      *
      * @return      BaseExceptionI|\Throwable|null
