@@ -40,9 +40,9 @@ namespace Exceptions;
 class BaseException                 extends     \Exception
                                     implements  BaseExceptionI
 {
-    public static function serializeToArray(\Throwable $throwable = null): array
+    public static function serializeToArray(\Throwable|BaseExceptionI $throwable = null): array
     {
-        if($throwable instanceof BaseException) {
+        if($throwable instanceof BaseExceptionI) {
             return $throwable->toArray();
         } else {
             return [
