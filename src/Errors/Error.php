@@ -10,7 +10,7 @@ use Exceptions\BaseExceptionI;
  * The class for encapsulate of PHP Errors
  * as object BaseExceptionI
  */
-class Error implements BaseExceptionI
+class Error implements BaseExceptionI, \Stringable
 {
 	/**
 	 * Conformity between PHP-errors and BaseExceptionI
@@ -251,5 +251,10 @@ class Error implements BaseExceptionI
     public function template(): string
     {
         return '';
+    }
+    
+    public function __toString(): string
+    {
+        return json_encode($this->toArray());
     }
 }
