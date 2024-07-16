@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
-namespace Exceptions;
+namespace IfCastle\Exceptions;
 
 /**
  * Base class for exception with aspect: System
  */
-class SystemException extends LoggableException implements SystemExceptionI
+class SystemException extends LoggableException implements SystemExceptionInterface
 {
 }

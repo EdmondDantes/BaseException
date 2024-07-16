@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Exceptions;
+namespace IfCastle\Exceptions;
 
 /**
  * Raise if the expression is not callable.

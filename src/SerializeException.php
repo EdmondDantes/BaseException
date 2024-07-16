@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Exceptions;
+namespace IfCastle\Exceptions;
 
 /**
  * Object can't be serialized!
@@ -13,7 +13,7 @@ class SerializeException            extends LoggableException
      *
      * @param       string|array        $reason         Reason of error
      * @param       object              $object         The object which must have been serialized
-     * @param       string              $type           Type of serialize
+     * @param       string              $type           Type of serializing
      * @param       object              $src_object     The object where started the process
      */
     public function __construct($reason, $object = null, $type = 'phpserialize', $src_object = null)

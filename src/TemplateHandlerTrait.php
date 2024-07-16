@@ -1,16 +1,13 @@
 <?php declare(strict_types=1);
-namespace Exceptions;
 
-trait TemplateHandlerT
+namespace IfCastle\Exceptions;
+
+trait TemplateHandlerTrait
 {
     /**
      * Returns string view for the $value
      *
-     * @param   mixed $value
-     * @param   bool  $isQuoted
-     * @param   int   $arrayMax
      *
-     * @return  string
      */
     abstract protected function toString(mixed $value, bool $isQuoted = false, int $arrayMax = 5): string;
 
@@ -24,8 +21,6 @@ trait TemplateHandlerT
      * @param   ?\Throwable         $previous       Previous Exception
      *
      * @throws  \UnexpectedValueException
-     *
-     * @return string
      */
     protected function handleTemplate
     (

@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Exceptions;
 
 use Exceptions\Errors\Error;
 
@@ -26,7 +25,7 @@ function error_get_last()
     return $GLOBALS['Last_error'];
 }
 
-class ExceptionHandler implements HandlerI
+class ExceptionHandler implements \IfCastle\Exceptions\HandlerInterface
 {
     /**
      * @var callable
@@ -41,11 +40,11 @@ class ExceptionHandler implements HandlerI
     /**
      * Exception handler
      *
-     * @param       \Throwable|BaseExceptionI $exception
+     * @param       \Throwable|\IfCastle\Exceptions\BaseExceptionInterface $exception
      *
      * @return      void
      */
-    public function exceptionHandler(\Throwable|BaseExceptionI $exception): void
+    public function exceptionHandler(\Throwable|\IfCastle\Exceptions\BaseExceptionInterface $exception): void
     {
         call_user_func($this->handler, $exception);
     }
@@ -107,7 +106,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
 
         $this->testData = array
         (
-            'level'         => BaseExceptionI::CRITICAL,
+            'level'         => BaseExceptionInterface::CRITICAL,
             'ident'         => 'test_ident',
             'exdata'        => [1,2,'string']
         );
@@ -217,7 +216,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
 
         $error = $exceptions[0];
 
-        $this->assertInstanceOf('\Exceptions\BaseExceptionI', $error);
+        $this->assertInstanceOf('\Exceptions\BaseExceptionInterface', $error);
         $this->assertInstanceOf('\Exceptions\Errors\Error', $error);
 
         $this->assertEquals
@@ -279,21 +278,21 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
     {
         $errors                     =
         [
-            E_ERROR                 => BaseExceptionI::ERROR,
-            E_WARNING               => BaseExceptionI::WARNING,
-            E_PARSE                 => BaseExceptionI::CRITICAL,
-            E_NOTICE                => BaseExceptionI::NOTICE,
-            E_CORE_ERROR            => BaseExceptionI::EMERGENCY,
-            E_CORE_WARNING          => BaseExceptionI::WARNING,
-            E_COMPILE_ERROR         => BaseExceptionI::EMERGENCY,
-            E_COMPILE_WARNING       => BaseExceptionI::WARNING,
-            E_USER_ERROR            => BaseExceptionI::ERROR,
-            E_USER_WARNING          => BaseExceptionI::INFO,
-            E_USER_NOTICE           => BaseExceptionI::DEBUG,
-            E_STRICT                => BaseExceptionI::ERROR,
-            E_RECOVERABLE_ERROR     => BaseExceptionI::ERROR,
-            E_DEPRECATED            => BaseExceptionI::INFO,
-            E_USER_DEPRECATED       => BaseExceptionI::INFO
+            E_ERROR                 => BaseExceptionInterface::ERROR,
+            E_WARNING               => BaseExceptionInterface::WARNING,
+            E_PARSE                 => BaseExceptionInterface::CRITICAL,
+            E_NOTICE                => BaseExceptionInterface::NOTICE,
+            E_CORE_ERROR            => BaseExceptionInterface::EMERGENCY,
+            E_CORE_WARNING          => BaseExceptionInterface::WARNING,
+            E_COMPILE_ERROR         => BaseExceptionInterface::EMERGENCY,
+            E_COMPILE_WARNING       => BaseExceptionInterface::WARNING,
+            E_USER_ERROR            => BaseExceptionInterface::ERROR,
+            E_USER_WARNING          => BaseExceptionInterface::INFO,
+            E_USER_NOTICE           => BaseExceptionInterface::DEBUG,
+            E_STRICT                => BaseExceptionInterface::ERROR,
+            E_RECOVERABLE_ERROR     => BaseExceptionInterface::ERROR,
+            E_DEPRECATED            => BaseExceptionInterface::INFO,
+            E_USER_DEPRECATED       => BaseExceptionInterface::INFO
         ];
 
 
@@ -322,7 +321,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
             [$code, $level]     = [key($errors), current($errors)];
             next($errors);
 
-            $this->assertInstanceOf(BaseExceptionI::class, $error);
+            $this->assertInstanceOf(BaseExceptionInterface::class, $error);
             $this->assertInstanceOf(Error::class, $error);
             $this->assertEquals($code, $error->getCode(), '$error->getCode() failed');
             $this->assertEquals
@@ -360,7 +359,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
 
         $error = $exceptions[0];
 
-        $this->assertInstanceOf(BaseExceptionI::class, $error);
+        $this->assertInstanceOf(BaseExceptionInterface::class, $error);
         $this->assertInstanceOf(Error::class, $error);
 
         $this->assertEquals('error', $error->getMessage(), '$error->getMessage() failed');

@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Exceptions\Resource;
+namespace IfCastle\Exceptions\Resource;
 
 use Exceptions\SystemException;
 
@@ -13,9 +13,6 @@ class ResourceException extends SystemException
     protected string $template  =
         '{system} error: operation {operation} for the resource {resource} ({type}) is failed';
 
-    /**
-     * @var string
-     */
     protected string $system    = 'undefined';
 
     /**
@@ -49,7 +46,7 @@ class ResourceException extends SystemException
      */
     public function resource()
     {
-        return isset($this->data['resource']) ? $this->data['resource'] : '';
+        return $this->data['resource'] ?? '';
     }
 
     /**
@@ -68,7 +65,7 @@ class ResourceException extends SystemException
      */
     public function resource_type()
     {
-        return isset($this->data['type']) ? $this->data['type'] : '';
+        return $this->data['type'] ?? '';
     }
 
     /**
@@ -78,6 +75,6 @@ class ResourceException extends SystemException
      */
     public function resource_operation()
     {
-        return isset($this->data['operation']) ? $this->data['operation'] : '';
+        return $this->data['operation'] ?? '';
     }
 }

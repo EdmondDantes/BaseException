@@ -1,5 +1,4 @@
 <?php declare(strict_types=1);
-namespace Exceptions;
 
 /**
  * Test class for FatalException.
@@ -12,7 +11,7 @@ class FatalExceptionTest            extends \PHPUnit\Framework\TestCase
         // 1. Случай контейнер для исключения \Exception
         $exception = new \Exception('message', 123);
 
-        $e = new FatalException($exception);
+        $e = new \IfCastle\Exceptions\FatalException($exception);
 
         $this->assertEquals($exception->getMessage(), $e->getMessage(), '$e->getMessage() failed');
         $this->assertEquals($exception->getCode(), $e->getCode(), '$e->getCode() failed');
@@ -25,9 +24,9 @@ class FatalExceptionTest            extends \PHPUnit\Framework\TestCase
         $this->assertTrue($e->isLoggable(), '$e->is_loggable() failed');
 
         // 2. Случай контейнер для BaseExceptionI
-        $exception = new LoggableException('message', 123);
+        $exception = new \IfCastle\Exceptions\LoggableException('message', 123);
 
-        $e = new FatalException($exception);
+        $e = new \IfCastle\Exceptions\FatalException($exception);
 
         $this->assertEquals('', $e->getMessage(), '$e->getMessage() failed');
         $this->assertEquals(0, $e->getCode(), '$e->getCode() failed');
@@ -41,9 +40,9 @@ class FatalExceptionTest            extends \PHPUnit\Framework\TestCase
         $this->assertTrue($e->isLoggable(), '$e->is_loggable() failed');
 
         // 3. Случай контейнер для BaseExceptionI, но используется класс ошибки
-        $exception = new Errors\Error(1, 'message', __FILE__, __LINE__);
+        $exception = new \IfCastle\Exceptions\Errors(1, 'message', __FILE__, __LINE__);
 
-        $e = new FatalException($exception);
+        $e = new \IfCastle\Exceptions\FatalException($exception);
 
         $this->assertEquals('', $e->getMessage(), '$e->getMessage() failed');
         $this->assertEquals(0, $e->getCode(), '$e->getCode() failed');
@@ -56,7 +55,7 @@ class FatalExceptionTest            extends \PHPUnit\Framework\TestCase
         $this->assertTrue($e->isLoggable(), '$e->is_loggable() failed');
 
         // 4. Simple
-        $e = new FatalException('message');
+        $e = new \IfCastle\Exceptions\FatalException('message');
         $e->markAsFatal();
         $this->assertTrue($e->isFatal(), '$e->is_fatal() failed');
     }

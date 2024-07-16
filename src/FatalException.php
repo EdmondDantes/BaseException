@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Exceptions;
+namespace IfCastle\Exceptions;
 
 /**
  * Fatal exception - container.
@@ -15,12 +15,11 @@ class FatalException                extends LoggableException
      * FatalException
      *
      * @param       \Throwable|mixed    $exception
-     * @param       int                 $code
      * @param       ?\Throwable         $previous
      */
     public function __construct(mixed $exception, int $code = 0, \Throwable $previous = null)
     {
-        if($exception instanceof BaseExceptionI)
+        if($exception instanceof BaseExceptionInterface)
         {
             parent::__construct($exception->markAsFatal());
         }

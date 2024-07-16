@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Exceptions;
+namespace IfCastle\Exceptions;
 
 /**
  * Contract is not correctly
@@ -9,9 +9,9 @@ namespace Exceptions;
  */
 class ContractNotCorrectly      extends LoggableException
 {
-    const PROP                  = 'property';
-    const INT                   = 'interface';
-    const METHOD                = 'method';
+    public const PROP                  = 'property';
+    public const INT                   = 'interface';
+    public const METHOD                = 'method';
 
     protected string $template  = 'Contract is not correctly for {type} in the trait {trait} which used by {object}';
 

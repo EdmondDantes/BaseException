@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
-namespace Exceptions\Resource\FileSystem;
+namespace IfCastle\Exceptions\Resource\FileSystem;
 
 use Exceptions\Resource\ResourceCloseError;
 
 class FileCloseError    extends    ResourceCloseError
-                        implements FileSystemExceptionI
+                        implements FileSystemExceptionInterface
 {
     protected string $system   = self::SYSTEM;
 

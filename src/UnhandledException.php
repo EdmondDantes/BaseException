@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Exceptions;
+namespace IfCastle\Exceptions;
 
 /**
  * Special exception, which is used to mark an unhandled exception.
@@ -10,7 +10,7 @@ class UnhandledException            extends LoggableException
     protected string $template      = 'Unhandled Exception {type} occurred in the {source}';
 
     /**
-     * @param \Throwable|BaseExceptionI $exception
+     * @param \Throwable|BaseExceptionInterface $exception
      */
     public function __construct(\Throwable $exception)
     {

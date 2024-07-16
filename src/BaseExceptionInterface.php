@@ -1,13 +1,14 @@
 <?php declare(strict_types=1);
-namespace Exceptions;
+
+namespace IfCastle\Exceptions;
 
 /**
  * Main interface for BaseExceptionI
  */
-interface BaseExceptionI
+interface BaseExceptionInterface
 {
     /**
-     * System is unusable
+     * The System is unusable
      */
     final public const EMERGENCY    = 1;
 
@@ -69,8 +70,6 @@ interface BaseExceptionI
 
     /**
      * Template message
-     *
-     * @return string
      */
     public function template(): string;
     
@@ -95,15 +94,11 @@ interface BaseExceptionI
      * The method returns a logging flag.
      *
      * TRUE - indicates that an exception is going to be written to the log.
-     *
-     * @return boolean
      */
     public function isLoggable(): bool;
 
     /**
      * The method returns TRUE - if an exception is fatal.
-     *
-     * @return boolean
      */
     public function isFatal(): bool;
 
@@ -118,13 +113,11 @@ interface BaseExceptionI
 
     /**
      * The method will return true, if an exception is the container.
-     * @return boolean
      */
     public function isContainer(): bool;
 
     /**
      * The method returns an error level
-     * @return      int
      */
     public function getLevel(): int;
 
@@ -139,8 +132,6 @@ interface BaseExceptionI
      * ]
      *
      * Attention the order of elements in the array is important!
-     *
-     * @return array|null
      */
     public function getSource(): ?array;
 
@@ -153,35 +144,26 @@ interface BaseExceptionI
      *
      * Also if this exception is container, when that method may be used
      * for getting contained object of BaseExceptionI.
-     *
-     * @return      BaseExceptionI|\Throwable|null
      */
-    public function getPreviousException(): \Throwable|BaseExceptionI|null;
+    public function getPreviousException(): \Throwable|BaseExceptionInterface|null;
 
     /**
      * The method returns extra data for exception
-     * @return array
      */
     public function getExceptionData(): array;
 
     /**
      * @param       array       $data   The additional data
-     *
-     * @return      BaseExceptionI
      */
     public function appendData(array $data): static;
 
     /**
      * The method returns debug data for exception
-     *
-     * @return      array
      */
     public function getDebugData(): array;
 
     /**
      * The method serialized object to an array.
-     *
-     * @return array
      */
     public function toArray(): array;
 }

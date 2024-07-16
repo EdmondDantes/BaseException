@@ -1,9 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Exceptions;
 
 class TestedClass {
-    use HelperT {
+    use \IfCastle\Exceptions\HelperTrait {
         toString as public _toString;
         getSourceFor as public _getSourceFor;
         getValueType as public _getValueType;

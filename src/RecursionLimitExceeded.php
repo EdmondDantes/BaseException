@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Exceptions;
+namespace IfCastle\Exceptions;
 
 /**
  * Reached a maximum depth of recursion

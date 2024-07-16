@@ -1,7 +1,0 @@
-<phpunit colors="true" bootstrap="./autoload.php">
-    <testsuites>
-        <testsuite name="BaseException test suite">
-            <directory>./src</directory>
-        </testsuite>
-    </testsuites>
-</phpunit>

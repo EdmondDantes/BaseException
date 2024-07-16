@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
-namespace Exceptions;
+
+namespace IfCastle\Exceptions;
 
 /**
  * The method does not support this mode of work.

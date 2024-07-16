@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
-namespace Exceptions\Resource\FileSystem;
+namespace IfCastle\Exceptions\Resource\FileSystem;
 
 use Exceptions\Resource\ResourceNotExists;
 
 class FileNotExists     extends     ResourceNotExists
-                        implements  FileSystemExceptionI
+                        implements FileSystemExceptionInterface
 {
     protected string $system   = self::SYSTEM;
 

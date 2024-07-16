@@ -2,21 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Exceptions\Errors;
+namespace IfCastle\Exceptions\Errors;
 
-use Exceptions\BaseExceptionI;
+use Exceptions\BaseExceptionInterface;
 
 /**
  * The class for encapsulate of PHP Errors
  * as object BaseExceptionI
  */
-class Error implements BaseExceptionI, \Stringable
+class Error implements BaseExceptionInterface, \Stringable
 {
 	/**
-	 * Conformity between PHP-errors and BaseExceptionI
-	 * @var array
-	 */
-	protected static array $ERRORS =
+  * Conformity between PHP-errors and BaseExceptionI
+  */
+ protected static array $ERRORS =
     [
         E_ERROR              => self::ERROR,
         E_WARNING            => self::WARNING,
@@ -35,18 +34,15 @@ class Error implements BaseExceptionI, \Stringable
         E_USER_DEPRECATED    => self::INFO
 	];
 
-    protected ?array $trace;
+    protected ?array $trace = null;
 
     /**
      * Loggable flag
-     *
-     * @var         boolean
      */
     protected bool $isLoggable      = true;
 
     /**
      * Fatal error flag
-     * @var         boolean
      */
     protected bool $isFatal         = false;
 
@@ -78,7 +74,7 @@ class Error implements BaseExceptionI, \Stringable
             $code                   = self::ERROR;
         }
 
-        if(in_array($code, array(E_USER_ERROR, E_USER_WARNING, E_USER_NOTICE)))
+        if(in_array($code, [E_USER_ERROR, E_USER_WARNING, E_USER_NOTICE]))
         {
             return new UserError($code, $message, $file, $line);
         }
@@ -90,27 +86,27 @@ class Error implements BaseExceptionI, \Stringable
                 //
                 // EMERGENCY created as fatal error
                 //
-                $err = new Error($code, $message, $file, (int)$line);
+                $err = new Error($code, $message, $file, $line);
                 $err->markAsFatal();
 
                 return $err;
             }
             case self::WARNING  :
             {
-                return new Warning($code, $message, $file, (int)$line);
+                return new Warning($code, $message, $file, $line);
             }
             case self::NOTICE   :
             case self::INFO     :
             case self::DEBUG    :
             {
-                return new Notice($code, $message, $file, (int)$line);
+                return new Notice($code, $message, $file, $line);
             }
             case self::ALERT    :
             case self::CRITICAL :
             case self::ERROR    :
             default:
             {
-                return new Error($code, $message, $file, (int)$line);
+                return new Error($code, $message, $file, $line);
             }
         }
     }
@@ -198,7 +194,6 @@ class Error implements BaseExceptionI, \Stringable
 
     /**
      * Returns level of error
-     * @return      int
      */
     public function getLevel(): int
     {
@@ -215,7 +210,7 @@ class Error implements BaseExceptionI, \Stringable
         return ['source' => $this->getFile(), 'type' => '', 'function' => ''];
     }
 
-    public function getPreviousException(): \Throwable|BaseExceptionI|null
+    public function getPreviousException(): \Throwable|BaseExceptionInterface|null
     {
         return null;
     }
@@ -234,7 +229,7 @@ class Error implements BaseExceptionI, \Stringable
     {
         return
         [
-            'type'      => get_class($this),
+            'type'      => static::class,
             'source'    => $this->getSource(),
             'message'   => $this->getMessage(),
             'code'      => $this->getCode(),
@@ -253,8 +248,9 @@ class Error implements BaseExceptionI, \Stringable
         return '';
     }
     
+    #[\Override]
     public function __toString(): string
     {
-        return json_encode($this->toArray());
+        return (string) json_encode($this->toArray());
     }
 }

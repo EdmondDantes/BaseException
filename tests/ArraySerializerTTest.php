@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Exceptions;
 
 class TestClass
 {
-    use HelperT {
+    use \IfCastle\Exceptions\HelperTrait {
         toString as public _toString;
     }
     
-    use ArraySerializerT {
+    use \IfCastle\Exceptions\ArraySerializerTrait {
         errorsToArray as public _errorsToArray;
         arrayToErrors as public _arrayToErrors;
     }
@@ -149,7 +148,7 @@ class ArraySerializerTTest extends \PHPUnit\Framework\TestCase
 
         foreach($results as $exception)
         {
-            $this->assertInstanceOf('\Exceptions\BaseExceptionI', $exception);
+            $this->assertInstanceOf('\Exceptions\BaseExceptionInterface', $exception);
             $this->assertEquals('test template with {code} and {exdata}', $exception->template());
             $this->assertEquals
             (

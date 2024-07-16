@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Exceptions;
+namespace IfCastle\Exceptions;
 
 /**
  * Register of exceptions.
@@ -27,28 +27,24 @@ class Registry
     /**
      * List of exception
      *
-     * @var BaseException[]|\Exception[]|StorageI
+     * @var BaseException[]|\Exception[]|StorageInterface
      */
-    static protected array|StorageI $exceptions = [];
+    static protected array|StorageInterface $exceptions = [];
 
     /**
      * Handler which called from save_exception_log
-     *
-     * @var SaveHandlerI|null
      */
     static protected ?SaveHandlerI $saveHandler = null;
 
     /**
      * Handler for unhandled exception
-     * @var HandlerI|null
      */
-    static protected ?HandlerI $unhandledHandler = null;
+    static protected ?HandlerInterface $unhandledHandler = null;
 
     /**
      * Handler called for fatal exception
-     * @var HandlerI|null
      */
-    static protected ?HandlerI $fatalHandler = null;
+    static protected ?HandlerInterface $fatalHandler = null;
 
     /**
      * Old error handler
@@ -64,13 +60,11 @@ class Registry
 
     /**
      * Setup global handler flag
-     * @var boolean
      */
     static protected bool $installGlobalHandlers = false;
 
     /**
      * List of fatal php error
-     * @var array
      */
     protected static array $FATAL = [\E_ERROR, \E_PARSE, \E_CORE_ERROR, \E_COMPILE_ERROR];
 
@@ -81,12 +75,12 @@ class Registry
      *
      * This method may be used with set_exception_handler()
      *
-     * @param BaseExceptionI|\Throwable     $exception
+     * @param BaseExceptionInterface|\Throwable $exception
      *
      */
     static public function registerException(mixed $exception): void
     {
-        if(!($exception instanceof \Throwable || $exception instanceof BaseExceptionI)) {
+        if(!($exception instanceof \Throwable || $exception instanceof BaseExceptionInterface)) {
             return;
         }
         
@@ -94,7 +88,7 @@ class Registry
         {
             self::$exceptions[] = $exception;
         }
-        elseif(self::$exceptions instanceof StorageI)
+        elseif(self::$exceptions instanceof StorageInterface)
         {
             self::$exceptions->addException($exception);
         }
@@ -107,21 +101,16 @@ class Registry
      */
     static public function getExceptionLog(): array
     {
-        if(is_array(self::$exceptions))
-        {
+        if (is_array(self::$exceptions)) {
             return self::$exceptions;
         }
-        elseif(self::$exceptions instanceof StorageI)
-        {
+        if (self::$exceptions instanceof StorageInterface) {
             $result = self::$exceptions->getStorageExceptions();
             if(!is_array($result))
             {
-                return array(new \UnexpectedValueException('StorageI->get_storage() return not array'));
+                return [new \UnexpectedValueException('StorageI->get_storage() return not array')];
             }
-            else
-            {
-                return $result;
-            }
+            return $result;
         }
         else
         {
@@ -134,7 +123,7 @@ class Registry
      */
     static public function resetExceptionLog(): void
     {
-        if(self::$exceptions instanceof StorageI)
+        if(self::$exceptions instanceof StorageInterface)
         {
             self::$exceptions->resetStorage();
         }
@@ -153,7 +142,7 @@ class Registry
         {
             self::$saveHandler->saveExceptions
             (
-                (self::$exceptions instanceof StorageI) ? self::$exceptions->getStorageExceptions() : self::$exceptions,
+                (self::$exceptions instanceof StorageInterface) ? self::$exceptions->getStorageExceptions() : self::$exceptions,
                 self::resetExceptionLog(...),
                 self::$LoggerOptions,
                 self::$DebugOptions
@@ -164,17 +153,17 @@ class Registry
     /**
      * Setup custom storage for exceptions
      *
-     * @param       StorageI     $storage      Custom storage
+     * @param       StorageInterface $storage Custom storage
      *
-     * @return      ?StorageI                   returns older storage if exists
+     * @return      ?StorageInterface                   returns older storage if exists
      */
-    static public function setRegistryStorage(StorageI $storage): ?StorageI
+    static public function setRegistryStorage(StorageInterface $storage): ?StorageInterface
     {
         $old = self::$exceptions;
 
         self::$exceptions = $storage;
 
-        return $old instanceof StorageI ? $old : null;
+        return $old instanceof StorageInterface ? $old : null;
     }
 
     /**
@@ -194,11 +183,9 @@ class Registry
     }
 
     /**
-     * @param       ?HandlerI        $handler
-     *
-     * @return      HandlerI|null
+     * @param       ?HandlerInterface $handler
      */
-    static public function setUnhandledHandler(HandlerI $handler = null): ?HandlerI
+    static public function setUnhandledHandler(HandlerInterface $handler = null): ?HandlerInterface
     {
         $old                        = self::$unhandledHandler;
 
@@ -208,11 +195,9 @@ class Registry
     }
 
     /**
-     * @param       HandlerI|null   $handler
-     *
-     * @return      HandlerI|null
+     * @param       HandlerInterface|null $handler
      */
-    static public function setFatalHandler(HandlerI $handler = null): HandlerI|null
+    static public function setFatalHandler(HandlerInterface $handler = null): HandlerInterface|null
     {
         $old                        = self::$fatalHandler;
 
@@ -224,11 +209,11 @@ class Registry
     /**
      * Invokes the handler if there is
      *
-     * @param       ?BaseExceptionI      $exception
+     * @param       ?BaseExceptionInterface $exception
      */
-    static public function callFatalHandler(BaseExceptionI $exception = null): void
+    static public function callFatalHandler(BaseExceptionInterface $exception = null): void
     {
-        if(self::$fatalHandler instanceof HandlerI)
+        if(self::$fatalHandler instanceof HandlerInterface)
         {
             self::$fatalHandler->exceptionHandler($exception);
         }
@@ -236,8 +221,6 @@ class Registry
 
     /**
      * Return list of logger options
-     *
-     * @return      array
      */
     static public function getLoggerOptions(): array
     {
@@ -246,10 +229,7 @@ class Registry
         {
             return self::$LoggerOptions;
         }
-        else
-        {
-            return [];
-        }
+        return [];
     }
 
     /**
@@ -308,7 +288,7 @@ class Registry
 
     static public function exceptionHandler(\Throwable $exception): void
     {
-        if($exception instanceof BaseExceptionI === false) {
+        if($exception instanceof BaseExceptionInterface === false) {
             self::registerException($exception);
         } else if(!($exception->isLoggable() || $exception->isContainer())) {
             // When exception reaches this handler
@@ -321,7 +301,7 @@ class Registry
         
         new UnhandledException($exception);
         
-        if(self::$unhandledHandler instanceof HandlerI)
+        if(self::$unhandledHandler instanceof HandlerInterface)
         {
             self::$unhandledHandler->exceptionHandler($exception);
         }
@@ -330,12 +310,7 @@ class Registry
     /**
      * The method for set_error_handler
      *
-     * @param       int             $code
-     * @param       string          $message
-     * @param       string          $file
-     * @param       int|string      $line
      *
-     * @return       boolean
      */
     static public function errorHandler(int $code, string $message, string $file, int|string $line): bool
     {
@@ -370,8 +345,6 @@ class Registry
      * Returns true if debug mode was enabled
      *
      * @param       ?string      $class          name of class or namespace
-     *
-     * @return      boolean
      */
     static public function isDebug(string $class = null): bool
     {
@@ -390,7 +363,7 @@ class Registry
         // Searching for matches
         foreach(self::$DebugOptions['namespaces'] as $namespace)
         {
-            if(str_starts_with($class, $namespace))
+            if(str_starts_with($class, (string) $namespace))
             {
                 return true;
             }

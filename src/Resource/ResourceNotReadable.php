@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Exceptions\Resource;
+namespace IfCastle\Exceptions\Resource;
 
 class ResourceNotReadable extends ResourceException
 {

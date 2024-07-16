@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Exceptions;
+namespace IfCastle\Exceptions;
 
 /**
  * Aspect: Exception runtime mode.
@@ -9,6 +9,6 @@ namespace Exceptions;
  * or unusable system.
  *
  */
-interface RuntimeExceptionI
+interface RuntimeExceptionInterface
 {
 }

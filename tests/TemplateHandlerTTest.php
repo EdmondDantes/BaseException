@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Exceptions;
 
 class TestedTemplateHandler {
     
@@ -45,7 +44,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
      */
     public function test(mixed $template, array $data, string|array|\ArrayObject $message, int|string $code, \Throwable $previous = null, mixed $excepted = null)
     {
-        $testedObject           = new TestedTemplateHandler();
+        $testedObject           = new \IfCastle\Exceptions\TestedTemplateHandler();
         
         if($excepted instanceof \Throwable)
         {

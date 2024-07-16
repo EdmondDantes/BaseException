@@ -1,29 +1,24 @@
 <?php declare(strict_types=1);
 
-namespace Exceptions;
+namespace IfCastle\Exceptions;
 
-trait ArraySerializerT
+trait ArraySerializerTrait
 {
     /**
      * The method defines the source of the exception.
      *
-     * @param       \Throwable $e
-     * @param       boolean    $isString
      *
-     * @return      array|string
      */
     abstract protected function getSourceFor(\Throwable $e, bool $isString = false): array|string;
 
     /**
      * The method serialized errors BaseExceptionI to an array
      *
-     * @param 			array|BaseExceptionI    $errors	    array of errors
-     *
-     * @return          array
+     * @param 			array|BaseExceptionInterface $errors array of errors
      */
     protected function errorsToArray(mixed $errors): array
     {
-        if($errors instanceof BaseExceptionI)
+        if($errors instanceof BaseExceptionInterface)
         {
             $errors             = [$errors];
         }
@@ -32,9 +27,9 @@ trait ArraySerializerT
 
         foreach($errors as $error)
         {
-            if($error instanceof BaseExceptionI)
+            if($error instanceof BaseExceptionInterface)
             {
-                /* @var BaseExceptionI $error */
+                /* @var BaseExceptionInterface $error */
                 $results[]      = $error->toArray();
             }
             elseif($error instanceof \Throwable)
@@ -42,7 +37,7 @@ trait ArraySerializerT
                 /* @var \Exception $error */
                 $results[]      =
                 [
-                    'type'      => get_class($error),
+                    'type'      => $error::class,
                     'source'    => $this->getSourceFor($error),
                     'message'   => $error->getMessage(),
                     'code'      => $error->getCode()

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Mockups;
 
-use Exceptions\BaseExceptionI;
+use Exceptions\BaseExceptionInterface;
 use Exceptions\StorageI;
 
 class Storage implements \Exceptions\StorageI
@@ -14,11 +14,11 @@ class Storage implements \Exceptions\StorageI
     /**
      *
      *
-     * @param       BaseExceptionI|\Throwable      $exception
+     * @param       BaseExceptionInterface|\Throwable $exception
      *
      * @return      StorageI
      */
-    public function addException(BaseExceptionI|\Throwable $exception): static
+    public function addException(BaseExceptionInterface|\Throwable $exception): static
     {
         $this->Exceptions[] = $exception;
 

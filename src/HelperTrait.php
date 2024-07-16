@@ -2,17 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Exceptions;
+namespace IfCastle\Exceptions;
 
-trait HelperT
+trait HelperTrait
 {
     /**
      * The method defines the source of the exception.
      *
-     * @param       \Throwable $e
-     * @param       boolean    $isString
      *
-     * @return      array|string
      */
     final protected function getSourceFor(\Throwable $e, bool $isString = false): array|string
     {
@@ -39,42 +36,32 @@ trait HelperT
      * It must use in order to exclude objects from the exception.
      *
      * @param           mixed           $value      value
-     *
-     * @return          string
      */
     final protected function getValueType(mixed $value): string
     {
-        if(is_bool($value))
-        {
+        if (is_bool($value)) {
             return $value ? 'TRUE' : 'FALSE';
         }
-        elseif(is_object($value))
-        {
+        if (is_object($value)) {
             return get_debug_type($value);
         }
-        elseif(is_null($value))
-        {
+        if (is_null($value)) {
             return 'NULL';
         }
-        elseif(is_string($value))
-        {
+        if (is_string($value)) {
             return 'STRING';
         }
-        elseif(is_int($value))
-        {
+        if (is_int($value)) {
             return 'INTEGER';
         }
-        elseif(is_float($value))
-        // is_double some
-        {
+        if (is_float($value)) {
+            // is_double some
             return 'DOUBLE';
         }
-        elseif(is_array($value))
-        {
+        if (is_array($value)) {
             return 'ARRAY('.count($value).')';
         }
-        elseif(is_resource($value))
-        {
+        if (is_resource($value)) {
             $type           = get_resource_type($value);
             $meta           = '';
             if($type === 'stream' && is_array($meta = stream_get_meta_data($value)))
@@ -87,7 +74,6 @@ trait HelperT
                 );
                 $meta       = " ({$meta['stream_type']}, {$meta['wrapper_type']}, {$meta['mode']}) {$meta['uri']}";
             }
-
             return 'RESOURCE: '.$type.$meta;
         }
         else
@@ -102,8 +88,6 @@ trait HelperT
      * @param       mixed   $value    Value
      * @param       boolean $isQuoted If result has been quoted?
      * @param       int     $arrayMax Max count items of array
-     *
-     * @return      string
      */
     protected function toString(mixed $value, bool $isQuoted = false, int $arrayMax = 5): string
     {
@@ -161,7 +145,7 @@ trait HelperT
 
         if($isQuoted)
         {
-            $value          = '\''.$value.'\'';
+            return '\''.$value.'\'';
         }
 
         return $value;

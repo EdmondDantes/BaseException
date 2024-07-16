@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Exceptions;
+namespace IfCastle\Exceptions;
 
 /**
  * Aspect: System exception.
@@ -10,6 +10,6 @@ namespace Exceptions;
  * 2. Equipment failures.
  * 3. This type of exception is not the result of errors programmer.
  */
-interface SystemExceptionI
+interface SystemExceptionInterface
 {
 }
