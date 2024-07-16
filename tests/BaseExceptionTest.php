@@ -77,11 +77,6 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
 
     }
 
-    /**
-     * @covers \Exceptions\BaseException::__construct
-     * @covers \Exceptions\BaseException::setLoggable
-     * @covers \Exceptions\BaseException::isLoggable
-     */
     public function testConstruct()
     {
         $previous = new \Exception('ex', 2);
@@ -103,10 +98,6 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(($this->test_base_data['previous'] === $e->getPrevious()), '$e->getPrevious() failed');
     }
 
-    /**
-     * @covers \Exceptions\BaseException::__construct
-     * @covers \Exceptions\BaseException::getPreviousException
-     */
     public function testConstructAsContainer()
     {
         // 1. Случай контейнер для исключения \Exception

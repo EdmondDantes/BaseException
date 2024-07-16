@@ -2,6 +2,8 @@
 
 namespace IfCastle\Exceptions;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class TestedClass {
     use \IfCastle\Exceptions\HelperTrait {
         toString as public _toString;
@@ -34,7 +36,7 @@ class HelperTraitTest               extends \PHPUnit\Framework\TestCase
         $this->assertEquals(__CLASS__.'->testGetSourceFor', $result);
     }
 
-    public function dataProviderGetValueType()
+    public static function dataProviderGetValueType(): array
     {
         $data_set               = [];
 
@@ -56,12 +58,11 @@ class HelperTraitTest               extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider dataProviderGetValueType
-     *
-     * @param   mixed     $value
-     * @param   string    $expected
+     * @param   mixed $value
+     * @param string  $expected
      */
-    public function testGetValueType($value, $expected)
+    #[DataProvider('dataProviderGetValueType')]
+    public function testGetValueType(mixed $value, string $expected): void
     {
         $testedObject           = new TestedClass();
         
@@ -69,8 +70,8 @@ class HelperTraitTest               extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($expected, $result);
     }
-
-    public function dataProviderToString()
+    
+    public static function dataProviderToString(): array
     {
         $data_set               = [];
 
@@ -111,12 +112,12 @@ class HelperTraitTest               extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider dataProviderToString
      *
      * @param   mixed       $value
      * @param   bool        $is_quoted
      * @param   string      $expected
      */
+    #[DataProvider('dataProviderToString')]
     public function testToString($value, $is_quoted, $expected)
     {
         $testedObject           = new TestedClass();
