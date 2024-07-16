@@ -1,4 +1,4 @@
-BaseException [![Build Status](https://secure.travis-ci.org/EdmondDantes/BaseException.png)](http://travis-ci.org/EdmondDantes/BaseException)
+BaseException [![PHP Composer](https://github.com/EdmondDantes/amphp-pool/actions/workflows/php.yml/badge.svg)](https://github.com/EdmondDantes/BaseException/actions/workflows/php.yml)
 =============
 
 Base Exception Library for PHP 8.2+
