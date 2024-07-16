@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 
+namespace IfCastle\Exceptions;
 
 class TestedClass {
     use \IfCastle\Exceptions\HelperTrait {
@@ -9,7 +10,7 @@ class TestedClass {
     }
 }
 
-class HelperTTest               extends \PHPUnit\Framework\TestCase
+class HelperTraitTest               extends \PHPUnit\Framework\TestCase
 {
 
     public function testGetSourceFor()

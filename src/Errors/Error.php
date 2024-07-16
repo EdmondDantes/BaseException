@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace IfCastle\Exceptions\Errors;
 
-use Exceptions\BaseExceptionInterface;
+use IfCastle\Exceptions\BaseExceptionInterface;
 
 /**
- * The class for encapsulate of PHP Errors
+ * The class for encapsulating of PHP Errors
  * as object BaseExceptionI
  */
 class Error implements BaseExceptionInterface, \Stringable

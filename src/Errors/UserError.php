@@ -2,6 +2,8 @@
 
 namespace IfCastle\Exceptions\Errors;
 
+use IfCastle\Exceptions\RuntimeExceptionInterface;
+
 /**
  * Class for USER_ error:
  *
@@ -9,7 +11,7 @@ namespace IfCastle\Exceptions\Errors;
  * -  WARNING or NOTICE - not is logged.
  *
  */
-class UserError extends Error implements \Exceptions\RuntimeExceptionI
+class UserError extends Error implements RuntimeExceptionInterface
 {
     public function __construct(int $code, string $message, string $file, int $line)
     {

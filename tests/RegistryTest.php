@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
+namespace IfCastle\Exceptions;
 
-use Exceptions\Errors\Error;
+use IfCastle\Exceptions\Errors\Error;
 
 /**
  * Simulating PHP's register_shutdown_function
@@ -50,7 +51,7 @@ class ExceptionHandler implements \IfCastle\Exceptions\HandlerInterface
     }
 }
 
-class SaveHandler implements SaveHandlerI
+class SaveHandler implements SaveHandlerInterface
 {
     /**
      * @var callable
@@ -332,7 +333,7 @@ class RegistryTest      extends \PHPUnit\Framework\TestCase
             );
             $this->assertInstanceOf
             (
-                '\Exceptions\Errors\\'.$error->getMessage(),
+                'IfCastle\Exceptions\Errors\\'.$error->getMessage(),
                 $error,
                 'create_error failed for: '.$error->getMessage().':'.$error->getLine()
             );

@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
-use Exceptions\Errors\Error;
+namespace IfCastle\Exceptions;
+
+use IfCastle\Exceptions\Errors\Error;
 
 class DebugException extends BaseException
 {
@@ -134,7 +136,7 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(($exception === $e->getPreviousException()), '$e->get_previous() failed');
 
         // 3. Случай контейнер для BaseExceptionI, но используется класс ошибки
-        $exception = new \IfCastle\Exceptions\Errors(1, 'message', __FILE__, __LINE__);
+        $exception = new Errors\Error(1, 'message', __FILE__, __LINE__);
 
         $e = new \IfCastle\Exceptions\BaseException($exception);
 
@@ -142,11 +144,7 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0, $e->getCode(), '$e->getCode() failed');
         $this->assertTrue(($exception === $e->getPreviousException()), '$e->get_previous() failed');
     }
-
-    /**
-     * @covers \Exceptions\BaseException::setLoggable
-     * @covers \Exceptions\BaseException::isLoggable
-     */
+    
     public function testSetLoggable()
     {
         $this->BaseException->setLoggable(true);
@@ -158,10 +156,7 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         $this->BaseException->setLoggable(true);
         $this->assertTrue($this->BaseException->isLoggable(), 'Loggable flag must be TRUE');
     }
-
-    /**
-     * @covers \Exceptions\BaseException::getLevel
-     */
+    
     public function testGetLevel()
     {
         $this->assertEquals
@@ -172,10 +167,6 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @covers \Exceptions\BaseException::getSource
-     * @covers \Exceptions\BaseException::getSourceFor
-     */
     public function testGetSource()
     {
         $this->assertEquals(__CLASS__.'->setUp', implode('', $this->BaseException->getSource()));
@@ -183,9 +174,6 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(__CLASS__.'->setUp', implode('', $this->BaseException->getSource()));
     }
 
-    /**
-     * @covers \Exceptions\BaseException::getExceptionData
-     */
     public function testGetData()
     {
         $data = $this->BaseException->getExceptionData();
@@ -321,7 +309,7 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
 
         $mockup         = array
         (
-            'type'      => 'Exceptions\UnexpectedValueType',
+            'type'      => UnexpectedValueType::class,
             'source'    => ['source' => get_class($this), 'type' => '->', 'function' => 'testToArrayForTemplate'],
             'message'   => '',
             'template'  => 'Unexpected type occurred for the value {name} and type {type}. Expected {expected}',

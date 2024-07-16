@@ -81,7 +81,7 @@ interface BaseExceptionInterface
     /**
      * The method sets a logging flag.
      *
-     * If set flag from TRUE to FALSE,
+     * If set a flag from TRUE to FALSE,
      * then the exception will not be saved to log (maybe).
      *
      * @param   boolean         $flag logging flag
@@ -112,7 +112,7 @@ interface BaseExceptionInterface
     public function markAsFatal(): static;
 
     /**
-     * The method will return true, if an exception is the container.
+     * The method will return true if an exception is the container.
      */
     public function isContainer(): bool;
 
@@ -131,7 +131,7 @@ interface BaseExceptionInterface
      *      'function'  => function or method or closure
      * ]
      *
-     * Attention the order of elements in the array is important!
+     * Attention to the order of elements in the array is important!
      */
     public function getSource(): ?array;
 
@@ -139,10 +139,10 @@ interface BaseExceptionInterface
      * The method returns previous exception.
      *
      * It extends the method Exception::getPrevious,
-     * and it allows to work with objects which not inherited from Exception class,
+     * and it allows to work with objects which are not inherited from Exception class,
      * but they are instances of BaseExceptionI.
      *
-     * Also if this exception is container, when that method may be used
+     * Also, if this exception is container, when that method may be used
      * for getting contained object of BaseExceptionI.
      */
     public function getPreviousException(): \Throwable|BaseExceptionInterface|null;

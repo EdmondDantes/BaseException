@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+namespace IfCastle\Exceptions;
+
+use IfCastle\Exceptions\Mockups\Storage;
 
 /**
  * A special test for testing the replacement of the Exception Registry Store.
@@ -11,10 +14,7 @@ declare(strict_types=1);
  */
 class RegistryStorageTest extends \IfCastle\Exceptions\RegistryTest
 {
-    /**
-     * @var \Mockups\Storage
-     */
-    protected $Storage;
+    protected StorageInterface $Storage;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -24,12 +24,12 @@ class RegistryStorageTest extends \IfCastle\Exceptions\RegistryTest
     {
         \IfCastle\Exceptions\RegistryTest::setUp();
 
-        $this->Storage = new \Mockups\Storage();
+        $this->Storage = new Storage;
 
         \IfCastle\Exceptions\Registry::setRegistryStorage($this->Storage);
     }
 
-    public function TestReset()
+    public function TestReset(): void
     {
         new \IfCastle\Exceptions\LoggableException('test message 1', 10);
         new \IfCastle\Exceptions\LoggableException('test message 2', 11);

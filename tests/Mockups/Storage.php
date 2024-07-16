@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Mockups;
+namespace IfCastle\Exceptions\Mockups;
 
-use Exceptions\BaseExceptionInterface;
-use Exceptions\StorageI;
+use IfCastle\Exceptions\BaseExceptionInterface;
+use IfCastle\Exceptions\StorageInterface;
 
-class Storage implements \Exceptions\StorageI
+class Storage implements StorageInterface
 {
     public array $Exceptions = [];
 
@@ -16,7 +16,7 @@ class Storage implements \Exceptions\StorageI
      *
      * @param       BaseExceptionInterface|\Throwable $exception
      *
-     * @return      StorageI
+     * @return      StorageInterface
      */
     public function addException(BaseExceptionInterface|\Throwable $exception): static
     {

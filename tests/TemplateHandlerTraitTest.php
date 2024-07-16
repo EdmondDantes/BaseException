@@ -2,10 +2,13 @@
 
 declare(strict_types=1);
 
+namespace IfCastle\Exceptions;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TestedTemplateHandler {
     
-    use TemplateHandlerT {
+    use TemplateHandlerTrait {
         handleTemplate as public _handleTemplate;
     }
     
@@ -29,24 +32,23 @@ class TestedTemplateHandler {
     }
 }
 
-class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
+class TemplateHandlerTraitTest          extends \PHPUnit\Framework\TestCase
 {
     
     /**
-     * @dataProvider dataProvider
-     *
-     * @param string     $template
-     * @param   array    $data
-     * @param string|array     $message
-     * @param int|string        $code
-     * @param ?\Throwable $previous
-     * @param mixed     $excepted
+     * @param string       $template
+     * @param   array      $data
+     * @param string|array $message
+     * @param int|string   $code
+     * @param ?\Throwable  $previous
+     * @param mixed        $expected
      */
-    public function test(mixed $template, array $data, string|array|\ArrayObject $message, int|string $code, \Throwable $previous = null, mixed $excepted = null)
+    #[DataProvider('dataProvider')]
+    public function test(mixed $template, array $data, string|array|\ArrayObject $message, int|string $code, \Throwable $previous = null, mixed $expected = null)
     {
         $testedObject           = new \IfCastle\Exceptions\TestedTemplateHandler();
         
-        if($excepted instanceof \Throwable)
+        if($expected instanceof \Throwable)
         {
             $e              = null;
             
@@ -58,19 +60,19 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
             {
             }
             
-            $this->assertInstanceOf(get_class($excepted), $e);
+            $this->assertInstanceOf(get_class($expected), $e);
         }
         else
         {
             $result        = $testedObject->_handleTemplate($template, $data, $message, $code, $previous);
-            $this->assertEquals($excepted, $result);
+            $this->assertEquals($expected, $result);
         }
     }
 
     /**
      * @dataSet On
      */
-    protected function data_set_1(): array
+    protected static function data_set_1(): array
     {
         return
         [
@@ -87,7 +89,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
     /**
      * @dataSet On
      */
-    protected function data_set_2(): array
+    protected static function data_set_2(): array
     {
         return
         [
@@ -104,7 +106,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
     /**
      * @dataSet On
      */
-    protected function data_set_3(): array
+    protected static function data_set_3(): array
     {
         return
         [
@@ -121,7 +123,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
     /**
      * @dataSet On
      */
-    protected function data_set_4(): array
+    protected static function data_set_4(): array
     {
         return
         [
@@ -138,7 +140,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
     /**
      * @dataSet On
      */
-    protected function data_set_error_1(): array
+    protected static function data_set_error_1(): array
     {
         return
         [
@@ -154,7 +156,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
     /**
      * @dataSet On
      */
-    protected function data_set_error_2(): array
+    protected static function data_set_error_2(): array
     {
         return
         [
@@ -170,7 +172,7 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
     /**
      * @dataSet On
      */
-    protected function data_set_error_3(): array
+    protected static function data_set_error_3(): array
     {
         return
         [
@@ -183,21 +185,21 @@ class TemplateHandlerTTest          extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function dataProvider(): array
+    public static function dataProvider(): array
     {
-        $reflection             = new \ReflectionClass($this);
+        $reflection             = new \ReflectionClass(self::class);
 
         $results                = [];
 
         foreach($reflection->getMethods(\ReflectionMethod::IS_PROTECTED) as $method)
         {
-            if(strpos($method->getName(), 'data_set_') !== 0
-            || preg_match('/@dataSet\sOff/im', $method->getDocComment()))
+            if(!str_starts_with($method->getName(), 'data_set_')
+               || preg_match('/@dataSet\sOff/im', $method->getDocComment()))
             {
                 continue;
             }
 
-            $results[]          = $this->{$method->getName()}();
+            $results[]          = self::{$method->getName()}();
         }
 
         return $results;

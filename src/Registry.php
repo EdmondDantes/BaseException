@@ -34,7 +34,7 @@ class Registry
     /**
      * Handler which called from save_exception_log
      */
-    static protected ?SaveHandlerI $saveHandler = null;
+    static protected ?SaveHandlerInterface $saveHandler = null;
 
     /**
      * Handler for unhandled exception
@@ -138,7 +138,7 @@ class Registry
      */
     static public function saveExceptionLog(): void
     {
-        if(self::$saveHandler instanceof SaveHandlerI)
+        if(self::$saveHandler instanceof SaveHandlerInterface)
         {
             self::$saveHandler->saveExceptions
             (
@@ -169,11 +169,11 @@ class Registry
     /**
      * Setup save handler
      *
-     * @param       ?SaveHandlerI                $handler       Handler
+     * @param       ?SaveHandlerInterface $handler Handler
      *
-     * @return      SaveHandlerI|null           Returns old handler if exists
+     * @return      SaveHandlerInterface|null           Returns old handler if exists
      */
-    static public function setSaveHandler(SaveHandlerI $handler = null): ?SaveHandlerI
+    static public function setSaveHandler(SaveHandlerInterface $handler = null): ?SaveHandlerInterface
     {
         $old = self::$saveHandler;
 
