@@ -14,7 +14,12 @@
     },
     "autoload": {
         "psr-4": {
-            "IfCastle\\Exceptions\\": ["src/", "tests/"]
+            "IfCastle\\Exceptions\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "IfCastle\\Exceptions\\": "tests/"
         }
     },
 
